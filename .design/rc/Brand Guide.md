@@ -192,6 +192,8 @@ thick cartoon outlines
 overly detailed filigree that collapses at small size
 neon glow strokes
 realistic metallic bevels
+
+Tufte principles apply to the charts themselves (area charts, pie charts, bar charts) — clean axes, direct labels, high data-ink ratio, no chartjunk. Brand ornament applies to the container (panel frames, corner flourishes, celestial dividers, typography, page structure). These are separate layers. A Tufte skill should never strip the ornamental panel treatment, and the brand aesthetic should never inject decorative elements into the data visualization area.
 4. Meaning and Symbolic System
 
 This style is strongest when every motif has symbolic work to do.
