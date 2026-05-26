@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rectrix Caedere — Campaign Overview</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.15.3/Recharts.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cinzel+Decorative:wght@400;700&family=Raleway:wght@300;400;500;600;700&family=Alegreya+Sans+SC:wght@400;500;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* ─── INK / DARK GROUND ─── */
+  --rc-starless-navy: #050A0E;
+  --rc-deep-blue-black: #111A24;
+  --rc-midnight-cardstock: #0D141C;
+  --rc-smoked-navy: #162230;
+  --rc-charcoal-slate: #1B1E23;
+  --rc-dusty-charcoal: #26252A;
+
+  /* ─── METALLICS ─── */
+  --rc-burnished-copper: #68442F;
+  --rc-antique-bronze: #7A4E38;
+  --rc-aged-copper-gold: #8C5D3F;
+  --rc-warm-amber: #AF755A;
+  --rc-moonlit-apricot: #DA9565;
+  --rc-soft-lunar-gold: #D9A064;
+  --rc-pale-gold-text: #E8C690;
+  --rc-product-gold: #C7A369;
+
+  /* ─── FLORALS ─── */
+  --rc-dark-wine-petal: #6F3842;
+  --rc-dried-rosewood: #A65E49;
+  --rc-burnt-coral: #B7634D;
+  --rc-terracotta-bloom: #C5795B;
+  --rc-muted-salmon: #D58A69;
+
+  /* ─── JEWEL TONES ─── */
+  --rc-moonlit-sapphire: #1F3F5B;
+  --rc-storm-teal: #24495A;
+  --rc-faded-cerulean: #2D5678;
+  --rc-dark-sea-glass: #2F5A5E;
+  --rc-muted-sage: #56644C;
+  --rc-dusty-mauve: #73596B;
+  --rc-faded-amethyst: #7E6385;
+
+  /* ─── TEXT ─── */
+  --rc-text-primary: #E8E4DC;
+  --rc-text-secondary: #9A9590;
+  --rc-text-muted: #5E5A55;
+  --rc-text-accent: var(--rc-product-gold);
+
+  /* ─── BORDERS ─── */
+  --rc-border-subtle: rgba(255,255,255,0.06);
+  --rc-border-faint: rgba(255,255,255,0.03);
+  --rc-border-accent: rgba(199,163,105,0.25);
+  --rc-border-accent-strong: rgba(199,163,105,0.45);
+  --rc-gold-dim: rgba(199,163,105,0.15);
+  --rc-gold-glow: rgba(199,163,105,0.30);
+
+  /* ─── SEMANTIC ─── */
+  --rc-success: #4A9E6E;
+  --rc-danger: #B44A4A;
+  --rc-warning: #D4943A;
+  --rc-info: #6B8AAD;
+  --rc-mystic: #8B6BB5;
+
+  --rc-success-dim: rgba(74,158,110,0.15);
+  --rc-danger-dim: rgba(180,74,74,0.15);
+
+  /* ─── CHART ─── */
+  --rc-chart-1: #C7A369;
+  --rc-chart-2: #6B8AAD;
+  --rc-chart-3: #B44A4A;
+  --rc-chart-4: #4A9E6E;
+  --rc-chart-5: #8B6BB5;
+  --rc-chart-6: #D4943A;
+  --rc-chart-7: #4A9E9E;
+
+  /* ─── TYPE ─── */
+  --rc-font-display: 'Cinzel', 'EB Garamond', serif;
+  --rc-font-display-deco: 'Cinzel Decorative', 'Cinzel', serif;
+  --rc-font-body: 'Raleway', 'Alegreya Sans', system-ui, sans-serif;
+  --rc-font-label: 'Alegreya Sans SC', 'Raleway', sans-serif;
+  --rc-font-serif: 'EB Garamond', Georgia, serif;
+
+  /* ─── SPACING ─── */
+  --gap-xs: 4px; --gap-sm: 8px; --gap-md: 16px; --gap-lg: 24px; --gap-xl: 40px; --gap-2xl: 64px;
+  --radius: 6px; --radius-lg: 12px; --radius-xl: 18px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--rc-starless-navy);
+  color: var(--rc-text-primary);
+  font-family: var(--rc-font-body);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ─── GRAIN OVERLAY ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  z-index: 9999;
+  mix-blend-mode: overlay;
+}
+
+/* ═══════════ LAYOUT ═══════════ */
+.app-shell { display: flex; min-height: 100vh; }
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--rc-deep-blue-black) 0%, var(--rc-midnight-cardstock) 100%);
+  border-right: 1px solid var(--rc-border-accent);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  z-index: 100;
+  overflow-y: auto;
+}
+
+.sidebar-brand {
+  padding: var(--gap-xl) var(--gap-lg) var(--gap-lg);
+  text-align: center;
+  position: relative;
+}
+
+.sidebar-brand::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: var(--gap-lg); right: var(--gap-lg);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--rc-aged-copper-gold), transparent);
+}
+
+.sidebar-logo {
+  width: 48px; height: 48px;
+  margin: 0 auto var(--gap-sm);
+}
+
+.sidebar-brand h1 {
+  font-family: var(--rc-font-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--rc-moonlit-apricot);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.sidebar-brand .tagline {
+  font-family: var(--rc-font-label);
+  font-size: 10px;
+  color: var(--rc-text-muted);
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+/* Sidebar sections */
+.sidebar-section-label {
+  font-family: var(--rc-font-label);
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--rc-aged-copper-gold);
+  padding: var(--gap-lg) var(--gap-lg) var(--gap-sm);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sidebar-section-label::before,
+.sidebar-section-label::after {
+  content: '✦';
+  font-size: 6px;
+  color: var(--rc-aged-copper-gold);
+  opacity: 0.5;
+}
+
+.sidebar-campaigns { list-style: none; margin-bottom: var(--gap-md); }
+.sidebar-campaigns li { position: relative; }
+
+.sidebar-campaigns button {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  width: 100%;
+  padding: 11px var(--gap-lg);
+  background: none;
+  border: none;
+  color: var(--rc-text-secondary);
+  font-family: var(--rc-font-body);
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  letter-spacing: 0.3px;
+}
+
+.sidebar-campaigns button:hover {
+  color: var(--rc-text-primary);
+  background: rgba(199,163,105,0.06);
+}
+
+.sidebar-campaigns button.active {
+  color: var(--rc-moonlit-apricot);
+  background: linear-gradient(90deg, rgba(199,163,105,0.12), transparent);
+  font-weight: 500;
+}
+
+.sidebar-campaigns button.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 6px; bottom: 6px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--rc-moonlit-apricot), var(--rc-aged-copper-gold));
+  border-radius: 0 2px 2px 0;
+}
+
+.sidebar-campaigns button .roll-count {
+  margin-left: auto;
+  font-size: 11px;
+  font-family: var(--rc-font-label);
+  color: var(--rc-text-muted);
+  letter-spacing: 0.5px;
+}
+
+.sidebar-campaigns button.paused { opacity: 0.3; cursor: default; }
+
+/* Sidebar nav */
+.sidebar-divider {
+  height: 1px;
+  margin: var(--gap-sm) var(--gap-lg);
+  background: linear-gradient(90deg, transparent, var(--rc-border-accent), transparent);
+}
+
+.sidebar-nav { list-style: none; margin-top: auto; padding-bottom: var(--gap-lg); }
+
+.sidebar-nav button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px var(--gap-lg);
+  background: none;
+  border: none;
+  color: var(--rc-text-muted);
+  font-family: var(--rc-font-label);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-transform: uppercase;
+}
+
+.sidebar-nav button:hover { color: var(--rc-text-secondary); }
+.sidebar-nav button.active { color: var(--rc-moonlit-apricot); }
+
+.sidebar-nav .nav-icon {
+  width: 14px; height: 14px;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+.sidebar-nav button.active .nav-icon { opacity: 1; }
+
+/* ─── MAIN CONTENT ─── */
+.main-content {
+  flex: 1;
+  margin-left: 260px;
+  padding: var(--gap-xl) var(--gap-xl) var(--gap-2xl);
+  max-width: 1260px;
+}
+
+/* ═══════════ PAGE HEADER ═══════════ */
+.page-header {
+  margin-bottom: var(--gap-xl);
+  position: relative;
+}
+
+.page-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.page-header h2 {
+  font-family: var(--rc-font-display);
+  font-size: 32px;
+  font-weight: 500;
+  color: var(--rc-text-primary);
+  letter-spacing: 2px;
+}
+
+.campaign-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  margin-top: 8px;
+  font-family: var(--rc-font-label);
+  font-size: 12px;
+  color: var(--rc-text-muted);
+  letter-spacing: 1px;
+}
+
+.campaign-meta .sep {
+  color: var(--rc-aged-copper-gold);
+  font-size: 8px;
+  opacity: 0.6;
+}
+
+/* Timeline bar */
+.timeline-bar {
+  margin-top: var(--gap-lg);
+  background: var(--rc-deep-blue-black);
+  border-radius: var(--radius-lg);
+  padding: 14px var(--gap-lg);
+  border: 1px solid var(--rc-border-accent);
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.timeline-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(199,163,105,0.04), transparent, rgba(199,163,105,0.04));
+  pointer-events: none;
+}
+
+.timeline-bar .date {
+  font-family: var(--rc-font-label);
+  font-size: 12px;
+  color: var(--rc-moonlit-apricot);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.timeline-bar .track {
+  flex: 1;
+  height: 3px;
+  background: rgba(199,163,105,0.1);
+  border-radius: 2px;
+  position: relative;
+}
+
+.timeline-bar .track-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  background: linear-gradient(90deg, var(--rc-burnished-copper), var(--rc-moonlit-apricot), var(--rc-burnished-copper));
+  border-radius: 2px;
+  width: 100%;
+}
+
+.timeline-bar .span-label {
+  font-family: var(--rc-font-serif);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--rc-text-secondary);
+  white-space: nowrap;
+}
+
+/* ═══════════ ORNAMENTAL DIVIDERS ═══════════ */
+.celestial-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: var(--gap-xl) 0;
+  color: var(--rc-aged-copper-gold);
+  opacity: 0.5;
+}
+
+.celestial-divider .line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--rc-aged-copper-gold), transparent);
+}
+
+.celestial-divider .ornament {
+  font-size: 10px;
+  letter-spacing: 6px;
+}
+
+/* ═══════════ STAT CARDS ═══════════ */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--gap-md);
+  margin-bottom: var(--gap-xl);
+}
+
+.stat-card {
+  background: var(--rc-deep-blue-black);
+  border: 1px solid var(--rc-border-accent);
+  border-radius: var(--radius-lg);
+  padding: var(--gap-lg) var(--gap-lg) 20px;
+  transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Double-border inner glow */
+.stat-card::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(199,163,105,0.08);
+  border-radius: 10px;
+  pointer-events: none;
+  transition: border-color 0.35s;
+}
+
+/* Top accent line */
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 20%; right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--card-accent, var(--rc-moonlit-apricot)), transparent);
+  opacity: 0.4;
+  transition: opacity 0.35s;
+}
+
+.stat-card:hover {
+  border-color: var(--rc-border-accent-strong);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 24px -8px var(--rc-gold-glow);
+}
+
+.stat-card:hover::before { border-color: rgba(199,163,105,0.15); }
+.stat-card:hover::after { opacity: 0.8; }
+
+.stat-card .card-icon {
+  margin-bottom: var(--gap-sm);
+  opacity: 0.4;
+}
+
+.stat-card .label {
+  font-family: var(--rc-font-label);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--rc-text-muted);
+  margin-bottom: 6px;
+}
+
+.stat-card .value {
+  font-family: var(--rc-font-display);
+  font-size: 34px;
+  font-weight: 500;
+  color: var(--rc-text-primary);
+  line-height: 1;
+  letter-spacing: 1px;
+}
+
+.stat-card .subtext {
+  font-family: var(--rc-font-body);
+  font-size: 11px;
+  color: var(--rc-text-secondary);
+  margin-top: 8px;
+  font-weight: 300;
+  letter-spacing: 0.3px;
+}
+
+.stat-card.nat20 { --card-accent: var(--rc-success); }
+.stat-card.nat20 .value { color: var(--rc-success); }
+.stat-card.nat20 .card-icon { color: var(--rc-success); opacity: 0.6; }
+
+.stat-card.nat1 { --card-accent: var(--rc-danger); }
+.stat-card.nat1 .value { color: var(--rc-danger); }
+.stat-card.nat1 .card-icon { color: var(--rc-danger); opacity: 0.6; }
+
+/* ═══════════ CHART PANELS ═══════════ */
+.chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap-lg);
+  margin-bottom: var(--gap-lg);
+}
+.chart-row.full { grid-template-columns: 1fr; }
+
+.chart-panel {
+  background: var(--rc-deep-blue-black);
+  border: 1px solid var(--rc-border-accent);
+  border-radius: var(--radius-lg);
+  padding: var(--gap-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Inner border */
+.chart-panel::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(199,163,105,0.06);
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+.chart-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--gap-md);
+}
+
+.chart-panel h3 {
+  font-family: var(--rc-font-display);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--rc-text-primary);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.chart-panel .chart-subtitle {
+  font-family: var(--rc-font-serif);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--rc-text-muted);
+  margin-top: -8px;
+  margin-bottom: var(--gap-md);
+}
+
+.section-label {
+  font-family: var(--rc-font-label);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--rc-moonlit-apricot);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: var(--gap-md);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-label::before {
+  content: '◆';
+  font-size: 6px;
+  opacity: 0.6;
+}
+
+/* ═══════════ CORNER FLOURISHES ═══════════ */
+.corner-flourish {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  color: var(--rc-aged-copper-gold);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.corner-flourish.tl { top: 6px; left: 6px; }
+.corner-flourish.tr { top: 6px; right: 6px; transform: scaleX(-1); }
+.corner-flourish.bl { bottom: 6px; left: 6px; transform: scaleY(-1); }
+.corner-flourish.br { bottom: 6px; right: 6px; transform: scale(-1,-1); }
+
+/* ═══════════ TOOLTIPS ═══════════ */
+.custom-tooltip {
+  background: var(--rc-midnight-cardstock) !important;
+  border: 1px solid var(--rc-border-accent-strong) !important;
+  border-radius: var(--radius) !important;
+  padding: 12px 16px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 16px -4px var(--rc-gold-glow);
+}
+
+.custom-tooltip .tt-label {
+  font-family: var(--rc-font-label);
+  font-size: 10px;
+  color: var(--rc-moonlit-apricot);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.custom-tooltip .tt-value {
+  font-family: var(--rc-font-display);
+  font-size: 15px;
+  color: var(--rc-text-primary);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* ═══════════ ANIMATIONS ═══════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+  100% { opacity: 0.3; }
+}
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.8; }
+}
+
+.animate-in { animation: fadeUp 0.6s cubic-bezier(0.4,0,0.2,1) both; }
+.delay-1 { animation-delay: 0.06s; }
+.delay-2 { animation-delay: 0.12s; }
+.delay-3 { animation-delay: 0.18s; }
+.delay-4 { animation-delay: 0.24s; }
+.delay-5 { animation-delay: 0.30s; }
+.delay-6 { animation-delay: 0.40s; }
+.delay-7 { animation-delay: 0.50s; }
+.delay-8 { animation-delay: 0.60s; }
+
+/* ═══════════ RECHARTS OVERRIDES ═══════════ */
+.recharts-cartesian-axis-tick-value {
+  fill: var(--rc-text-muted) !important;
+  font-family: var(--rc-font-label) !important;
+  font-size: 10px !important;
+}
+.recharts-cartesian-grid line {
+  stroke: rgba(199,163,105,0.06) !important;
+}
+.recharts-legend-item-text {
+  color: var(--rc-text-secondary) !important;
+  font-family: var(--rc-font-label) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.8px !important;
+}
+
+/* ═══════════ FOOTER ═══════════ */
+.page-footer {
+  text-align: center;
+  padding: var(--gap-xl) 0 var(--gap-lg);
+  color: var(--rc-text-muted);
+  font-family: var(--rc-font-label);
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+/* ═══════════ RESPONSIVE ═══════════ */
+@media (max-width: 1100px) {
+  .stat-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 860px) {
+  .sidebar { display: none; }
+  .main-content { margin-left: 0; padding: var(--gap-lg); }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .chart-row { grid-template-columns: 1fr; }
+  .page-header h2 { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+var useState = React.useState;
+var useEffect = React.useEffect;
+var useMemo = React.useMemo;
+var h = React.createElement;
+var AreaChart = Recharts.AreaChart;
+var Area = Recharts.Area;
+var BarChart = Recharts.BarChart;
+var Bar = Recharts.Bar;
+var PieChart = Recharts.PieChart;
+var Pie = Recharts.Pie;
+var Cell = Recharts.Cell;
+var XAxis = Recharts.XAxis;
+var YAxis = Recharts.YAxis;
+var CartesianGrid = Recharts.CartesianGrid;
+var Tooltip = Recharts.Tooltip;
+var ResponsiveContainer = Recharts.ResponsiveContainer;
+var Legend = Recharts.Legend;
+
+// ═══════════════════════════════════════
+// CAMPAIGN DATA
+// ═══════════════════════════════════════
+
+var CAMPAIGNS = [
+  {
+    id: 1, name: 'Sky Is The Limit', shortName: 'SITL', status: 'active',
+    totalRolls: 946, characters: 6, sessions: 15, nat20: 44, nat1: 41,
+    firstRoll: '2025-10-12', lastRoll: '2026-05-03',
+    sessionData: [
+      { date: 'S01', rolls: 67 }, { date: 'S02', rolls: 81 }, { date: 'S03', rolls: 99 },
+      { date: 'S04', rolls: 88 }, { date: 'S05', rolls: 66 }, { date: 'S06', rolls: 160 },
+      { date: 'S07', rolls: 22 }, { date: 'S08', rolls: 59 }, { date: 'S09', rolls: 22 },
+      { date: 'S10', rolls: 70 }, { date: 'S11', rolls: 13 }, { date: 'S12', rolls: 36 },
+      { date: 'S13', rolls: 63 }, { date: 'S14', rolls: 20 }, { date: 'S15', rolls: 28 }
+    ],
+    rollTypes: [
+      { name: 'Check', value: 461, color: '#C7A369' },
+      { name: 'To Hit', value: 164, color: '#6B8AAD' },
+      { name: 'Damage', value: 142, color: '#B44A4A' },
+      { name: 'Save', value: 78, color: '#4A9E6E' },
+      { name: 'Roll', value: 67, color: '#8B6BB5' },
+      { name: 'Heal', value: 34, color: '#D4943A' }
+    ],
+    actionCategories: [
+      { name: 'Skill', value: 461 }, { name: 'Attack', value: 186 },
+      { name: 'Custom', value: 103 }, { name: 'Ability', value: 89 },
+      { name: 'Spell', value: 75 }, { name: 'Initiative', value: 54 },
+      { name: 'Hit Dice', value: 21 }
+    ]
+  },
+  {
+    id: 2, name: 'Pacts & Power', shortName: 'P&P', status: 'active',
+    totalRolls: 2907, characters: 5, sessions: 72, nat20: 109, nat1: 117,
+    firstRoll: '2023-01-29', lastRoll: '2026-04-21',
+    sessionData: [
+      { date: 'Q1 \'23', rolls: 149 }, { date: 'Q2 \'23', rolls: 288 },
+      { date: 'Q3 \'23', rolls: 234 }, { date: 'Q4 \'23', rolls: 206 },
+      { date: 'Q1 \'24', rolls: 164 }, { date: 'Q2 \'24', rolls: 103 },
+      { date: 'Q3 \'24', rolls: 81 }, { date: 'Q4 \'24', rolls: 123 },
+      { date: 'Q1 \'25', rolls: 110 }, { date: 'Q2 \'25', rolls: 78 },
+      { date: 'Q3 \'25', rolls: 199 }, { date: 'Q4 \'25', rolls: 189 },
+      { date: 'Q1 \'26', rolls: 188 }, { date: 'Q2 \'26', rolls: 191 }
+    ],
+    rollTypes: [
+      { name: 'Check', value: 934, color: '#C7A369' },
+      { name: 'Roll', value: 566, color: '#8B6BB5' },
+      { name: 'Damage', value: 483, color: '#B44A4A' },
+      { name: 'To Hit', value: 414, color: '#6B8AAD' },
+      { name: 'Save', value: 263, color: '#4A9E6E' },
+      { name: 'Heal', value: 23, color: '#D4943A' }
+    ],
+    actionCategories: [
+      { name: 'Skill', value: 934 }, { name: 'Attack', value: 664 },
+      { name: 'Custom', value: 352 }, { name: 'Ability', value: 287 },
+      { name: 'Spell', value: 287 }, { name: 'Initiative', value: 136 },
+      { name: 'Hit Dice', value: 58 }
+    ]
+  },
+  {
+    id: 3, name: 'Ashfall Brittania', shortName: 'AFB', status: 'active',
+    totalRolls: 855, characters: 7, sessions: 8, nat20: 29, nat1: 22,
+    firstRoll: '2025-11-08', lastRoll: '2026-05-04',
+    sessionData: [
+      { date: 'S01', rolls: 196 }, { date: 'S02', rolls: 93 },
+      { date: 'S03', rolls: 125 }, { date: 'S04', rolls: 163 },
+      { date: 'S05', rolls: 81 }, { date: 'S06', rolls: 51 },
+      { date: 'S07', rolls: 47 }, { date: 'S08', rolls: 44 }
+    ],
+    rollTypes: [
+      { name: 'Check', value: 329, color: '#C7A369' },
+      { name: 'Roll', value: 173, color: '#8B6BB5' },
+      { name: 'Damage', value: 167, color: '#B44A4A' },
+      { name: 'To Hit', value: 118, color: '#6B8AAD' },
+      { name: 'Save', value: 83, color: '#4A9E6E' }
+    ],
+    actionCategories: [
+      { name: 'Skill', value: 235 }, { name: 'Attack', value: 261 },
+      { name: 'Custom', value: 128 }, { name: 'Ability', value: 89 },
+      { name: 'Spell', value: 67 }, { name: 'Initiative', value: 22 },
+      { name: 'Hit Dice', value: 17 }
+    ]
+  },
+  {
+    id: 4, name: 'Where the Flowers Remember', shortName: 'WTFR', status: 'paused',
+    totalRolls: 0, characters: 0, sessions: 0, nat20: 0, nat1: 0,
+    firstRoll: null, lastRoll: null, sessionData: [], rollTypes: [], actionCategories: []
+  }
+];
+
+// ═══════════════════════════════════════
+// SVG DECORATIVE ELEMENTS
+// ═══════════════════════════════════════
+
+function CornerFlourish(props) {
+  return h('svg', { className: 'corner-flourish ' + props.pos, viewBox: '0 0 40 40', fill: 'none', xmlns: 'http://www.w3.org/2000/svg' },
+    h('path', { d: 'M2 38 L2 12 Q2 2 12 2 L38 2', stroke: 'currentColor', strokeWidth: '0.8', fill: 'none' }),
+    h('path', { d: 'M6 38 L6 16 Q6 6 16 6 L38 6', stroke: 'currentColor', strokeWidth: '0.4', fill: 'none', opacity: '0.5' }),
+    h('circle', { cx: '2', cy: '2', r: '1.5', fill: 'currentColor', opacity: '0.6' }),
+    h('path', { d: 'M12 2 L12 8 Q12 12 8 12 L2 12', stroke: 'currentColor', strokeWidth: '0.5', fill: 'none', opacity: '0.3' })
+  );
+}
+
+function CelestialDivider() {
+  return h('div', { className: 'celestial-divider animate-in delay-5' },
+    h('div', { className: 'line' }),
+    h('svg', { width: '80', height: '16', viewBox: '0 0 80 16', fill: 'none' },
+      // Left star
+      h('path', { d: 'M10 8 L12 6 L14 8 L12 10 Z', fill: 'currentColor', opacity: '0.5' }),
+      // Center moon
+      h('path', { d: 'M36 3 A5 5 0 1 0 36 13 A4 4 0 1 1 36 3', fill: 'currentColor', opacity: '0.7' }),
+      // Center dot
+      h('circle', { cx: '40', cy: '8', r: '1', fill: 'currentColor', opacity: '0.4' }),
+      // Right ornament
+      h('path', { d: 'M44 8 A5 5 0 1 1 44 8.01', fill: 'none', stroke: 'currentColor', strokeWidth: '0.5', opacity: '0.3' }),
+      // Right star
+      h('path', { d: 'M66 8 L68 6 L70 8 L68 10 Z', fill: 'currentColor', opacity: '0.5' }),
+      // Connecting lines
+      h('line', { x1: '16', y1: '8', x2: '34', y2: '8', stroke: 'currentColor', strokeWidth: '0.5', opacity: '0.3' }),
+      h('line', { x1: '46', y1: '8', x2: '64', y2: '8', stroke: 'currentColor', strokeWidth: '0.5', opacity: '0.3' })
+    ),
+    h('div', { className: 'line' })
+  );
+}
+
+function BladeLogo() {
+  return h('svg', { className: 'sidebar-logo', viewBox: '0 0 60 60', fill: 'none', xmlns: 'http://www.w3.org/2000/svg' },
+    h('defs', null,
+      h('linearGradient', { id: 'bladeGrad', x1: '0', y1: '0', x2: '0', y2: '1' },
+        h('stop', { offset: '0%', stopColor: '#DA9565' }),
+        h('stop', { offset: '50%', stopColor: '#C7A369' }),
+        h('stop', { offset: '100%', stopColor: '#8C5D3F' })
+      )
+    ),
+    // Blade body
+    h('path', { d: 'M30 6 L36 28 L33 30 L30 54 L27 30 L24 28 Z', fill: 'url(#bladeGrad)', opacity: '0.9' }),
+    // Blade center line
+    h('line', { x1: '30', y1: '8', x2: '30', y2: '52', stroke: '#111A24', strokeWidth: '0.8', opacity: '0.5' }),
+    // Cross guard
+    h('path', { d: 'M22 29 L30 32 L38 29 L30 26 Z', fill: 'url(#bladeGrad)', opacity: '0.7' }),
+    // Small star at top
+    h('path', { d: 'M30 3 L30.8 5 L30 4.2 L29.2 5 Z', fill: '#DA9565', opacity: '0.6' })
+  );
+}
+
+// Nav icons as simple SVGs
+function NavIcon(props) {
+  var paths = {
+    overview: h('path', { d: 'M3 3h4v4H3zM9 3h4v4H9zM3 9h4v4H3zM9 9h4v4H9z', stroke: 'currentColor', strokeWidth: '1.2', fill: 'none' }),
+    characters: h('g', null,
+      h('circle', { cx: '8', cy: '5', r: '3', stroke: 'currentColor', strokeWidth: '1.2', fill: 'none' }),
+      h('path', { d: 'M2 14 Q2 10 8 10 Q14 10 14 14', stroke: 'currentColor', strokeWidth: '1.2', fill: 'none' })
+    ),
+    combat: h('path', { d: 'M8 2 L10 6 L8 14 L6 6 Z M4 7 L12 7', stroke: 'currentColor', strokeWidth: '1.2', fill: 'none' }),
+    skills: h('g', null,
+      h('circle', { cx: '8', cy: '8', r: '6', stroke: 'currentColor', strokeWidth: '1.2', fill: 'none' }),
+      h('path', { d: 'M8 2 L9 6 L13 6 L10 9 L11 13 L8 11 L5 13 L6 9 L3 6 L7 6 Z', fill: 'currentColor', opacity: '0.5' })
+    ),
+    luck: h('g', null,
+      h('path', { d: 'M4 4 A4 4 0 0 1 12 4 Q12 8 8 12 Q4 8 4 4', stroke: 'currentColor', strokeWidth: '1.2', fill: 'none' }),
+      h('path', { d: 'M6 6 L8 3 L10 6', stroke: 'currentColor', strokeWidth: '0.8', fill: 'none' })
+    ),
+    sessions: h('g', null,
+      h('rect', { x: '2', y: '3', width: '12', height: '10', rx: '1', stroke: 'currentColor', strokeWidth: '1.2', fill: 'none' }),
+      h('line', { x1: '2', y1: '7', x2: '14', y2: '7', stroke: 'currentColor', strokeWidth: '1.2' }),
+      h('line', { x1: '5', y1: '1', x2: '5', y2: '4', stroke: 'currentColor', strokeWidth: '1.2' }),
+      h('line', { x1: '11', y1: '1', x2: '11', y2: '4', stroke: 'currentColor', strokeWidth: '1.2' })
+    )
+  };
+  return h('svg', { className: 'nav-icon', viewBox: '0 0 16 16', fill: 'none' }, paths[props.icon]);
+}
+
+// Stat card icons
+function StatIcon(props) {
+  var size = 20;
+  var icons = {
+    rolls: h('svg', { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '1.5' },
+      h('rect', { x: '4', y: '4', width: '16', height: '16', rx: '3', ry: '3' }),
+      h('circle', { cx: '8.5', cy: '8.5', r: '1.2', fill: 'currentColor' }),
+      h('circle', { cx: '12', cy: '12', r: '1.2', fill: 'currentColor' }),
+      h('circle', { cx: '15.5', cy: '15.5', r: '1.2', fill: 'currentColor' })
+    ),
+    sessions: h('svg', { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '1.5' },
+      h('path', { d: 'M12 3 A9 9 0 1 0 21 12', strokeLinecap: 'round' }),
+      h('path', { d: 'M12 3 L12 12 L18 12', strokeLinecap: 'round' })
+    ),
+    characters: h('svg', { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '1.5' },
+      h('circle', { cx: '12', cy: '8', r: '4' }),
+      h('path', { d: 'M4 20 Q4 14 12 14 Q20 14 20 20', strokeLinecap: 'round' })
+    ),
+    nat20: h('svg', { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '1.5' },
+      h('path', { d: 'M12 2 L14.5 8 L21 9 L16 14 L17.5 21 L12 17.5 L6.5 21 L8 14 L3 9 L9.5 8 Z' })
+    ),
+    nat1: h('svg', { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '1.5' },
+      h('circle', { cx: '12', cy: '12', r: '9' }),
+      h('path', { d: 'M8 8 L16 16 M16 8 L8 16' })
+    )
+  };
+  return h('div', { className: 'card-icon', style: { color: props.color || '#8C5D3F' } }, icons[props.icon]);
+}
+
+// ═══════════════════════════════════════
+// COMPONENTS
+// ═══════════════════════════════════════
+
+function ChartTooltip(props) {
+  if (!props.active || !props.payload || !props.payload.length) return null;
+  return h('div', { className: 'custom-tooltip' },
+    h('div', { className: 'tt-label' }, props.label),
+    props.payload.map(function(p, i) {
+      return h('div', { key: i, className: 'tt-value', style: { color: p.color || '#E8E4DC' } },
+        (typeof p.value === 'number' ? p.value.toLocaleString() : p.value) + ' rolls'
+      );
+    })
+  );
+}
+
+function PieTooltipComp(props) {
+  if (!props.active || !props.payload || !props.payload.length) return null;
+  var d = props.payload[0];
+  var pct = d.payload.total > 0 ? (d.value / d.payload.total * 100).toFixed(1) : '0';
+  return h('div', { className: 'custom-tooltip' },
+    h('div', { className: 'tt-label' }, d.name),
+    h('div', { className: 'tt-value' }, d.value.toLocaleString() + ' (' + pct + '%)')
+  );
+}
+
+function StatCard(props) {
+  return h('div', { className: 'stat-card animate-in ' + (props.className || '') + ' delay-' + props.delay },
+    h(CornerFlourish, { pos: 'tl' }),
+    h(CornerFlourish, { pos: 'tr' }),
+    h(CornerFlourish, { pos: 'bl' }),
+    h(CornerFlourish, { pos: 'br' }),
+    h(StatIcon, { icon: props.icon, color: props.iconColor }),
+    h('div', { className: 'label' }, props.label),
+    h('div', { className: 'value' }, typeof props.value === 'number' ? props.value.toLocaleString() : props.value),
+    props.subtext && h('div', { className: 'subtext' }, props.subtext)
+  );
+}
+
+function SessionRollsChart(props) {
+  var isPnP = props.isPnP;
+  return h(ResponsiveContainer, { width: '100%', height: 280 },
+    h(AreaChart, { data: props.data, margin: { top: 10, right: 10, left: -15, bottom: 0 } },
+      h('defs', null,
+        h('linearGradient', { id: 'rollGrad', x1: 0, y1: 0, x2: 0, y2: 1 },
+          h('stop', { offset: '0%', stopColor: '#DA9565', stopOpacity: 0.4 }),
+          h('stop', { offset: '50%', stopColor: '#C7A369', stopOpacity: 0.15 }),
+          h('stop', { offset: '100%', stopColor: '#8C5D3F', stopOpacity: 0.02 })
+        )
+      ),
+      h(CartesianGrid, { strokeDasharray: '3 3', vertical: false }),
+      h(XAxis, {
+        dataKey: 'date',
+        tick: { fill: '#5E5A55', fontFamily: "'Alegreya Sans SC', sans-serif", fontSize: 10 },
+        axisLine: { stroke: 'rgba(199,163,105,0.12)' },
+        tickLine: false,
+        interval: 0,
+        angle: isPnP ? 0 : -35,
+        textAnchor: isPnP ? 'middle' : 'end',
+        height: isPnP ? 30 : 50
+      }),
+      h(YAxis, {
+        tick: { fill: '#5E5A55', fontFamily: "'Alegreya Sans SC', sans-serif", fontSize: 10 },
+        axisLine: false, tickLine: false
+      }),
+      h(Tooltip, { content: h(ChartTooltip, null) }),
+      h(Area, {
+        type: 'monotone', dataKey: 'rolls',
+        stroke: '#DA9565', strokeWidth: 2,
+        fill: 'url(#rollGrad)',
+        dot: { r: 3, fill: '#DA9565', strokeWidth: 0 },
+        activeDot: { r: 5, fill: '#DA9565', stroke: '#050A0E', strokeWidth: 2 }
+      })
+    )
+  );
+}
+
+function RollTypePie(props) {
+  var total = props.data.reduce(function(s, d) { return s + d.value; }, 0);
+  var dataWithTotal = props.data.map(function(d) { return Object.assign({}, d, { total: total }); });
+  return h(ResponsiveContainer, { width: '100%', height: 280 },
+    h(PieChart, null,
+      h(Pie, {
+        data: dataWithTotal, cx: '50%', cy: '50%',
+        innerRadius: 60, outerRadius: 105,
+        paddingAngle: 2, dataKey: 'value', stroke: 'none'
+      },
+        props.data.map(function(entry, i) {
+          return h(Cell, { key: i, fill: entry.color });
+        })
+      ),
+      h(Tooltip, { content: h(PieTooltipComp, null) }),
+      h(Legend, {
+        iconType: 'circle', iconSize: 7,
+        wrapperStyle: { fontFamily: "'Alegreya Sans SC', sans-serif", fontSize: 11, letterSpacing: '1px' }
+      })
+    )
+  );
+}
+
+function ActionCategoryBars(props) {
+  return h(ResponsiveContainer, { width: '100%', height: 280 },
+    h(BarChart, { data: props.data, layout: 'vertical', margin: { top: 0, right: 10, left: 5, bottom: 0 } },
+      h(CartesianGrid, { strokeDasharray: '3 3', horizontal: false }),
+      h(YAxis, {
+        type: 'category', dataKey: 'name', width: 80,
+        tick: { fill: '#9A9590', fontFamily: "'Alegreya Sans SC', sans-serif", fontSize: 11, letterSpacing: '0.5px' },
+        axisLine: false, tickLine: false
+      }),
+      h(XAxis, {
+        type: 'number',
+        tick: { fill: '#5E5A55', fontFamily: "'Alegreya Sans SC', sans-serif", fontSize: 10 },
+        axisLine: false, tickLine: false
+      }),
+      h(Tooltip, { content: h(ChartTooltip, null) }),
+      h(Bar, {
+        dataKey: 'value', fill: '#6B8AAD',
+        radius: [0, 4, 4, 0], barSize: 20
+      })
+    )
+  );
+}
+
+function CampaignTimeline(props) {
+  if (!props.firstRoll) return null;
+  var start = new Date(props.firstRoll);
+  var end = new Date(props.lastRoll);
+  var diffMs = end - start;
+  var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  var months = Math.floor(diffDays / 30);
+  var days = diffDays % 30;
+  var spanText = months > 0
+    ? months + ' month' + (months > 1 ? 's' : '') + (days > 0 ? ', ' + days + ' days' : '')
+    : diffDays + ' days';
+
+  function fmt(d) {
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  return h('div', { className: 'timeline-bar animate-in delay-6' },
+    h('span', { className: 'date' }, fmt(start)),
+    h('div', { className: 'track' },
+      h('div', { className: 'track-fill' })
+    ),
+    h('span', { className: 'date' }, fmt(end)),
+    h('span', { className: 'span-label' }, spanText)
+  );
+}
+
+// ═══════════════════════════════════════
+// APP
+// ═══════════════════════════════════════
+
+var NAV_ITEMS = [
+  { label: 'Overview', icon: 'overview' },
+  { label: 'Characters', icon: 'characters' },
+  { label: 'Combat', icon: 'combat' },
+  { label: 'Skills & Spells', icon: 'skills' },
+  { label: 'Luck & Trends', icon: 'luck' },
+  { label: 'Session Explorer', icon: 'sessions' }
+];
+
+function App() {
+  var _s = useState(1);
+  var activeCampaignId = _s[0];
+  var setActiveCampaignId = _s[1];
+
+  var campaign = CAMPAIGNS.find(function(c) { return c.id === activeCampaignId; });
+  var isPnP = campaign.id === 2;
+  var nat20Rate = campaign.totalRolls > 0 ? (campaign.nat20 / campaign.totalRolls * 100).toFixed(1) + '%' : '—';
+  var nat1Rate = campaign.totalRolls > 0 ? (campaign.nat1 / campaign.totalRolls * 100).toFixed(1) + '%' : '—';
+
+  return h('div', { className: 'app-shell' },
+
+    // ── SIDEBAR ──
+    h('nav', { className: 'sidebar' },
+      h('div', { className: 'sidebar-brand' },
+        h(BladeLogo, null),
+        h('h1', null, 'Rectrix', h('br'), 'Caedere'),
+        h('div', { className: 'tagline' }, 'Roll Analytics')
+      ),
+
+      h('div', { className: 'sidebar-section-label' }, 'Campaigns'),
+      h('ul', { className: 'sidebar-campaigns' },
+        CAMPAIGNS.map(function(c) {
+          return h('li', { key: c.id },
+            h('button', {
+              className: (c.id === activeCampaignId ? 'active' : '') + (c.status === 'paused' ? ' paused' : ''),
+              onClick: c.status !== 'paused' ? function() { setActiveCampaignId(c.id); } : undefined
+            },
+              h('span', null, c.shortName),
+              h('span', { className: 'roll-count' },
+                c.status === 'paused' ? 'paused' : c.totalRolls.toLocaleString()
+              )
+            )
+          );
+        })
+      ),
+
+      h('div', { className: 'sidebar-divider' }),
+
+      h('ul', { className: 'sidebar-nav' },
+        NAV_ITEMS.map(function(item, i) {
+          return h('li', { key: item.label },
+            h('button', { className: i === 0 ? 'active' : '' },
+              h(NavIcon, { icon: item.icon }),
+              item.label
+            )
+          );
+        })
+      )
+    ),
+
+    // ── MAIN CONTENT ──
+    h('main', { className: 'main-content', key: activeCampaignId },
+
+      // Page header
+      h('div', { className: 'page-header animate-in' },
+        h('div', { className: 'page-header-top' },
+          h('div', null,
+            h('h2', null, campaign.name),
+            h('div', { className: 'campaign-meta' },
+              'Overview',
+              h('span', { className: 'sep' }, '◆'),
+              campaign.sessions + ' sessions',
+              h('span', { className: 'sep' }, '◆'),
+              campaign.characters + ' characters',
+              h('span', { className: 'sep' }, '◆'),
+              campaign.totalRolls.toLocaleString() + ' rolls archived'
+            )
+          )
+        ),
+        h(CampaignTimeline, { firstRoll: campaign.firstRoll, lastRoll: campaign.lastRoll })
+      ),
+
+      h(CelestialDivider, null),
+
+      // Stat cards
+      h('div', { className: 'stat-grid' },
+        h(StatCard, { label: 'Total Rolls', value: campaign.totalRolls, icon: 'rolls', delay: 1 }),
+        h(StatCard, { label: 'Sessions', value: campaign.sessions, icon: 'sessions', delay: 2 }),
+        h(StatCard, { label: 'Characters', value: campaign.characters, icon: 'characters', delay: 3 }),
+        h(StatCard, {
+          label: 'Natural 20s', value: campaign.nat20,
+          subtext: nat20Rate + ' of all rolls',
+          className: 'nat20', icon: 'nat20', iconColor: '#4A9E6E', delay: 4
+        }),
+        h(StatCard, {
+          label: 'Natural 1s', value: campaign.nat1,
+          subtext: nat1Rate + ' of all rolls',
+          className: 'nat1', icon: 'nat1', iconColor: '#B44A4A', delay: 5
+        })
+      ),
+
+      // Session rolls chart
+      h('div', { className: 'chart-row full' },
+        h('div', { className: 'chart-panel animate-in delay-6' },
+          h(CornerFlourish, { pos: 'tl' }),
+          h(CornerFlourish, { pos: 'tr' }),
+          h(CornerFlourish, { pos: 'bl' }),
+          h(CornerFlourish, { pos: 'br' }),
+          h('div', { className: 'chart-panel-header' },
+            h('h3', null, isPnP ? 'Rolls by Quarter' : 'Rolls per Session')
+          ),
+          h('p', { className: 'chart-subtitle' },
+            isPnP ? 'Quarterly aggregation across 3 years of play' : 'Session intensity over time — peaks mark combat-heavy sessions'
+          ),
+          h(SessionRollsChart, { data: campaign.sessionData, isPnP: isPnP })
+        )
+      ),
+
+      // Roll type pie + Action category bars
+      h('div', { className: 'chart-row' },
+        h('div', { className: 'chart-panel animate-in delay-7' },
+          h(CornerFlourish, { pos: 'tl' }),
+          h(CornerFlourish, { pos: 'tr' }),
+          h(CornerFlourish, { pos: 'bl' }),
+          h(CornerFlourish, { pos: 'br' }),
+          h('div', { className: 'chart-panel-header' },
+            h('h3', null, 'Roll Type Breakdown')
+          ),
+          campaign.rollTypes.length > 0
+            ? h(RollTypePie, { data: campaign.rollTypes })
+            : h('p', { style: { color: '#5E5A55', textAlign: 'center', padding: '80px 0', fontFamily: "'EB Garamond', serif", fontStyle: 'italic' } }, 'Awaiting first roll…')
+        ),
+        h('div', { className: 'chart-panel animate-in delay-8' },
+          h(CornerFlourish, { pos: 'tl' }),
+          h(CornerFlourish, { pos: 'tr' }),
+          h(CornerFlourish, { pos: 'bl' }),
+          h(CornerFlourish, { pos: 'br' }),
+          h('div', { className: 'chart-panel-header' },
+            h('h3', null, 'Action Categories')
+          ),
+          campaign.actionCategories.length > 0
+            ? h(ActionCategoryBars, { data: campaign.actionCategories })
+            : h('p', { style: { color: '#5E5A55', textAlign: 'center', padding: '80px 0', fontFamily: "'EB Garamond', serif", fontStyle: 'italic' } }, 'Awaiting first roll…')
+        )
+      ),
+
+      // Footer
+      h('div', { className: 'page-footer animate-in delay-8' },
+        h('div', { className: 'celestial-divider', style: { margin: '0 0 16px' } },
+          h('div', { className: 'line' }),
+          h('svg', { width: '20', height: '12', viewBox: '0 0 20 12', fill: 'none' },
+            h('path', { d: 'M6 1 A5 5 0 1 0 6 11 A4 4 0 1 1 6 1', fill: '#8C5D3F', opacity: '0.4' }),
+            h('path', { d: 'M10 6 L12 4 L14 6 L12 8 Z', fill: '#8C5D3F', opacity: '0.3' })
+          ),
+          h('div', { className: 'line' })
+        ),
+        'Rectrix Caedere · Roll Analytics · rectrixcaedere.com'
+      )
+    )
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(h(App, null));
+</script>
+</body>
+</html>
