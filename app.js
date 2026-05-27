@@ -18,7 +18,10 @@ function PieC(p){var tot=p.data.reduce(function(s,d){return s+d.v},0);var dt=p.d
 
 function PH(p){return h('div',{className:'ph'},h('span',{className:'star'},'*'),h('h3',null,p.title),p.sub&&h('span',{className:'psub'},p.sub))}
 
-function Kpi(p){return h('div',{className:'panel kpi ai '+(p.cn||'')+' d'+p.dl},h(CF,{p:'c-tl'}),h(CF,{p:'c-tr'}),h(CF,{p:'c-bl'}),h(CF,{p:'c-br'}),h('div',{className:'kl'},p.label),h('div',{className:'kv'},typeof p.value==='number'?p.value.toLocaleString():p.value),p.sub&&h('div',{className:'ks'},p.sub))}
+function Kpi(p){
+  var style=p.bg?{backgroundImage:'url('+p.bg+')',backgroundSize:'cover',backgroundPosition:'center'}:{};
+  return h('div',{className:'panel kpi ai '+(p.cn||'')+' d'+p.dl,style:style},h(CF,{p:'c-tl'}),h(CF,{p:'c-tr'}),h(CF,{p:'c-bl'}),h(CF,{p:'c-br'}),h('div',{className:'kl'},p.label),h('div',{className:'kv'},typeof p.value==='number'?p.value.toLocaleString():p.value),p.sub&&h('div',{className:'ks'},p.sub))
+}
 
 var CHARS=[{n:'Aric Velloren',r:1842,avg:16.3,tr:2.1},{n:'Liora Sunblade',r:1621,avg:15.7,tr:1.4},{n:'Thorne Blackwell',r:1401,avg:14.8,tr:-0.6},{n:'Kaelen Stormborn',r:1239,avg:17.2,tr:0.9},{n:'Mira Undertide',r:1083,avg:13.9,tr:-1.2}];
 function CharTable(){
@@ -94,10 +97,10 @@ function App(){
       ),
 
       h('div',{className:'row-kpi'},
-        h(Kpi,{label:'Total Rolls',value:c.tr,dl:1}),
-        h(Kpi,{label:'Sessions Logged',value:c.se,dl:2}),
-        h(Kpi,{label:'Nat 20 Rate',value:r20,cn:'n20',dl:3}),
-        h(Kpi,{label:'Characters',value:c.ch,dl:4}),
+        h(Kpi,{label:'Total Rolls',value:c.tr,dl:1,bg:'https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/scorecard1.png'}),
+        h(Kpi,{label:'Sessions Logged',value:c.se,dl:2,bg:'https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/scorecard2.png'}),
+        h(Kpi,{label:'Nat 20 Rate',value:r20,cn:'n20',dl:3,bg:'https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/scorecard3.png'}),
+        h(Kpi,{label:'Characters',value:c.ch,dl:4,bg:'https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/scorecard4.png'}),
         h('div',{className:'panel cp ai d5 kpi-chart'},
           h(CF,{p:'c-tl'}),h(CF,{p:'c-tr'}),h(CF,{p:'c-bl'}),h(CF,{p:'c-br'}),
           h(PH,{title:q?'Rolls by Quarter':'Roll Activity Over Time',sub:q?'Quarterly aggregation':'session_date -- roll_count'}),
