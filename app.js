@@ -1,21 +1,150 @@
 var T={bgVoid:'#050A0E',bgCard:'#0E1820',bgCardInner:'#0B1219',goldDark:'#68442F',goldMid:'#8C5D3F',gold:'#C7A369',goldBright:'#DA9565',goldPale:'#E8C690',text1:'#E8E4DC',text2:'#9A9590',text3:'#5E5A55',success:'#4A9E6E',danger:'#B44A4A',info:'#6B8AAD',mystic:'#8B6BB5',warn:'#D4943A',fLabel:"'Alegreya Sans SC',sans-serif",text2xs:9,textXs:10,goldAlpha5:'rgba(199,163,105,0.05)',goldAlpha8:'rgba(199,163,105,0.08)',goldAlpha10:'rgba(199,163,105,0.10)',goldAlpha30:'rgba(199,163,105,0.30)'};
-var h=React.createElement,us=React.useState;var AC=Recharts.AreaChart,A=Recharts.Area,BC=Recharts.BarChart,B=Recharts.Bar,PC=Recharts.PieChart,Pi=Recharts.Pie,Ce=Recharts.Cell,XA=Recharts.XAxis,YA=Recharts.YAxis,CG=Recharts.CartesianGrid,Tt=Recharts.Tooltip,RC=Recharts.ResponsiveContainer,Lg=Recharts.Legend;
-var D=[{id:1,nm:'Sky Is The Limit',sn:'SITL',st:'a',tr:946,ch:6,se:15,n20:44,n1:41,fr:'2025-10-12',lr:'2026-05-03',sd:[{d:'S01',r:67},{d:'S02',r:81},{d:'S03',r:99},{d:'S04',r:88},{d:'S05',r:66},{d:'S06',r:160},{d:'S07',r:22},{d:'S08',r:59},{d:'S09',r:22},{d:'S10',r:70},{d:'S11',r:13},{d:'S12',r:36},{d:'S13',r:63},{d:'S14',r:20},{d:'S15',r:28}],rt:[{n:'Check',v:461,c:T.gold},{n:'To Hit',v:164,c:T.info},{n:'Damage',v:142,c:T.danger},{n:'Save',v:78,c:T.success},{n:'Roll',v:67,c:T.mystic},{n:'Heal',v:34,c:T.warn}],ac:[{n:'Skill',v:461,c:T.gold},{n:'Attack',v:186,c:T.danger},{n:'Custom',v:103,c:T.goldMid},{n:'Ability',v:89,c:T.goldBright},{n:'Spell',v:75,c:T.mystic},{n:'Initiative',v:54,c:T.warn},{n:'Hit Dice',v:21,c:T.success}]},{id:2,nm:'Pacts & Power',sn:'P&P',st:'a',tr:2907,ch:5,se:72,n20:109,n1:117,fr:'2023-01-29',lr:'2026-04-21',sd:[{d:"Q1'23",r:149},{d:"Q2'23",r:288},{d:"Q3'23",r:234},{d:"Q4'23",r:206},{d:"Q1'24",r:164},{d:"Q2'24",r:103},{d:"Q3'24",r:81},{d:"Q4'24",r:123},{d:"Q1'25",r:110},{d:"Q2'25",r:78},{d:"Q3'25",r:199},{d:"Q4'25",r:189},{d:"Q1'26",r:188},{d:"Q2'26",r:191}],rt:[{n:'Check',v:934,c:T.gold},{n:'Roll',v:566,c:T.mystic},{n:'Damage',v:483,c:T.danger},{n:'To Hit',v:414,c:T.info},{n:'Save',v:263,c:T.success},{n:'Heal',v:23,c:T.warn}],ac:[{n:'Skill',v:934,c:T.gold},{n:'Attack',v:664,c:T.danger},{n:'Custom',v:352,c:T.goldMid},{n:'Ability',v:287,c:T.goldBright},{n:'Spell',v:287,c:T.mystic},{n:'Initiative',v:136,c:T.warn},{n:'Hit Dice',v:58,c:T.success}]},{id:3,nm:'Ashfall Brittania',sn:'AFB',st:'a',tr:855,ch:7,se:8,n20:29,n1:22,fr:'2025-11-08',lr:'2026-05-04',sd:[{d:'S01',r:196},{d:'S02',r:93},{d:'S03',r:125},{d:'S04',r:163},{d:'S05',r:81},{d:'S06',r:51},{d:'S07',r:47},{d:'S08',r:44}],rt:[{n:'Check',v:329,c:T.gold},{n:'Roll',v:173,c:T.mystic},{n:'Damage',v:167,c:T.danger},{n:'To Hit',v:118,c:T.info},{n:'Save',v:83,c:T.success}],ac:[{n:'Skill',v:235,c:T.gold},{n:'Attack',v:261,c:T.danger},{n:'Custom',v:128,c:T.goldMid},{n:'Ability',v:89,c:T.goldBright},{n:'Spell',v:67,c:T.mystic},{n:'Initiative',v:22,c:T.warn},{n:'Hit Dice',v:17,c:T.success}]},{id:4,nm:'Where the Flowers Remember',sn:'WTFR',st:'p',tr:0,ch:0,se:0,n20:0,n1:0,fr:null,lr:null,sd:[],rt:[],ac:[]}];
-function CF(p){return h('svg',{className:'cf '+p.p,viewBox:'0 0 44 44',fill:'none'},h('path',{d:'M2 42 L2 14 Q2 2 14 2 L42 2',stroke:'currentColor',strokeWidth:'.7'}),h('path',{d:'M6 42 L6 18 Q6 6 18 6 L42 6',stroke:'currentColor',strokeWidth:'.35',opacity:'.4'}),h('circle',{cx:2,cy:2,r:1.8,fill:'currentColor',opacity:'.5'}),h('path',{d:'M2 10 Q2 6 6 4',stroke:'currentColor',strokeWidth:'.4',opacity:'.3'}),h('path',{d:'M10 2 Q6 2 4 6',stroke:'currentColor',strokeWidth:'.4',opacity:'.3'}),h('path',{d:'M8 2 C10 0 12 1 11 3 C10 5 8 4 8 2',fill:'currentColor',opacity:'.15'}),h('path',{d:'M2 8 C0 10 1 12 3 11 C5 10 4 8 2 8',fill:'currentColor',opacity:'.15'}))}
-function BL(){return h('svg',{className:'side-logo',viewBox:'0 0 60 60',fill:'none'},h('defs',null,h('linearGradient',{id:'bg',x1:0,y1:0,x2:0,y2:1},h('stop',{offset:'0%',stopColor:T.goldBright}),h('stop',{offset:'50%',stopColor:T.gold}),h('stop',{offset:'100%',stopColor:T.goldMid}))),h('path',{d:'M30 4 L37 28 L34 31 L30 56 L26 31 L23 28 Z',fill:'url(#bg)',opacity:.9}),h('line',{x1:30,y1:6,x2:30,y2:54,stroke:T.bgCardInner,strokeWidth:'.7',opacity:.4}),h('path',{d:'M20 29 L30 33 L40 29 L30 25 Z',fill:'url(#bg)',opacity:.6}),h('path',{d:'M30 1 L31 3.5 L30 2.8 L29 3.5 Z',fill:T.goldBright,opacity:.5}))}
-function ODiv(){return h('div',{className:'odiv ai d5'},h('div',{className:'ol'}),h('svg',{width:100,height:14,viewBox:'0 0 100 14',fill:'none'},h('path',{d:'M12 7 L14 5 L16 7 L14 9Z',fill:T.goldMid,opacity:.5}),h('line',{x1:20,y1:7,x2:40,y2:7,stroke:T.goldMid,strokeWidth:.5,opacity:.3}),h('path',{d:'M45 2 A5 5 0 1 0 45 12 A3.8 3.8 0 1 1 45 2',fill:T.goldMid,opacity:.6}),h('circle',{cx:50,cy:7,r:.8,fill:T.goldMid,opacity:.3}),h('line',{x1:60,y1:7,x2:80,y2:7,stroke:T.goldMid,strokeWidth:.5,opacity:.3}),h('path',{d:'M84 7 L86 5 L88 7 L86 9Z',fill:T.goldMid,opacity:.5})),h('div',{className:'ol'}))}
+var h=React.createElement,us=React.useState;
+var AC=Recharts.AreaChart,A=Recharts.Area,PC=Recharts.PieChart,Pi=Recharts.Pie,Ce=Recharts.Cell,XA=Recharts.XAxis,YA=Recharts.YAxis,CG=Recharts.CartesianGrid,Tt=Recharts.Tooltip,RC=Recharts.ResponsiveContainer,Lg=Recharts.Legend;
+var D=[{id:1,nm:'Sky Is The Limit',sn:'SITL',st:'a',tr:946,ch:6,se:15,n20:44,n1:41,fr:'2025-10-12',lr:'2026-05-03',sd:[{d:'S01',r:67},{d:'S02',r:81},{d:'S03',r:99},{d:'S04',r:88},{d:'S05',r:66},{d:'S06',r:160},{d:'S07',r:22},{d:'S08',r:59},{d:'S09',r:22},{d:'S10',r:70},{d:'S11',r:13},{d:'S12',r:36},{d:'S13',r:63},{d:'S14',r:20},{d:'S15',r:28}],rt:[{n:'Check',v:461,c:T.gold},{n:'To Hit',v:164,c:T.info},{n:'Damage',v:142,c:T.danger},{n:'Save',v:78,c:T.success},{n:'Roll',v:67,c:T.mystic},{n:'Heal',v:34,c:T.warn}],ac:[{n:'Skill',v:461,c:T.gold},{n:'Attack',v:186,c:T.danger},{n:'Custom',v:103,c:T.goldMid}]},{id:2,nm:'Pacts & Power',sn:'P&P',st:'a',tr:2907,ch:5,se:72,n20:109,n1:117,fr:'2023-01-29',lr:'2026-04-21',sd:[{d:"Q1'23",r:149},{d:"Q2'23",r:288},{d:"Q3'23",r:234},{d:"Q4'23",r:206},{d:"Q1'24",r:164},{d:"Q2'24",r:103},{d:"Q3'24",r:81},{d:"Q4'24",r:123},{d:"Q1'25",r:110},{d:"Q2'25",r:78},{d:"Q3'25",r:199},{d:"Q4'25",r:189},{d:"Q1'26",r:188},{d:"Q2'26",r:191}],rt:[{n:'Check',v:934,c:T.gold},{n:'Roll',v:566,c:T.mystic},{n:'Damage',v:483,c:T.danger},{n:'To Hit',v:414,c:T.info},{n:'Save',v:263,c:T.success},{n:'Heal',v:23,c:T.warn}],ac:[{n:'Skill',v:934,c:T.gold},{n:'Attack',v:664,c:T.danger},{n:'Custom',v:352,c:T.goldMid}]},{id:3,nm:'Ashfall Brittania',sn:'AFB',st:'a',tr:855,ch:7,se:8,n20:29,n1:22,fr:'2025-11-08',lr:'2026-05-04',sd:[{d:'S01',r:196},{d:'S02',r:93},{d:'S03',r:125},{d:'S04',r:163},{d:'S05',r:81},{d:'S06',r:51},{d:'S07',r:47},{d:'S08',r:44}],rt:[{n:'Check',v:329,c:T.gold},{n:'Roll',v:173,c:T.mystic},{n:'Damage',v:167,c:T.danger},{n:'To Hit',v:118,c:T.info},{n:'Save',v:83,c:T.success}],ac:[{n:'Skill',v:235,c:T.gold},{n:'Attack',v:261,c:T.danger}]},{id:4,nm:'Where the Flowers Remember',sn:'WTFR',st:'p',tr:0,ch:0,se:0,n20:0,n1:0,fr:null,lr:null,sd:[],rt:[],ac:[]}];
+
+function CF(p){return h('svg',{className:'cf '+p.p,viewBox:'0 0 44 44',fill:'none'},h('path',{d:'M2 42 L2 14 Q2 2 14 2 L42 2',stroke:'currentColor',strokeWidth:'.7'}),h('path',{d:'M6 42 L6 18 Q6 6 18 6 L42 6',stroke:'currentColor',strokeWidth:'.35',opacity:'.4'}),h('circle',{cx:2,cy:2,r:1.8,fill:'currentColor',opacity:'.5'}),h('path',{d:'M8 2 C10 0 12 1 11 3 C10 5 8 4 8 2',fill:'currentColor',opacity:'.15'}),h('path',{d:'M2 8 C0 10 1 12 3 11 C5 10 4 8 2 8',fill:'currentColor',opacity:'.15'}))}
+
+function BL(){return h('svg',{viewBox:'0 0 60 60',fill:'none',width:44,height:44},h('defs',null,h('linearGradient',{id:'blg',x1:0,y1:0,x2:0,y2:1},h('stop',{offset:'0%',stopColor:T.goldBright}),h('stop',{offset:'50%',stopColor:T.gold}),h('stop',{offset:'100%',stopColor:T.goldMid}))),h('path',{d:'M30 4 L37 28 L34 31 L30 56 L26 31 L23 28 Z',fill:'url(#blg)',opacity:.9}),h('line',{x1:30,y1:6,x2:30,y2:54,stroke:T.bgCardInner,strokeWidth:'.7',opacity:.4}),h('path',{d:'M20 29 L30 33 L40 29 L30 25 Z',fill:'url(#blg)',opacity:.6}),h('path',{d:'M30 1 L31 3.5 L30 2.8 L29 3.5 Z',fill:T.goldBright,opacity:.5}))}
+
 function NI(p){var d={overview:h('path',{d:'M3 3h4v4H3zM9 3h4v4H9zM3 9h4v4H3zM9 9h4v4H9z',stroke:'currentColor',strokeWidth:'1.1',fill:'none'}),characters:h('g',null,h('circle',{cx:8,cy:5,r:3,stroke:'currentColor',strokeWidth:'1.1',fill:'none'}),h('path',{d:'M2 14 Q2 10 8 10 Q14 10 14 14',stroke:'currentColor',strokeWidth:'1.1',fill:'none'})),combat:h('path',{d:'M8 2 L10 6 L8 14 L6 6Z M4 7 L12 7',stroke:'currentColor',strokeWidth:'1.1',fill:'none'}),skills:h('circle',{cx:8,cy:8,r:6,stroke:'currentColor',strokeWidth:'1.1',fill:'none'}),luck:h('path',{d:'M4 4 A4 4 0 0 1 12 4 Q12 8 8 12 Q4 8 4 4',stroke:'currentColor',strokeWidth:'1.1',fill:'none'}),sessions:h('rect',{x:2,y:3,width:12,height:10,rx:1,stroke:'currentColor',strokeWidth:'1.1',fill:'none'})};return h('svg',{className:'ni',viewBox:'0 0 16 16',fill:'none'},d[p.i])}
-function SI(p){var s=18,d={rolls:h('svg',{width:s,height:s,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'1.4'},h('rect',{x:4,y:4,width:16,height:16,rx:3}),h('circle',{cx:9,cy:9,r:1,fill:'currentColor'}),h('circle',{cx:15,cy:15,r:1,fill:'currentColor'})),sessions:h('svg',{width:s,height:s,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'1.4'},h('circle',{cx:12,cy:12,r:9}),h('path',{d:'M12 3L12 12 18 12'})),characters:h('svg',{width:s,height:s,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'1.4'},h('circle',{cx:12,cy:8,r:4}),h('path',{d:'M4 20Q4 14 12 14 20 14 20 20'})),nat20:h('svg',{width:s,height:s,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'1.4'},h('path',{d:'M12 2L14.5 8 21 9 16 14 17.5 21 12 17.5 6.5 21 8 14 3 9 9.5 8Z'})),nat1:h('svg',{width:s,height:s,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'1.4'},h('circle',{cx:12,cy:12,r:9}),h('path',{d:'M8 8L16 16M16 8L8 16'}))};return h('div',{className:'si',style:{color:p.c||T.goldMid}},d[p.i])}
-function Ill(p){var paths={rolls:h('path',{d:'M40 40 Q30 30 35 20 Q40 10 50 15 Q60 20 55 30 Q50 40 40 40Z M25 50 Q20 40 30 35 Q35 38 30 45Z',fill:'currentColor'}),sessions:h('path',{d:'M40 10 A30 30 0 0 1 70 40 L40 40Z M30 50 Q25 45 28 38 Q32 42 30 50Z',fill:'currentColor'}),characters:h('g',null,h('circle',{cx:40,cy:25,r:12,fill:'currentColor'}),h('path',{d:'M20 55 Q20 40 40 40 60 40 60 55',fill:'currentColor'})),nat20:h('path',{d:'M40 5 L45 25 L65 28 L50 40 L55 60 L40 50 L25 60 L30 40 L15 28 L35 25Z',fill:'currentColor'}),nat1:h('g',null,h('circle',{cx:40,cy:40,r:25,fill:'currentColor'}),h('path',{d:'M28 28L52 52M52 28L28 52',stroke:'var(--bg-card)',strokeWidth:3}))};return h('svg',{className:'ill',viewBox:'0 0 80 80'},paths[p.t])}
+
 function CTT(p){if(!p.active||!p.payload||!p.payload.length)return null;return h('div',{className:'ctt'},h('div',{className:'tl2'},p.label),p.payload.map(function(d,i){return h('div',{key:i,className:'tv',style:{color:d.color||T.text1}},d.value.toLocaleString()+' rolls')}))}
 function PTT(p){if(!p.active||!p.payload||!p.payload.length)return null;var d=p.payload[0],pct=d.payload.tot>0?(d.value/d.payload.tot*100).toFixed(1):'0';return h('div',{className:'ctt'},h('div',{className:'tl2'},d.name),h('div',{className:'tv'},d.value.toLocaleString()+' ('+pct+'%)'))}
-function AreaC(p){return h(RC,{width:'100%',height:260},h(AC,{data:p.data,margin:{top:8,right:8,left:-18,bottom:0}},h('defs',null,h('linearGradient',{id:'ag',x1:0,y1:0,x2:0,y2:1},h('stop',{offset:'0%',stopColor:T.goldBright,stopOpacity:.35}),h('stop',{offset:'50%',stopColor:T.gold,stopOpacity:.12}),h('stop',{offset:'100%',stopColor:T.goldMid,stopOpacity:.02}))),h(CG,{strokeDasharray:'3 3',vertical:false}),h(XA,{dataKey:'d',tick:{fill:T.text3,fontFamily:T.fLabel,fontSize:T.text2xs},axisLine:{stroke:T.goldAlpha10},tickLine:false,interval:0,angle:p.q?0:-35,textAnchor:p.q?'middle':'end',height:p.q?28:45}),h(YA,{tick:{fill:T.text3,fontFamily:T.fLabel,fontSize:T.text2xs},axisLine:false,tickLine:false}),h(Tt,{content:h(CTT)}),h(A,{type:'monotone',dataKey:'r',stroke:T.goldBright,strokeWidth:2,fill:'url(#ag)',dot:{r:2.5,fill:T.goldBright,strokeWidth:0},activeDot:{r:4,fill:T.goldBright,stroke:T.bgVoid,strokeWidth:2}})))}
-function PieC(p){var tot=p.data.reduce(function(s,d){return s+d.v},0);var dt=p.data.map(function(d){return{name:d.n,value:d.v,color:d.c,tot:tot}});return h(RC,{width:'100%',height:260},h(PC,null,h(Pi,{data:dt,cx:'50%',cy:'50%',innerRadius:55,outerRadius:98,paddingAngle:2,dataKey:'value',stroke:'none'},p.data.map(function(e,i){return h(Ce,{key:i,fill:e.c})})),h(Tt,{content:h(PTT)}),h(Lg,{iconType:'circle',iconSize:6,wrapperStyle:{fontFamily:T.fLabel,fontSize:T.textXs,letterSpacing:'1px'}})))}
-function BarC(p){var data=p.data.map(function(d){return{name:d.n,value:d.v,color:d.c}});return h(RC,{width:'100%',height:260},h(BC,{data:data,layout:'vertical',margin:{top:0,right:8,left:2,bottom:0}},h(CG,{strokeDasharray:'3 3',horizontal:false}),h(YA,{type:'category',dataKey:'name',width:72,tick:{fill:T.text2,fontFamily:T.fLabel,fontSize:T.textXs},axisLine:false,tickLine:false}),h(XA,{type:'number',tick:{fill:T.text3,fontFamily:T.fLabel,fontSize:T.text2xs},axisLine:false,tickLine:false}),h(Tt,{content:h(CTT)}),h(B,{dataKey:'value',radius:[0,3,3,0],barSize:18},data.map(function(d,i){return h(Ce,{key:i,fill:d.color||T.goldMid})}))))}
-function TLine(p){if(!p.fr)return null;var s=new Date(p.fr),e=new Date(p.lr),dd=Math.floor((e-s)/864e5),m=Math.floor(dd/30),d=dd%30;var t=m>0?m+' month'+(m>1?'s':'')+(d>0?', '+d+' days':''):dd+' days';function f(x){return x.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}return h('div',{className:'tl ai d6'},h('span',{className:'dt'},f(s)),h('div',{className:'tk'},h('div',{className:'tf'})),h('span',{className:'dt'},f(e)),h('span',{className:'sp'},t))}
-function Stat(p){return h('div',{className:'panel stat ai '+(p.cn||'')+' d'+p.dl},h(SI,{i:p.icon,c:p.ic}),h('div',{className:'sl'},p.label),h('div',{className:'sv'},typeof p.value==='number'?p.value.toLocaleString():p.value),p.sub&&h('div',{className:'ss'},p.sub),h(Ill,{t:p.icon}))}
-function TIcon(p){return h('div',{className:'top-icon','aria-hidden':'true'},h('svg',{width:14,height:14,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'1.5'},p.children))}
+
+function AreaC(p){return h(RC,{width:'100%',height:190},h(AC,{data:p.data,margin:{top:8,right:8,left:-18,bottom:0}},h('defs',null,h('linearGradient',{id:'ag',x1:0,y1:0,x2:0,y2:1},h('stop',{offset:'0%',stopColor:T.goldBright,stopOpacity:.35}),h('stop',{offset:'50%',stopColor:T.gold,stopOpacity:.12}),h('stop',{offset:'100%',stopColor:T.goldMid,stopOpacity:.02}))),h(CG,{strokeDasharray:'3 3',vertical:false}),h(XA,{dataKey:'d',tick:{fill:T.text3,fontFamily:T.fLabel,fontSize:T.text2xs},axisLine:{stroke:T.goldAlpha10},tickLine:false,interval:0,angle:p.q?0:-35,textAnchor:p.q?'middle':'end',height:p.q?28:45}),h(YA,{tick:{fill:T.text3,fontFamily:T.fLabel,fontSize:T.text2xs},axisLine:false,tickLine:false}),h(Tt,{content:h(CTT)}),h(A,{type:'monotone',dataKey:'r',stroke:T.goldBright,strokeWidth:2,fill:'url(#ag)',dot:{r:2.5,fill:T.goldBright,strokeWidth:0},activeDot:{r:4,fill:T.goldBright,stroke:T.bgVoid,strokeWidth:2}})))}
+
+function PieC(p){var tot=p.data.reduce(function(s,d){return s+d.v},0);var dt=p.data.map(function(d){return{name:d.n,value:d.v,color:d.c,tot:tot}});return h(RC,{width:'100%',height:228},h(PC,null,h(Pi,{data:dt,cx:'50%',cy:'50%',innerRadius:48,outerRadius:90,paddingAngle:2,dataKey:'value',stroke:'none'},p.data.map(function(e,i){return h(Ce,{key:i,fill:e.c})})),h(Tt,{content:h(PTT)}),h(Lg,{iconType:'circle',iconSize:6,wrapperStyle:{fontFamily:T.fLabel,fontSize:T.textXs,letterSpacing:'1px'}})))}
+
+function PH(p){return h('div',{className:'ph'},h('span',{className:'star'},'*'),h('h3',null,p.title),p.sub&&h('span',{className:'psub'},p.sub))}
+
+function Kpi(p){return h('div',{className:'panel kpi ai '+(p.cn||'')+' d'+p.dl},h(CF,{p:'c-tl'}),h(CF,{p:'c-tr'}),h(CF,{p:'c-bl'}),h(CF,{p:'c-br'}),h('div',{className:'kl'},p.label),h('div',{className:'kv'},typeof p.value==='number'?p.value.toLocaleString():p.value),p.sub&&h('div',{className:'ks'},p.sub))}
+
+var CHARS=[{n:'Aric Velloren',r:1842,avg:16.3,tr:2.1},{n:'Liora Sunblade',r:1621,avg:15.7,tr:1.4},{n:'Thorne Blackwell',r:1401,avg:14.8,tr:-0.6},{n:'Kaelen Stormborn',r:1239,avg:17.2,tr:0.9},{n:'Mira Undertide',r:1083,avg:13.9,tr:-1.2}];
+function CharTable(){
+  return h('div',{style:{overflowY:'auto',maxHeight:218,scrollbarWidth:'none'}},
+    h('table',{className:'char-tbl'},
+      h('thead',null,h('tr',null,h('th',null,'Character'),h('th',null,'Rolls'),h('th',null,'Avg'),h('th',null,'Trend'))),
+      h('tbody',null,CHARS.map(function(r,i){
+        var up=r.tr>=0;
+        return h('tr',{key:i},h('td',null,r.n),h('td',null,r.r.toLocaleString()),h('td',null,r.avg),h('td',{className:up?'up':'dn'},(up?'+':'')+r.tr))
+      }))
+    )
+  )
+}
+
+var FEED=[{t:'Defeated the Night Hag in The Weeping Fen',m:'Session 87 - 2h ago'},{t:'"The price of mercy is memory." -- Liora',m:'Session 87 - 2h ago'},{t:'Aric rolled a natural 20 on Persuasion',m:'Session 87 - 3h ago'},{t:'New quest: Echoes of the Sunken Bell',m:'Session 87 - 4h ago'},{t:'Met with Captain Veyra of the Dusk Watch',m:'Session 86 - 1d ago'}];
+function Feed(){return h('ul',{className:'feed'},FEED.map(function(x,i){return h('li',{key:i},h('div',{className:'ft'},x.t),h('div',{className:'fm'},x.m))}))}
+
+function CampSnap(p){
+  var c=p.c;
+  function fd(x){if(!x)return'--';return new Date(x).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
+  var rows=[{k:'Last Session',v:fd(c.lr)+' (Sess. '+c.se+')'},{k:'Active PCs',v:c.ch},{k:'Total Rolls',v:c.tr>0?c.tr.toLocaleString():'--'},{k:'Nat 20 / Nat 1',v:c.n20+' / '+c.n1},{k:'Campaign',v:c.nm}];
+  return h('div',null,h('div',{className:'snap-sigil'},h(BL)),h('ul',{className:'snap-status'},rows.map(function(r,i){return h('li',{key:i},h('span',{className:'sk'},r.k),h('span',{className:'sv'},r.v))})))
+}
+
+var SESS=[{d:'May 25',n:'87. The Weeping Fen',loc:'Valewatch Marshes',r:'win'},{d:'May 18',n:'86. Council of Shadows',loc:'Ebonspire Keep',r:'part'},{d:'May 11',n:'85. Trail of Ashes',loc:'Greyhold Pass',r:'fail'}];
+var RLAB={win:'Victory',part:'Partial',fail:'Failure'};
+function SessList(){return h('ul',{className:'sess-list'},SESS.map(function(s,i){return h('li',{key:i},h('span',{className:'sd'},s.d),h('div',null,h('div',{className:'sn'},s.n),h('div',{className:'sl'},s.loc)),h('span',{className:'sr '+s.r},RLAB[s.r]))}))}
+
+function QuoteBoard(){return h('div',{className:'quote-wrap'},h('div',{className:'quote-body'},'"We do not fear the dark. We are the dark. We shape what others fear."'),h('div',{className:'quote-attr'},'-- Thorne Blackwell -- Session 87'))}
+
+function RIcon(p){
+  var icons={
+    npc:h('g',null,h('circle',{cx:8,cy:5,r:3,stroke:'currentColor',strokeWidth:'1.1',fill:'none'}),h('path',{d:'M2 14 Q2 10 8 10 Q14 10 14 14',stroke:'currentColor',strokeWidth:'1.1',fill:'none'})),
+    loot:h('path',{d:'M4 9 L8 3 L12 9 L10 9 L10 13 L6 13 L6 9Z M6 6 L10 6',stroke:'currentColor',strokeWidth:'1.1',fill:'none'}),
+    faction:h('path',{d:'M8 2 L10 6 L14 6 L11 9 L12 13 L8 11 L4 13 L5 9 L2 6 L6 6Z',stroke:'currentColor',strokeWidth:'1.1',fill:'none'}),
+    quest:h('g',null,h('rect',{x:3,y:2,width:10,height:12,rx:1,stroke:'currentColor',strokeWidth:'1.1',fill:'none'}),h('path',{d:'M5.5 6 H10.5 M5.5 9 H9',stroke:'currentColor',strokeWidth:'1.1'}))
+  };
+  return h('svg',{width:22,height:22,viewBox:'0 0 16 16',fill:'none'},icons[p.i])
+}
+var RESS=[{n:'NPC Tracker',s:'character relationships',i:'npc'},{n:'Loot Tracker',s:'items & rewards',i:'loot'},{n:'Faction & Rep',s:'standing & alliances',i:'faction'},{n:'Quest Board',s:'open & closed quests',i:'quest'}];
+function ResCards(){return h('div',{className:'res-grid'},RESS.map(function(r,i){return h('div',{key:i,className:'res-card'},h('div',{className:'ri'},h(RIcon,{i:r.i})),h('div',{className:'rn'},r.n),h('div',{className:'rs'},r.s))}))}
+
 var NAV=[{l:'Overview',i:'overview'}];
-function App(){var _=us(1),aId=_[0],set=_[1];var c=D.find(function(x){return x.id===aId});var q=c.id===2;var r20=c.tr>0?(c.n20/c.tr*100).toFixed(1)+'%':'—';var r1=c.tr>0?(c.n1/c.tr*100).toFixed(1)+'%':'—';
-return h('div',{className:'shell'},h('nav',{className:'side'},h('div',{className:'side-brand'},h('img',{src:'https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/logo_tex-vert-transparent.png',alt:'Rectrix Caedere',className:'side-logo-img'})),h('div',{className:'side-section'},'Campaigns'),h('ul',{className:'camp-list'},D.map(function(x){return h('li',{key:x.id},h('button',{className:(x.id===aId?'on':'')+(x.st==='p'?' off':''),onClick:x.st!=='p'?function(){set(x.id)}:undefined,title:x.st==='p'?'No sessions recorded yet — this campaign is dormant':undefined,tabIndex:x.st==='p'?-1:0,'aria-disabled':x.st==='p'?'true':undefined},h('span',null,x.sn),h('span',{className:'ct'},x.st==='p'?'◌ uncharted':x.tr.toLocaleString())))})),h('div',{className:'side-div'}),h('ul',{className:'side-nav'},NAV.map(function(n,i){return h('li',{key:n.l},h('button',{className:i===0?'on':''},h(NI,{i:n.i}),n.l))}))),h('main',{className:'main',key:aId},h('div',{className:'top-bar ai'},h('div',null,h('div',{className:'top-title'},'Rectrix Caedere'),h('div',{className:'top-sub'},'Command your dice. Shape the unseen.')),h('img',{src:'https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/topcenterheader.png',alt:'',className:'top-center-img','aria-hidden':'true'}),h('div',{className:'top-icons'},h(TIcon,null,h('path',{d:'M12 2L14.5 8 21 9 16 14 17.5 21 12 17.5 6.5 21 8 14 3 9 9.5 8Z'})),h(TIcon,null,h('path',{d:'M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9'}),h('path',{d:'M13.73 21a2 2 0 0 1-3.46 0'})),h(TIcon,null,h('path',{d:'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'})))),h('div',{className:'content'},h('div',{className:'pg-head ai'},h('h2',null,c.nm),h('div',{className:'pg-meta'},'Overview',h('span',{className:'dot'},'◆'),c.se+' sessions',h('span',{className:'dot'},'◆'),c.ch+' characters',h('span',{className:'dot'},'◆'),c.tr.toLocaleString()+' rolls archived'),h(TLine,{fr:c.fr,lr:c.lr})),h(ODiv),h('div',{className:'stats'},h(Stat,{label:'Total Rolls',value:c.tr,icon:'rolls',dl:1}),h(Stat,{label:'Sessions',value:c.se,icon:'sessions',dl:2}),h(Stat,{label:'Characters',value:c.ch,icon:'characters',dl:3}),h(Stat,{label:'Natural 20s',value:c.n20,sub:r20+' of all rolls',cn:'n20',icon:'nat20',ic:T.success,dl:4}),h(Stat,{label:'Natural 1s',value:c.n1,sub:r1+' of all rolls',cn:'n1',icon:'nat1',ic:T.danger,dl:5})),h('div',{className:'charts full'},h('div',{className:'panel cp ai d6'},h(CF,{p:'c-tl'}),h(CF,{p:'c-tr'}),h(CF,{p:'c-bl'}),h(CF,{p:'c-br'}),h('h3',null,q?'Rolls by Quarter':'Rolls per Session'),h('p',{className:'csub'},q?'Quarterly aggregation across 3 years':'Session intensity over time'),h(AreaC,{data:c.sd,q:q}))),h('div',{className:'charts'},h('div',{className:'panel cp ai d7'},h(CF,{p:'c-tl'}),h(CF,{p:'c-tr'}),h(CF,{p:'c-bl'}),h(CF,{p:'c-br'}),h('h3',null,'Roll Type Breakdown'),c.rt.length>0?h(PieC,{data:c.rt}):h('p',{style:{color:T.text3,textAlign:'center',padding:'70px 0'}},'No data')),h('div',{className:'panel cp ai d8'},h(CF,{p:'c-tl'}),h(CF,{p:'c-tr'}),h(CF,{p:'c-bl'}),h(CF,{p:'c-br'}),h('h3',null,'Action Categories'),c.ac.length>0?h(BarC,{data:c.ac}):h('p',{style:{color:T.text3,textAlign:'center',padding:'70px 0'}},'No data'))),h('div',{className:'foot ai d8'},h('div',{className:'odiv',style:{margin:'0 0 12px'}},h('div',{className:'ol'}),h('svg',{width:16,height:10,viewBox:'0 0 16 10',fill:'none'},h('path',{d:'M5 1A4 4 0 1 0 5 9A3 3 0 1 1 5 1',fill:T.goldMid,opacity:.35})),h('div',{className:'ol'})),'Rectrix Caedere · Roll Analytics · rectrixcaedere.com'))))}
+
+function App(){
+  var _=us(1),aId=_[0],set=_[1];
+  var c=D.find(function(x){return x.id===aId});
+  var q=c.id===2;
+  var r20=c.tr>0?(c.n20/c.tr*100).toFixed(1)+'%':'--';
+
+  return h('div',{className:'shell'},
+    h('nav',{className:'side'},
+      h('div',{className:'side-brand'},h('img',{src:'https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/logo_tex-vert-transparent.png',alt:'Rectrix Caedere',className:'side-logo-img'})),
+      h('div',{className:'side-section'},'Campaigns'),
+      h('ul',{className:'camp-list'},D.map(function(x){return h('li',{key:x.id},h('button',{className:(x.id===aId?'on':'')+(x.st==='p'?' off':''),onClick:x.st!=='p'?function(){set(x.id)}:undefined,title:x.st==='p'?'No sessions recorded yet':undefined,tabIndex:x.st==='p'?-1:0,'aria-disabled':x.st==='p'?'true':undefined},h('span',null,x.sn),h('span',{className:'ct'},x.st==='p'?'uncharted':x.tr.toLocaleString())))})),
+      h('div',{className:'side-div'}),
+      h('ul',{className:'side-nav'},NAV.map(function(n,i){return h('li',{key:n.l},h('button',{className:i===0?'on':''},h(NI,{i:n.i}),n.l))}))
+    ),
+    h('main',{className:'main',key:aId},
+
+      h('div',{className:'row-hdr ai'},
+        h('div',{style:{position:'relative',zIndex:1}},
+          h('div',{className:'hdr-title'},'Rectrix Caedere'),
+          h('div',{className:'hdr-sub'},c.nm+' -- Overview')
+        ),
+        h('img',{src:'https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/topcenterheader.png',alt:'',className:'top-center-img','aria-hidden':'true'}),
+        h('div',{className:'hdr-right'},
+          h('div',{className:'hdr-filter'},'Filter by campaign'),
+          h('div',{className:'top-icon','aria-hidden':'true'},h('svg',{width:14,height:14,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'1.5'},h('path',{d:'M12 2L14.5 8 21 9 16 14 17.5 21 12 17.5 6.5 21 8 14 3 9 9.5 8Z'}))),
+          h('div',{className:'top-icon','aria-hidden':'true'},h('svg',{width:14,height:14,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'1.5'},h('path',{d:'M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9'}),h('path',{d:'M13.73 21a2 2 0 0 1-3.46 0'}))),
+          h('div',{className:'top-icon','aria-hidden':'true'},h('svg',{width:14,height:14,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'1.5'},h('path',{d:'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'})))
+        )
+      ),
+
+      h('div',{className:'row-kpi'},
+        h(Kpi,{label:'Total Rolls',value:c.tr,dl:1}),
+        h(Kpi,{label:'Sessions Logged',value:c.se,dl:2}),
+        h(Kpi,{label:'Nat 20 Rate',value:r20,cn:'n20',dl:3}),
+        h(Kpi,{label:'Characters',value:c.ch,dl:4}),
+        h('div',{className:'panel cp ai d5 kpi-chart'},
+          h(CF,{p:'c-tl'}),h(CF,{p:'c-tr'}),h(CF,{p:'c-bl'}),h(CF,{p:'c-br'}),
+          h(PH,{title:q?'Rolls by Quarter':'Roll Activity Over Time',sub:q?'Quarterly aggregation':'session_date -- roll_count'}),
+          h(AreaC,{data:c.sd,q:q})
+        )
+      ),
+
+      h('div',{className:'row-mid'},
+        h('div',{className:'panel cp ai d6'},
+          h(CF,{p:'c-tl'}),h(CF,{p:'c-tr'}),h(CF,{p:'c-bl'}),h(CF,{p:'c-br'}),
+          h(PH,{title:'Roll Type Breakdown',sub:'roll_log.roll_type'}),
+          c.rt.length>0?h(PieC,{data:c.rt}):h('p',{style:{color:T.text3,textAlign:'center',padding:'60px 0'}},'No data')
+        ),
+        h('div',{className:'panel cp ai d6'},
+          h(CF,{p:'c-tl'}),h(CF,{p:'c-tr'}),h(CF,{p:'c-bl'}),h(CF,{p:'c-br'}),
+          h(PH,{title:'Top Characters',sub:'character_name -- roll_total'}),
+          h(CharTable)
+        ),
+        h('div',{className:'panel cp ai d7'},
+          h(CF,{p:'c-tl'}),h(CF,{p:'c-tr'}),h(CF,{p:'c-bl'}),h(CF,{p:'c-br'}),
+          h(PH,{title:'Session Highlights',sub:'encounter_notes -- quotes'}),
+          h(Feed)
+        ),
+        h('div',{className:'panel cp ai d7'},
+          h(CF,{p:'c-tl'}),h(CF,{p:'c-tr'}),h(CF,{p:'c-bl'}),h(CF,{p:'c-br'}),
+          h(PH,{title:'Campaign Snapshot',sub:'session_id -- quest_tracker'}),
+          h(CampSnap,{c:c})
+        )
+      ),
+
+      h('div',{className:'row-bot'},
+        h('div',{className:'panel cp ai d8'},
+          h(CF,{p:'c-tl'}),h(CF,{p:'c-tr'}),h(CF,{p:'c-bl'}),h(CF,{p:'c-br'}),
+          h(PH,{title:'Recent Sessions',sub:'sessions -- encounter_summary'}),
+          h(SessList)
+        ),
+        h('div',{className:'panel cp ai d8'},
+          h(CF,{p:'c-tl'}),h(CF,{p:'c-tr'}),h(CF,{p:'c-bl'}),h(CF,{p:'c-br'}),
+          h(QuoteBoard)
+        ),
+        h('div',{className:'panel cp ai d8'},
+          h(CF,{p:'c-tl'}),h(CF,{p:'c-tr'}),h(CF,{p:'c-bl'}),h(CF,{p:'c-br'}),
+          h(PH,{title:'Quick Access',sub:'resource links'}),
+          h(ResCards)
+        )
+      )
+    )
+  )
+}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));
