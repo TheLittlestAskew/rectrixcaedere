@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,7 +50,7 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 .top-icon:hover{border-color:var(--border-strong);color:var(--gold-bright)}
 
 /* ── Row sub-grids ── */
-.row-kpi{display:grid;grid-template-columns:repeat(4,minmax(140px,1fr)) minmax(200px,1.8fr);gap:14px}
+.row-kpi{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr)) minmax(200px,1.8fr);gap:14px}
 .row-mid{display:grid;grid-template-columns:2.5fr 2.2fr 2fr 1.5fr;gap:12px}
 .row-bot{display:grid;grid-template-columns:2.8fr 2.2fr 1.5fr;gap:12px}
 
@@ -66,7 +65,7 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 .cf.c-tl{top:4px;left:4px}.cf.c-tr{top:4px;right:4px;transform:scaleX(-1)}.cf.c-bl{bottom:4px;left:4px;transform:scaleY(-1)}.cf.c-br{bottom:4px;right:4px;transform:scale(-1)}
 
 /* ── KPI cards ── */
-.kpi{padding:48px 20px 16px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;min-height:200px;transition:all var(--dur-enter) var(--ease)}
+.kpi{padding:48px 20px 16px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;aspect-ratio:4/3;transition:all var(--dur-enter) var(--ease)}
 .kpi:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
 .kpi .kl{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:2px;text-transform:uppercase;color:var(--text-3);margin-bottom:6px}
 .kpi .kv{font-family:var(--f-display);font-size:48px;font-weight:500;color:var(--text-1);line-height:1;letter-spacing:1px}
@@ -151,7 +150,7 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 @media(max-width:1080px){
   .row-kpi{grid-template-columns:repeat(2,1fr)}
   .row-kpi .kpi-chart{grid-column:1/-1}
-  .kpi{min-height:160px;padding:32px 16px 12px}
+  .kpi{aspect-ratio:4/3;padding:32px 16px 12px}
   .kpi .kv{font-size:36px}
 }
 @media(max-width:860px){
