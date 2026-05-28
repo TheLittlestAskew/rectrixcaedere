@@ -19,7 +19,7 @@ function PieC(p){var tot=p.data.reduce(function(s,d){return s+d.v},0);var dt=p.d
 function PH(p){return h('div',{className:'ph'},h('span',{className:'star'},'*'),h('h3',null,p.title),p.sub&&h('span',{className:'psub'},p.sub))}
 
 function Kpi(p){
-  var style=p.bg?{backgroundImage:'url('+p.bg+')',backgroundSize:'cover',backgroundPosition:'center'}:{};
+  var style=p.bg?{backgroundImage:'url('+p.bg+')',backgroundSize:'100% 100%',backgroundPosition:'center'}:{};
   return h('div',{className:'panel kpi ai '+(p.cn||'')+' d'+p.dl,style:style},h(CF,{p:'c-tl'}),h(CF,{p:'c-tr'}),h(CF,{p:'c-bl'}),h(CF,{p:'c-br'}),h('div',{className:'kl'},p.label),h('div',{className:'kv'},typeof p.value==='number'?p.value.toLocaleString():p.value),p.sub&&h('div',{className:'ks'},p.sub))
 }
 
