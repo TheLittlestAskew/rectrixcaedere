@@ -54,14 +54,9 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 .row-mid{display:grid;grid-template-columns:2.5fr 2.2fr 2fr 1.5fr;gap:12px}
 .row-bot{display:grid;grid-template-columns:2.8fr 2.2fr 1.5fr;gap:12px}
 
-/* ── Panel base — art deco frame image ── */
+/* ── Panel base ── */
 .panel{background-color:var(--bg-card);border:none;border-radius:0;position:relative;overflow:visible}
-.panel::before{content:'';position:absolute;inset:-4px;background:url('https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/panel-frame.png') no-repeat center / 100% 100%;pointer-events:none;z-index:2}
-.panel::after{content:none}
 .panel:hover{box-shadow:var(--shadow-glow)}
-
-/* ── Corner flourishes — disabled, frame image handles this ── */
-.cf{display:none}
 
 /* ── KPI cards ── */
 .kpi{padding:48px 20px 16px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;aspect-ratio:3/5;transition:all var(--dur-enter) var(--ease)}
