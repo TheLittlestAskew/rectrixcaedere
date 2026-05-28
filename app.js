@@ -3,91 +3,6 @@ var h=React.createElement,us=React.useState;
 var AC=Recharts.AreaChart,A=Recharts.Area,PC=Recharts.PieChart,Pi=Recharts.Pie,Ce=Recharts.Cell,XA=Recharts.XAxis,YA=Recharts.YAxis,CG=Recharts.CartesianGrid,Tt=Recharts.Tooltip,RC=Recharts.ResponsiveContainer,Lg=Recharts.Legend;
 var D=[{id:1,nm:'Sky Is The Limit',sn:'SITL',st:'a',tr:946,ch:6,se:15,n20:44,n1:41,fr:'2025-10-12',lr:'2026-05-03',sd:[{d:'S01',r:67},{d:'S02',r:81},{d:'S03',r:99},{d:'S04',r:88},{d:'S05',r:66},{d:'S06',r:160},{d:'S07',r:22},{d:'S08',r:59},{d:'S09',r:22},{d:'S10',r:70},{d:'S11',r:13},{d:'S12',r:36},{d:'S13',r:63},{d:'S14',r:20},{d:'S15',r:28}],rt:[{n:'Check',v:461,c:T.gold},{n:'To Hit',v:164,c:T.info},{n:'Damage',v:142,c:T.danger},{n:'Save',v:78,c:T.success},{n:'Roll',v:67,c:T.mystic},{n:'Heal',v:34,c:T.warn}],ac:[{n:'Skill',v:461,c:T.gold},{n:'Attack',v:186,c:T.danger},{n:'Custom',v:103,c:T.goldMid}]},{id:2,nm:'Pacts & Power',sn:'P&P',st:'a',tr:2907,ch:5,se:72,n20:109,n1:117,fr:'2023-01-29',lr:'2026-04-21',sd:[{d:"Q1'23",r:149},{d:"Q2'23",r:288},{d:"Q3'23",r:234},{d:"Q4'23",r:206},{d:"Q1'24",r:164},{d:"Q2'24",r:103},{d:"Q3'24",r:81},{d:"Q4'24",r:123},{d:"Q1'25",r:110},{d:"Q2'25",r:78},{d:"Q3'25",r:199},{d:"Q4'25",r:189},{d:"Q1'26",r:188},{d:"Q2'26",r:191}],rt:[{n:'Check',v:934,c:T.gold},{n:'Roll',v:566,c:T.mystic},{n:'Damage',v:483,c:T.danger},{n:'To Hit',v:414,c:T.info},{n:'Save',v:263,c:T.success},{n:'Heal',v:23,c:T.warn}],ac:[{n:'Skill',v:934,c:T.gold},{n:'Attack',v:664,c:T.danger},{n:'Custom',v:352,c:T.goldMid}]},{id:3,nm:'Ashfall Brittania',sn:'AFB',st:'a',tr:855,ch:7,se:8,n20:29,n1:22,fr:'2025-11-08',lr:'2026-05-04',sd:[{d:'S01',r:196},{d:'S02',r:93},{d:'S03',r:125},{d:'S04',r:163},{d:'S05',r:81},{d:'S06',r:51},{d:'S07',r:47},{d:'S08',r:44}],rt:[{n:'Check',v:329,c:T.gold},{n:'Roll',v:173,c:T.mystic},{n:'Damage',v:167,c:T.danger},{n:'To Hit',v:118,c:T.info},{n:'Save',v:83,c:T.success}],ac:[{n:'Skill',v:235,c:T.gold},{n:'Attack',v:261,c:T.danger}]},{id:4,nm:'Where the Flowers Remember',sn:'WTFR',st:'p',tr:0,ch:0,se:0,n20:0,n1:0,fr:null,lr:null,sd:[],rt:[],ac:[]}];
 
-/* ── Panel Frame (art deco SVG overlay) ── */
-var _pfGold='#e8a44a';
-var _pfGoldB='#ffc97b';
-var _pfGoldD='#c7a369';
-
-/* 4-point star path centered at 0,0 */
-function _star(cx,cy,r,o){return h('path',{d:'M'+(cx)+' '+(cy-r)+' L'+(cx+r*.3)+' '+(cy-r*.2)+' L'+(cx+r)+' '+cy+' L'+(cx+r*.3)+' '+(cy+r*.2)+' L'+cx+' '+(cy+r)+' L'+(cx-r*.3)+' '+(cy+r*.2)+' L'+(cx-r)+' '+cy+' L'+(cx-r*.3)+' '+(cy-r*.2)+' Z',fill:_pfGold,opacity:o||0.8})}
-function _spark(cx,cy,r){return _star(cx,cy,r||1.5,0.35)}
-
-function PF(){
-  /* Frame border lines */
-  var bs={position:'absolute',pointerEvents:'none',zIndex:2};
-  /* Outer border */
-  var outer=h('div',{style:Object.assign({},bs,{inset:0,border:'1px solid '+_pfGoldD,opacity:0.5})});
-  /* Inner border */
-  var inner=h('div',{style:Object.assign({},bs,{inset:'6px',border:'1px solid '+_pfGoldD,opacity:0.25})});
-  
-  /* Corner star - fixed size SVG, absolutely positioned */
-  function corner(pos){
-    var st={position:'absolute',width:18,height:18,pointerEvents:'none',zIndex:3};
-    if(pos==='tl'){st.top=-5;st.left=-5}
-    if(pos==='tr'){st.top=-5;st.right=-5}
-    if(pos==='bl'){st.bottom=-5;st.left=-5}
-    if(pos==='br'){st.bottom=-5;st.right=-5}
-    return h('svg',{style:st,viewBox:'0 0 20 20',fill:'none'},
-      _star(10,10,9,0.9)
-    )
-  }
-  
-  /* Side accent - large star at vertical midpoint */
-  function sideAccent(side){
-    var st={position:'absolute',width:22,height:60,pointerEvents:'none',zIndex:3,top:'50%',transform:'translateY(-50%)'};
-    if(side==='l'){st.left=-7}
-    if(side==='r'){st.right=-7}
-    return h('svg',{style:st,viewBox:'0 0 22 60',fill:'none'},
-      _star(11,30,10,0.65),
-      _spark(11,12),
-      _spark(11,48),
-      _spark(4,24,1),
-      _spark(18,24,1),
-      _spark(4,36,1),
-      _spark(18,36,1)
-    )
-  }
-  
-  /* Top/bottom center moon motif */
-  function centerMotif(edge){
-    var st={position:'absolute',width:50,height:16,pointerEvents:'none',zIndex:3,left:'50%',transform:'translateX(-50%)'};
-    if(edge==='t'){st.top=-4}
-    if(edge==='b'){st.bottom=-4}
-    var flip=edge==='b'?'scale(1,-1)':'';
-    return h('svg',{style:st,viewBox:'0 0 50 16',fill:'none'},
-      h('g',{transform:flip?'translate(0,16) '+flip:''},
-        /* crescent moon */
-        h('path',{d:'M25 2 C29 2 32 5.5 32 9 C32 12.5 29 16 25 16 C27.5 14 28.5 11.5 28.5 9 C28.5 6.5 27.5 4 25 2 Z',fill:_pfGold,opacity:0.65}),
-        /* flanking dots */
-        h('circle',{cx:16,cy:8,r:2.5,fill:_pfGold,opacity:0.55}),
-        h('circle',{cx:34,cy:8,r:2.5,fill:_pfGold,opacity:0.55}),
-        /* tiny sparkles */
-        _spark(10,6,1),
-        _spark(40,6,1)
-      )
-    )
-  }
-  
-  /* Decorative horizontal lines near top/bottom */
-  function hLine(edge){
-    var st={position:'absolute',height:1,left:'15%',right:'15%',pointerEvents:'none',zIndex:2,background:'linear-gradient(90deg, transparent, '+_pfGoldD+', transparent)',opacity:0.2};
-    if(edge==='t'){st.top=10}
-    if(edge==='b'){st.bottom=10}
-    return h('div',{style:st})
-  }
-  
-  return h(React.Fragment,null,
-    outer,inner,
-    corner('tl'),corner('tr'),corner('bl'),corner('br'),
-    sideAccent('l'),sideAccent('r'),
-    centerMotif('t'),centerMotif('b'),
-    hLine('t'),hLine('b')
-  )
-}
-
-/* Legacy CF kept as alias */
-function CF(){return h(PF)}
-
 function BL(){return h('svg',{viewBox:'0 0 60 60',fill:'none',width:44,height:44},h('defs',null,h('linearGradient',{id:'blg',x1:0,y1:0,x2:0,y2:1},h('stop',{offset:'0%',stopColor:T.goldBright}),h('stop',{offset:'50%',stopColor:T.gold}),h('stop',{offset:'100%',stopColor:T.goldMid}))),h('path',{d:'M30 4 L37 28 L34 31 L30 56 L26 31 L23 28 Z',fill:'url(#blg)',opacity:.9}),h('line',{x1:30,y1:6,x2:30,y2:54,stroke:T.bgCardInner,strokeWidth:'.7',opacity:.4}),h('path',{d:'M20 29 L30 33 L40 29 L30 25 Z',fill:'url(#blg)',opacity:.6}),h('path',{d:'M30 1 L31 3.5 L30 2.8 L29 3.5 Z',fill:T.goldBright,opacity:.5}))}
 
 function NI(p){var d={overview:h('path',{d:'M3 3h4v4H3zM9 3h4v4H9zM3 9h4v4H3zM9 9h4v4H9z',stroke:'currentColor',strokeWidth:'1.1',fill:'none'}),characters:h('g',null,h('circle',{cx:8,cy:5,r:3,stroke:'currentColor',strokeWidth:'1.1',fill:'none'}),h('path',{d:'M2 14 Q2 10 8 10 Q14 10 14 14',stroke:'currentColor',strokeWidth:'1.1',fill:'none'})),combat:h('path',{d:'M8 2 L10 6 L8 14 L6 6Z M4 7 L12 7',stroke:'currentColor',strokeWidth:'1.1',fill:'none'}),skills:h('circle',{cx:8,cy:8,r:6,stroke:'currentColor',strokeWidth:'1.1',fill:'none'}),luck:h('path',{d:'M4 4 A4 4 0 0 1 12 4 Q12 8 8 12 Q4 8 4 4',stroke:'currentColor',strokeWidth:'1.1',fill:'none'}),sessions:h('rect',{x:2,y:3,width:12,height:10,rx:1,stroke:'currentColor',strokeWidth:'1.1',fill:'none'})};return h('svg',{className:'ni',viewBox:'0 0 16 16',fill:'none'},d[p.i])}
@@ -103,7 +18,7 @@ function PH(p){return h('div',{className:'ph'},h('span',{className:'star'},'*'),
 
 function Kpi(p){
   var style=p.bg?{backgroundImage:'url('+p.bg+')',backgroundSize:'100% 100%',backgroundPosition:'center'}:{};
-  return h('div',{className:'panel kpi ai '+(p.cn||'')+' d'+p.dl,style:style},h(PF),h('div',{className:'kl'},p.label),h('div',{className:'kv'},typeof p.value==='number'?p.value.toLocaleString():p.value),p.sub&&h('div',{className:'ks'},p.sub))
+  return h('div',{className:'panel kpi ai '+(p.cn||'')+' d'+p.dl,style:style},h('div',{className:'kl'},p.label),h('div',{className:'kv'},typeof p.value==='number'?p.value.toLocaleString():p.value),p.sub&&h('div',{className:'ks'},p.sub))
 }
 
 var CHARS=[{n:'Aric Velloren',r:1842,avg:16.3,tr:2.1},{n:'Liora Sunblade',r:1621,avg:15.7,tr:1.4},{n:'Thorne Blackwell',r:1401,avg:14.8,tr:-0.6},{n:'Kaelen Stormborn',r:1239,avg:17.2,tr:0.9},{n:'Mira Undertide',r:1083,avg:13.9,tr:-1.2}];
@@ -185,7 +100,6 @@ function App(){
         h(Kpi,{label:'Nat 20 Rate',value:r20,cn:'n20',dl:3,bg:'https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/scorecard3.png'}),
         h(Kpi,{label:'Characters',value:c.ch,dl:4,bg:'https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/scorecard4.png'}),
         h('div',{className:'panel cp ai d5 kpi-chart'},
-          h(PF),
           h(PH,{title:q?'Rolls by Quarter':'Roll Activity Over Time',sub:q?'Quarterly aggregation':'session_date -- roll_count'}),
           h(AreaC,{data:c.sd,q:q})
         )
@@ -193,22 +107,18 @@ function App(){
 
       h('div',{className:'row-mid'},
         h('div',{className:'panel cp ai d6'},
-          h(PF),
           h(PH,{title:'Roll Type Breakdown',sub:'roll_log.roll_type'}),
           c.rt.length>0?h(PieC,{data:c.rt}):h('p',{style:{color:T.text3,textAlign:'center',padding:'60px 0'}},'No data')
         ),
         h('div',{className:'panel cp ai d6'},
-          h(PF),
           h(PH,{title:'Top Characters',sub:'character_name -- roll_total'}),
           h(CharTable)
         ),
         h('div',{className:'panel cp ai d7'},
-          h(PF),
           h(PH,{title:'Session Highlights',sub:'encounter_notes -- quotes'}),
           h(Feed)
         ),
         h('div',{className:'panel cp ai d7'},
-          h(PF),
           h(PH,{title:'Campaign Snapshot',sub:'session_id -- quest_tracker'}),
           h(CampSnap,{c:c})
         )
@@ -216,16 +126,13 @@ function App(){
 
       h('div',{className:'row-bot'},
         h('div',{className:'panel cp ai d8'},
-          h(PF),
           h(PH,{title:'Recent Sessions',sub:'sessions -- encounter_summary'}),
           h(SessList)
         ),
         h('div',{className:'panel cp ai d8'},
-          h(PF),
           h(QuoteBoard)
         ),
         h('div',{className:'panel cp ai d8'},
-          h(PF),
           h(PH,{title:'Quick Access',sub:'resource links'}),
           h(ResCards)
         )
