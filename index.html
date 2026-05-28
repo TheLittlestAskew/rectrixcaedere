@@ -54,15 +54,14 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 .row-mid{display:grid;grid-template-columns:2.5fr 2.2fr 2fr 1.5fr;gap:12px}
 .row-bot{display:grid;grid-template-columns:2.8fr 2.2fr 1.5fr;gap:12px}
 
-/* ── Panel base ── */
-.panel{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);position:relative;overflow:hidden}
-.panel:hover{border-color:var(--border-strong);box-shadow:var(--shadow-glow)}
-.panel::before{content:'';position:absolute;inset:3px;border:1px solid var(--gold-alpha-6);border-radius:8px;pointer-events:none;z-index:0}
-.panel::after{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,var(--panel-accent,var(--gold-bright)),transparent);opacity:.3;pointer-events:none}
+/* ── Panel base — art deco frame image ── */
+.panel{background-color:var(--bg-card);border:none;border-radius:0;position:relative;overflow:visible}
+.panel::before{content:'';position:absolute;inset:-4px;background:url('https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/panel-frame.png') no-repeat center / 100% 100%;pointer-events:none;z-index:2}
+.panel::after{content:none}
+.panel:hover{box-shadow:var(--shadow-glow)}
 
-/* ── Corner flourishes ── */
-.cf{position:absolute;width:32px;height:32px;color:var(--gold-mid);opacity:.25;pointer-events:none;z-index:1}
-.cf.c-tl{top:4px;left:4px}.cf.c-tr{top:4px;right:4px;transform:scaleX(-1)}.cf.c-bl{bottom:4px;left:4px;transform:scaleY(-1)}.cf.c-br{bottom:4px;right:4px;transform:scale(-1)}
+/* ── Corner flourishes — disabled, frame image handles this ── */
+.cf{display:none}
 
 /* ── KPI cards ── */
 .kpi{padding:48px 20px 16px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;aspect-ratio:3/5;transition:all var(--dur-enter) var(--ease)}
