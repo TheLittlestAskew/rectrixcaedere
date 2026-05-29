@@ -50,7 +50,7 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 .top-icon:hover{border-color:var(--border-strong);color:var(--gold-bright)}
 
 /* ── Row sub-grids ── */
-.row-kpi{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr)) minmax(200px,1.8fr);gap:14px;align-items:start}
+.row-kpi{display:grid;grid-template-columns:repeat(4,minmax(120px,1fr)) minmax(200px,2.5fr);gap:2px;align-items:stretch}
 .row-mid{display:grid;grid-template-columns:2.5fr 2.2fr 2fr 1.5fr;gap:12px}
 .row-bot{display:grid;grid-template-columns:2.8fr 2.2fr 1.5fr;gap:12px}
 
@@ -58,14 +58,17 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 .panel{background-color:var(--bg-card);border:55px solid transparent;border-image-source:url('https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/border%20panel.png');border-image-slice:21% 26% 21% 26% fill;border-image-repeat:stretch;border-image-outset:4px;border-radius:0;position:relative;overflow:visible}
 .panel:hover{filter:drop-shadow(0 0 8px rgba(199,163,105,0.15))}
 
-/* ── KPI cards ── */
-.kpi{padding:12px 8px 8px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;aspect-ratio:3/5;max-height:280px;transition:all var(--dur-enter) var(--ease)}
+/* ── KPI cards — thinner frame than other panels ── */
+.kpi{padding:12px 8px 8px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;aspect-ratio:3/5;max-height:280px;border-width:35px;transition:all var(--dur-enter) var(--ease)}
 .kpi:hover{transform:translateY(-2px)}
 .kpi .kl{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:2px;text-transform:uppercase;color:var(--text-3);margin-bottom:6px}
 .kpi .kv{font-family:var(--f-display);font-size:48px;font-weight:500;color:var(--text-1);line-height:1;letter-spacing:1px}
 .kpi .ks{font-family:var(--f-body);font-size:var(--text-xs);color:var(--text-2);margin-top:6px;font-weight:300}
 .kpi.n20{--panel-accent:var(--success)}.kpi.n20 .kv{color:var(--success)}
 .kpi.n1{--panel-accent:var(--danger)}.kpi.n1 .kv{color:var(--danger)}
+
+/* ── KPI chart panel — stretch to fill row height ── */
+.kpi-chart{align-self:stretch}
 
 /* ── Chart / content panels ── */
 .cp{padding:4px 6px 4px}
@@ -141,7 +144,7 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 @media(max-width:1080px){
   .row-kpi{grid-template-columns:repeat(2,1fr)}
   .row-kpi .kpi-chart{grid-column:1/-1}
-  .kpi{aspect-ratio:3/5;padding:8px 6px 6px;max-height:260px}
+  .kpi{aspect-ratio:3/5;padding:8px 6px 6px;max-height:260px;border-width:30px}
   .kpi .kv{font-size:36px}
   .panel{border-width:40px}
 }
@@ -152,6 +155,7 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
   .row-kpi .kpi-chart{grid-column:1}
   .res-grid{grid-template-columns:repeat(2,1fr)}
   .panel{border-width:30px}
+  .kpi{border-width:25px}
 }
 </style>
 </head>
