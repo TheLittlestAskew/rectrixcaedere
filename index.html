@@ -16,7 +16,7 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 .shell{display:flex;min-height:100vh}
 
 /* ── Sidebar — brand frame border-image ── */
-.side{width:var(--sidebar-width);min-height:100vh;background:linear-gradient(180deg,var(--bg-sidebar-top),var(--bg-sidebar-bottom));position:fixed;left:var(--sidebar-left);top:0;bottom:0;z-index:100;display:flex;flex-direction:column;overflow-y:auto;border:40px solid transparent;border-image-source:url('https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/border%20panel.png');border-image-slice:21% 26% 21% 26% fill;border-image-repeat:stretch;border-image-outset:0px}
+.side{width:var(--sidebar-width);min-height:100vh;background:linear-gradient(180deg,var(--bg-sidebar-top),var(--bg-sidebar-bottom));position:fixed;left:var(--sidebar-left,16px);top:0;bottom:0;z-index:100;display:flex;flex-direction:column;overflow-y:auto;border:40px solid transparent;border-image-source:url('https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/border%20panel.png');border-image-slice:21% 26% 21% 26% fill;border-image-repeat:stretch;border-image-outset:0px}
 .side-brand{padding:16px 8px 16px;text-align:center;position:relative}
 .side-brand::after{content:'';position:absolute;bottom:0;left:8px;right:8px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-mid),transparent)}
 .side-logo-img{display:block;width:100%;max-width:160px;height:auto;margin:0 auto;filter:drop-shadow(0 0 14px var(--gold-alpha-30))}
@@ -36,7 +36,7 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 .side-nav .ni{width:13px;height:13px;opacity:.45}.side-nav button.on .ni{opacity:.9}
 
 /* ── Main 4-row grid ── */
-.main{flex:1;margin-left:calc(var(--sidebar-left) + var(--sidebar-width) - 6px);display:grid;grid-template-rows:74px auto auto auto;gap:12px;padding:9px 12px 24px;align-content:start}
+.main{flex:1;margin-left:calc(var(--sidebar-left,16px) + var(--sidebar-width,209px));display:grid;grid-template-rows:74px auto auto auto;gap:12px;padding:9px 12px 24px;align-content:start}
 
 /* ── Row 1: Header ── */
 .row-hdr{position:relative;background:linear-gradient(180deg,var(--gold-alpha-4),transparent);border:1px solid var(--border);border-radius:var(--r);display:flex;align-items:center;justify-content:space-between;padding:0 24px;overflow:hidden}
