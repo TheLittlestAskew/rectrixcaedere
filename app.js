@@ -1,7 +1,7 @@
 var T={bgVoid:'#050A0E',bgCard:'#0E1820',bgCardInner:'#0B1219',goldDark:'#68442F',goldMid:'#8C5D3F',gold:'#C7A369',goldBright:'#DA9565',goldPale:'#E8C690',text1:'#E8E4DC',text2:'#9A9590',text3:'#5E5A55',success:'#4A9E6E',danger:'#B44A4A',info:'#6B8AAD',mystic:'#8B6BB5',warn:'#D4943A',fLabel:"'Alegreya Sans SC',sans-serif",text2xs:9,textXs:10,goldAlpha5:'rgba(199,163,105,0.05)',goldAlpha8:'rgba(199,163,105,0.08)',goldAlpha10:'rgba(199,163,105,0.10)',goldAlpha30:'rgba(199,163,105,0.30)'};
 var h=React.createElement,us=React.useState;
 var AC=Recharts.AreaChart,A=Recharts.Area,PC=Recharts.PieChart,Pi=Recharts.Pie,Ce=Recharts.Cell,XA=Recharts.XAxis,YA=Recharts.YAxis,CG=Recharts.CartesianGrid,Tt=Recharts.Tooltip,RC=Recharts.ResponsiveContainer,Lg=Recharts.Legend,BC=Recharts.BarChart,Bar=Recharts.Bar;
-var D=[{id:1,nm:'Sky Is The Limit',sn:'SITL',st:'a',tr:946,ch:6,se:15,n20:44,n1:41,fr:'2025-10-12',lr:'2026-05-03',sd:[{d:'S01',r:67},{d:'S02',r:81},{d:'S03',r:99},{d:'S04',r:88},{d:'S05',r:66},{d:'S06',r:160},{d:'S07',r:22},{d:'S08',r:59},{d:'S09',r:22},{d:'S10',r:70},{d:'S11',r:13},{d:'S12',r:36},{d:'S13',r:63},{d:'S14',r:20},{d:'S15',r:28}],rt:[{n:'Check',v:461,c:T.gold},{n:'To Hit',v:164,c:T.info},{n:'Damage',v:142,c:T.danger},{n:'Save',v:78,c:T.success},{n:'Roll',v:67,c:T.mystic},{n:'Heal',v:34,c:T.warn}],ac:[{n:'Skill',v:461,c:T.gold},{n:'Attack',v:186,c:T.danger},{n:'Custom',v:103,c:T.goldMid}],pf:[{d:'S01',n:3},{d:'S02',n:2},{d:'S03',n:2},{d:'S04',n:1},{d:'S05',n:2},{d:'S06',n:1},{d:'S07',n:1},{d:'S08',n:2},{d:'S09',n:2},{d:'S10',n:5},{d:'S11',n:7},{d:'S12',n:7},{d:'S13',n:12},{d:'S14',n:12},{d:'S15',n:4}],pfTop:'Kit \u00b7 33'},{id:2,nm:'Pacts & Power',sn:'P&P',st:'a',tr:2907,ch:5,se:72,n20:109,n1:117,fr:'2023-01-29',lr:'2026-04-21',sd:[{d:"Q1'23",r:149},{d:"Q2'23",r:288},{d:"Q3'23",r:234},{d:"Q4'23",r:206},{d:"Q1'24",r:164},{d:"Q2'24",r:103},{d:"Q3'24",r:81},{d:"Q4'24",r:123},{d:"Q1'25",r:110},{d:"Q2'25",r:78},{d:"Q3'25",r:199},{d:"Q4'25",r:189},{d:"Q1'26",r:188},{d:"Q2'26",r:191}],rt:[{n:'Check',v:934,c:T.gold},{n:'Roll',v:566,c:T.mystic},{n:'Damage',v:483,c:T.danger},{n:'To Hit',v:414,c:T.info},{n:'Save',v:263,c:T.success},{n:'Heal',v:23,c:T.warn}],ac:[{n:'Skill',v:934,c:T.gold},{n:'Attack',v:664,c:T.danger},{n:'Custom',v:352,c:T.goldMid}],pf:[]},{id:3,nm:'Ashfall Brittania',sn:'AFB',st:'a',tr:855,ch:7,se:8,n20:29,n1:22,fr:'2025-11-08',lr:'2026-05-04',sd:[{d:'S01',r:196},{d:'S02',r:93},{d:'S03',r:125},{d:'S04',r:163},{d:'S05',r:81},{d:'S06',r:51},{d:'S07',r:47},{d:'S08',r:44}],rt:[{n:'Check',v:329,c:T.gold},{n:'Roll',v:173,c:T.mystic},{n:'Damage',v:167,c:T.danger},{n:'To Hit',v:118,c:T.info},{n:'Save',v:83,c:T.success}],ac:[{n:'Skill',v:235,c:T.gold},{n:'Attack',v:261,c:T.danger}],pf:[]},{id:4,nm:'Where the Flowers Remember',sn:'WTFR',st:'p',tr:0,ch:0,se:0,n20:0,n1:0,fr:null,lr:null,sd:[],rt:[],ac:[],pf:[]}];
+var D=[{id:1,nm:'Sky Is The Limit',sn:'SITL',st:'a',tr:946,ch:6,se:15,n20:44,n1:41,fr:'2025-10-12',lr:'2026-05-03',sd:[{d:'S01',r:67},{d:'S02',r:81},{d:'S03',r:99},{d:'S04',r:88},{d:'S05',r:66},{d:'S06',r:160},{d:'S07',r:22},{d:'S08',r:59},{d:'S09',r:22},{d:'S10',r:70},{d:'S11',r:13},{d:'S12',r:36},{d:'S13',r:63},{d:'S14',r:20},{d:'S15',r:28}],rt:[{n:'Check',v:461,c:T.gold},{n:'To Hit',v:164,c:T.info},{n:'Damage',v:142,c:T.danger},{n:'Save',v:78,c:T.success},{n:'Roll',v:67,c:T.mystic},{n:'Heal',v:34,c:T.warn}],ac:[{n:'Skill',v:461,c:T.gold},{n:'Attack',v:186,c:T.danger},{n:'Custom',v:103,c:T.goldMid}],pf:[{d:'S01',n:3},{d:'S02',n:2},{d:'S03',n:2},{d:'S04',n:1},{d:'S05',n:2},{d:'S06',n:1},{d:'S07',n:1},{d:'S08',n:2},{d:'S09',n:2},{d:'S10',n:5},{d:'S11',n:7},{d:'S12',n:7},{d:'S13',n:12},{d:'S14',n:12},{d:'S15',n:4}],pfTop:'Kit \u00b7 33',oq:47},{id:2,nm:'Pacts & Power',sn:'P&P',st:'a',tr:2907,ch:5,se:72,n20:109,n1:117,fr:'2023-01-29',lr:'2026-04-21',sd:[{d:"Q1'23",r:149},{d:"Q2'23",r:288},{d:"Q3'23",r:234},{d:"Q4'23",r:206},{d:"Q1'24",r:164},{d:"Q2'24",r:103},{d:"Q3'24",r:81},{d:"Q4'24",r:123},{d:"Q1'25",r:110},{d:"Q2'25",r:78},{d:"Q3'25",r:199},{d:"Q4'25",r:189},{d:"Q1'26",r:188},{d:"Q2'26",r:191}],rt:[{n:'Check',v:934,c:T.gold},{n:'Roll',v:566,c:T.mystic},{n:'Damage',v:483,c:T.danger},{n:'To Hit',v:414,c:T.info},{n:'Save',v:263,c:T.success},{n:'Heal',v:23,c:T.warn}],ac:[{n:'Skill',v:934,c:T.gold},{n:'Attack',v:664,c:T.danger},{n:'Custom',v:352,c:T.goldMid}],pf:[],oq:null},{id:3,nm:'Ashfall Brittania',sn:'AFB',st:'a',tr:855,ch:7,se:8,n20:29,n1:22,fr:'2025-11-08',lr:'2026-05-04',sd:[{d:'S01',r:196},{d:'S02',r:93},{d:'S03',r:125},{d:'S04',r:163},{d:'S05',r:81},{d:'S06',r:51},{d:'S07',r:47},{d:'S08',r:44}],rt:[{n:'Check',v:329,c:T.gold},{n:'Roll',v:173,c:T.mystic},{n:'Damage',v:167,c:T.danger},{n:'To Hit',v:118,c:T.info},{n:'Save',v:83,c:T.success}],ac:[{n:'Skill',v:235,c:T.gold},{n:'Attack',v:261,c:T.danger}],pf:[],oq:null},{id:4,nm:'Where the Flowers Remember',sn:'WTFR',st:'p',tr:0,ch:0,se:0,n20:0,n1:0,fr:null,lr:null,sd:[],rt:[],ac:[],pf:[],oq:null}];
 
 function BL(){return h('svg',{viewBox:'0 0 60 60',fill:'none',width:44,height:44},h('defs',null,h('linearGradient',{id:'blg',x1:0,y1:0,x2:0,y2:1},h('stop',{offset:'0%',stopColor:T.goldBright}),h('stop',{offset:'50%',stopColor:T.gold}),h('stop',{offset:'100%',stopColor:T.goldMid}))),h('path',{d:'M30 4 L37 28 L34 31 L30 56 L26 31 L23 28 Z',fill:'url(#blg)',opacity:.9}),h('line',{x1:30,y1:6,x2:30,y2:54,stroke:T.bgCardInner,strokeWidth:'.7',opacity:.4}),h('path',{d:'M20 29 L30 33 L40 29 L30 25 Z',fill:'url(#blg)',opacity:.6}),h('path',{d:'M30 1 L31 3.5 L30 2.8 L29 3.5 Z',fill:T.goldBright,opacity:.5}))}
 
@@ -64,25 +64,42 @@ function ResCards(){return h('div',{className:'res-grid'},RESS.map(function(r,i)
 
 var NAV=[{l:'Overview',i:'overview'}];
 
-function PfTT(p){if(!p.active||!p.payload||!p.payload.length)return null;var v=p.payload[0].value;return h('div',{className:'ctt'},h('div',{className:'tl2'},p.label),h('div',{className:'tv'},v+(v===1?' curse':' curses')))}
-function ProfChart(p){return h(RC,{width:'100%',height:128},h(BC,{data:p.data,margin:{top:6,right:6,left:-22,bottom:0}},h('defs',null,h('linearGradient',{id:'pfg',x1:0,y1:0,x2:0,y2:1},h('stop',{offset:'0%',stopColor:T.danger}),h('stop',{offset:'100%',stopColor:T.goldMid}))),h(CG,{strokeDasharray:'3 3',vertical:false}),h(XA,{dataKey:'d',tick:{fill:T.text3,fontFamily:T.fLabel,fontSize:T.text2xs},axisLine:{stroke:T.goldAlpha10},tickLine:false,interval:0,angle:-35,textAnchor:'end',height:34}),h(YA,{tick:{fill:T.text3,fontFamily:T.fLabel,fontSize:T.text2xs},axisLine:false,tickLine:false,allowDecimals:false,width:28}),h(Tt,{content:h(PfTT),cursor:{fill:T.goldAlpha8}}),h(Bar,{dataKey:'n',fill:'url(#pfg)',radius:[2,2,0,0],maxBarSize:22})))}
+function gArc(cx,cy,r,d0,d1){var a0=d0*Math.PI/180,a1=d1*Math.PI/180;var x0=cx+r*Math.cos(a0),y0=cy+r*Math.sin(a0),x1=cx+r*Math.cos(a1),y1=cy+r*Math.sin(a1);var large=(d1-d0)<=180?0:1;return 'M'+x0+' '+y0+' A'+r+' '+r+' 0 '+large+' 1 '+x1+' '+y1}
+function Gauge(p){
+  var cx=110,cy=108,r=88;
+  var f=Math.max(0,Math.min(p.value/p.max,1));
+  var vDeg=180+180*f, vRad=vDeg*Math.PI/180;
+  var nx=cx+(r-16)*Math.cos(vRad), ny=cy+(r-16)*Math.sin(vRad);
+  var ticks=[];for(var i=0;i<=4;i++){var d=(180+45*i)*Math.PI/180;ticks.push(h('line',{key:i,x1:cx+r*Math.cos(d),y1:cy+r*Math.sin(d),x2:cx+(r-8)*Math.cos(d),y2:cy+(r-8)*Math.sin(d),stroke:T.goldMid,strokeWidth:1,opacity:.55}))}
+  return h('svg',{className:'pf-gauge-svg',viewBox:'0 0 220 132'},
+    h('defs',null,h('linearGradient',{id:'gaugeg',x1:0,y1:0,x2:1,y2:0},h('stop',{offset:'0%',stopColor:T.gold}),h('stop',{offset:'55%',stopColor:T.goldBright}),h('stop',{offset:'100%',stopColor:T.danger}))),
+    h('path',{d:gArc(cx,cy,r,180,360),stroke:T.goldAlpha10,strokeWidth:11,fill:'none',strokeLinecap:'round'}),
+    h('path',{d:gArc(cx,cy,r,180,vDeg),stroke:'url(#gaugeg)',strokeWidth:11,fill:'none',strokeLinecap:'round'}),
+    ticks,
+    h('line',{x1:cx,y1:cy,x2:nx,y2:ny,stroke:T.goldPale,strokeWidth:2.5,strokeLinecap:'round'}),
+    h('circle',{cx:cx,cy:cy,r:5,fill:T.goldPale}),
+    h('text',{x:cx-r,y:cy+17,fill:T.text3,fontFamily:T.fLabel,fontSize:9,textAnchor:'middle'},'0'),
+    h('text',{x:cx+r,y:cy+17,fill:T.text3,fontFamily:T.fLabel,fontSize:9,textAnchor:'middle'},p.max)
+  )
+}
 function ProfMeter(p){
   var c=p.c,data=c.pf||[];
-  if(!data.length)return h('div',{className:'panel cp ai d6 prof-meter'},h(PH,{title:'Profanity Meter',sub:'curses -- per session'}),h('p',{style:{color:T.text3,textAlign:'center',padding:'48px 0'}},'No profanity logged yet'));
+  if(!data.length)return h('div',{className:'panel cp ai d6 prof-meter'},h(PH,{title:'Profanity Meter',sub:'spice level'}),h('p',{style:{color:T.text3,textAlign:'center',padding:'48px 0'}},'No profanity logged yet'));
   var total=data.reduce(function(s,x){return s+x.n},0);
-  var cap=100,pct=Math.min(total/cap,1)*100;
+  var peak=data.reduce(function(m,x){return Math.max(m,x.n)},0);
+  var cap=100;
   var tier=total<10?'Choir-clean':total<25?'Salty':total<50?'Sailor-tier':total<80?'Foul-mouthed':'Unholy';
   return h('div',{className:'panel cp ai d6 prof-meter'},
-    h(PH,{title:'Profanity Meter',sub:'curses -- per session'}),
-    h('div',{className:'pf-top'},
-      h('div',{className:'pf-num'},total),
-      h('div',{className:'pf-meta'},
+    h(PH,{title:'Profanity Meter',sub:'spice level'}),
+    h('div',{className:'pf-body'},
+      h('div',{className:'pf-stat'},
+        h('div',{className:'pf-num'},total),
         h('div',{className:'pf-tier'},tier),
         c.pfTop?h('div',{className:'pf-lead'},'\uD83E\uDEB6 '+c.pfTop):null,
-        h('div',{className:'pf-gauge'},h('div',{className:'pf-fill',style:{width:pct+'%'}}))
-      )
-    ),
-    h(ProfChart,{data:data})
+        h('div',{className:'pf-peak'},'Peak session: '+peak+' curses')
+      ),
+      h(Gauge,{value:total,max:cap})
+    )
   )
 }
 
@@ -94,7 +111,6 @@ function App(){
   var c=D.find(function(x){return x.id===aId});
   var q=c.id===2;
   var r20=c.tr>0?(c.n20/c.tr*100).toFixed(1)+'%':'--';
-  var totalSessions=D.reduce(function(s,x){return s+(x.st==='a'?x.se:0)},0);
 
   return h('div',{className:'shell'},
     h('nav',{className:'side'+(navOpen?' open':'')},
@@ -128,8 +144,12 @@ function App(){
         h(Kpi,{label:'Sessions Logged',value:c.se,dl:2}),
         h(Kpi,{label:'Nat 20 Rate',value:r20,cn:'n20',dl:3}),
         h(Kpi,{label:'Characters',value:c.ch,dl:4}),
-        h(Kpi,{label:'Total Sessions',value:totalSessions,sub:'all campaigns',dl:5}),
+        h(Kpi,{label:'Open Quests',value:c.oq!=null?c.oq:'--',sub:'active threads',dl:5}),
         h(ProfMeter,{c:c}),
+        h('div',{className:'panel cp ai d6 kpi-snap'},
+          h(PH,{title:'Campaign Snapshot',sub:'session_id -- quest_tracker'}),
+          h(CampSnap,{c:c})
+        ),
         h('div',{className:'panel cp ai d5 kpi-chart'},
           h(PH,{title:q?'Rolls by Quarter':'Roll Activity Over Time',sub:q?'Quarterly aggregation':'session_date -- roll_count'}),
           h(AreaC,{data:c.sd,q:q})
@@ -148,10 +168,6 @@ function App(){
         h('div',{className:'panel cp ai d7'},
           h(PH,{title:'Session Highlights',sub:'encounter_notes -- quotes'}),
           h(Feed)
-        ),
-        h('div',{className:'panel cp ai d7'},
-          h(PH,{title:'Campaign Snapshot',sub:'session_id -- quest_tracker'}),
-          h(CampSnap,{c:c})
         )
       ),
 
