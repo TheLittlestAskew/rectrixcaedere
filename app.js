@@ -66,15 +66,20 @@ var NAV=[{l:'Overview',i:'overview'}];
 
 function App(){
   var _=us(1),aId=_[0],set=_[1];
+  var nv=us(false),navOpen=nv[0],setNav=nv[1];
+  function openNav(){setNav(true)}
+  function closeNav(){setNav(false)}
   var c=D.find(function(x){return x.id===aId});
   var q=c.id===2;
   var r20=c.tr>0?(c.n20/c.tr*100).toFixed(1)+'%':'--';
 
   return h('div',{className:'shell'},
-    h('nav',{className:'side'},
-      h('div',{className:'side-brand'},h('img',{src:'https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/logo_tex-vert-transparent.png',alt:'Rectrix Caedere',className:'side-logo-img'})),
+    h('nav',{className:'side'+(navOpen?' open':'')},
+      h('div',{className:'side-brand'},
+        h('button',{className:'drawer-close',onClick:closeNav,'aria-label':'Close menu'},'\u2715'),
+        h('img',{src:'https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/logo_tex-vert-transparent.png',alt:'Rectrix Caedere',className:'side-logo-img'})),
       h('div',{className:'side-section'},'Campaigns'),
-      h('ul',{className:'camp-list'},D.map(function(x){return h('li',{key:x.id},h('button',{className:(x.id===aId?'on':'')+(x.st==='p'?' off':''),onClick:x.st!=='p'?function(){set(x.id)}:undefined,title:x.st==='p'?'No sessions recorded yet':undefined,tabIndex:x.st==='p'?-1:0,'aria-disabled':x.st==='p'?'true':undefined},h('span',null,x.sn),h('span',{className:'ct'},x.st==='p'?'uncharted':x.tr.toLocaleString())))})),
+      h('ul',{className:'camp-list'},D.map(function(x){return h('li',{key:x.id},h('button',{className:(x.id===aId?'on':'')+(x.st==='p'?' off':''),onClick:x.st!=='p'?function(){set(x.id);closeNav()}:undefined,title:x.st==='p'?'No sessions recorded yet':undefined,tabIndex:x.st==='p'?-1:0,'aria-disabled':x.st==='p'?'true':undefined},h('span',null,x.sn),h('span',{className:'ct'},x.st==='p'?'uncharted':x.tr.toLocaleString())))})),
       h('div',{className:'side-div'}),
       h('ul',{className:'side-nav'},NAV.map(function(n,i){return h('li',{key:n.l},h('button',{className:i===0?'on':''},h(NI,{i:n.i}),n.l))}))
     ),
@@ -87,6 +92,7 @@ function App(){
         ),
         h('img',{src:'https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/topcenterheader.png',alt:'',className:'top-center-img','aria-hidden':'true'}),
         h('div',{className:'hdr-right'},
+          h('button',{className:'filter-btn',onClick:openNav,'aria-label':'Open filters and menu'},h('svg',{viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'1.8'},h('path',{d:'M3 5h18l-7 8v6l-4-2v-4z'})),h('span',null,'Filter')),
           h('div',{className:'hdr-filter'},'Filter by campaign'),
           h('div',{className:'top-icon','aria-hidden':'true'},h('svg',{width:14,height:14,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'1.5'},h('path',{d:'M12 2L14.5 8 21 9 16 14 17.5 21 12 17.5 6.5 21 8 14 3 9 9.5 8Z'}))),
           h('div',{className:'top-icon','aria-hidden':'true'},h('svg',{width:14,height:14,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'1.5'},h('path',{d:'M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9'}),h('path',{d:'M13.73 21a2 2 0 0 1-3.46 0'}))),
@@ -137,7 +143,8 @@ function App(){
           h(ResCards)
         )
       )
-    )
+    ),
+    navOpen?h('div',{className:'drawer-overlay',onClick:closeNav}):null
   )
 }
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));
