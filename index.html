@@ -50,7 +50,7 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 .top-icon:hover{border-color:var(--border-strong);color:var(--gold-bright)}
 
 /* ── Row sub-grids ── */
-.row-kpi{--kpi-h:270px;display:grid;grid-template-columns:repeat(4,auto) minmax(240px,1fr);gap:8px;align-items:stretch;justify-content:start}
+.row-kpi{--kpi-h:270px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;align-items:stretch}
 .row-mid{display:grid;grid-template-columns:2.5fr 2.2fr 2fr 1.5fr;gap:12px}
 .row-bot{display:grid;grid-template-columns:2.8fr 2.2fr 1.5fr;gap:12px}
 
@@ -59,16 +59,16 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 .panel:hover{border-color:var(--border-strong)}
 
 /* ── KPI cards — frameless, centered content ── */
-.kpi{width:calc(var(--kpi-h)*5/7);height:var(--kpi-h);padding:16px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:all var(--dur-enter) var(--ease)}
+.kpi{width:auto;min-width:0;height:var(--kpi-h);padding:16px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:all var(--dur-enter) var(--ease)}
 .kpi:hover{transform:translateY(-2px)}
 .kpi .kl{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:2px;text-transform:uppercase;color:var(--text-3);margin-bottom:6px}
-.kpi .kv{font-family:var(--f-display);font-size:48px;font-weight:500;color:var(--text-1);line-height:1;letter-spacing:1px}
+.kpi .kv{font-family:var(--f-display);font-size:clamp(32px,3.2vw,44px);font-weight:500;color:var(--text-1);line-height:1;letter-spacing:1px}
 .kpi .ks{font-family:var(--f-body);font-size:var(--text-xs);color:var(--text-2);margin-top:6px;font-weight:300}
 .kpi.n20{--panel-accent:var(--success)}.kpi.n20 .kv{color:var(--success)}
 .kpi.n1{--panel-accent:var(--danger)}.kpi.n1 .kv{color:var(--danger)}
 
 /* ── KPI chart panel — stretch to fill row height ── */
-.kpi-chart{height:var(--kpi-h);align-self:stretch}
+.kpi-chart{grid-column:1/-1;height:var(--kpi-h);align-self:stretch}
 
 /* ── Chart / content panels ── */
 .cp{padding:14px 16px}
@@ -85,14 +85,14 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 /* ── Character table ── */
 .char-tbl{width:100%;border-collapse:collapse}
 .char-tbl th{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);padding:5px 8px;border-bottom:1px solid var(--border);text-align:left}
-.char-tbl td{font-family:var(--f-body);font-size:var(--text-sm);color:var(--text-2);padding:6px 8px;border-bottom:1px solid var(--gold-alpha-5)}
+.char-tbl td{font-family:var(--f-body);font-size:13px;color:var(--text-2);padding:6px 8px;border-bottom:1px solid var(--gold-alpha-5)}
 .char-tbl td:first-child{color:var(--text-1)}.char-tbl .up{color:var(--success)}.char-tbl .dn{color:var(--danger)}
 
 /* ── Activity feed ── */
 .feed{list-style:none;display:flex;flex-direction:column;gap:5px;overflow-y:auto;max-height:218px;scrollbar-width:none}
 .feed::-webkit-scrollbar{display:none}
 .feed li{padding:6px 10px;background:var(--gold-alpha-3);border-radius:var(--r);border-left:2px solid var(--border)}
-.feed .ft{font-family:var(--f-body);font-size:var(--text-sm);color:var(--text-1);line-height:1.35}
+.feed .ft{font-family:var(--f-body);font-size:13px;color:var(--text-1);line-height:1.35}
 .feed .fm{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:1px;color:var(--text-3);margin-top:2px}
 
 /* ── Campaign snapshot ── */
@@ -100,13 +100,13 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 .snap-status{list-style:none;display:flex;flex-direction:column;gap:4px}
 .snap-status li{display:flex;align-items:baseline;gap:8px;padding:4px 0;border-bottom:1px solid var(--gold-alpha-5)}
 .snap-status .sk{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);min-width:88px;flex-shrink:0}
-.snap-status .sv{color:var(--text-2);font-family:var(--f-body);font-size:var(--text-sm)}
+.snap-status .sv{color:var(--text-2);font-family:var(--f-body);font-size:13px}
 
 /* ── Session list ── */
 .sess-list{list-style:none;display:flex;flex-direction:column;gap:6px}
 .sess-list li{display:grid;grid-template-columns:44px 1fr auto;gap:8px;align-items:center;padding:7px 10px;border-radius:var(--r);background:var(--gold-alpha-3);border-left:2px solid var(--border)}
 .sess-list .sd{font-family:var(--f-label);font-size:var(--text-2xs);color:var(--text-3);letter-spacing:1px}
-.sess-list .sn{font-family:var(--f-body);font-size:var(--text-sm);color:var(--text-1)}
+.sess-list .sn{font-family:var(--f-body);font-size:13px;color:var(--text-1)}
 .sess-list .sl{font-size:var(--text-xs);color:var(--text-3);margin-top:2px}
 .sess-list .sr{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:1px;padding:2px 7px;border-radius:8px;border:1px solid;white-space:nowrap}
 .sr.win{color:var(--success);border-color:var(--success)}.sr.part{color:var(--warn);border-color:var(--warn)}.sr.fail{color:var(--danger);border-color:var(--danger)}
@@ -134,29 +134,110 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 .ai{animation:fu var(--dur-appear) var(--ease) both}
 .d1{animation-delay:.05s}.d2{animation-delay:.1s}.d3{animation-delay:.15s}.d4{animation-delay:.2s}.d5{animation-delay:.25s}.d6{animation-delay:.35s}.d7{animation-delay:.45s}.d8{animation-delay:.55s}
 
-/* ── Responsive ── */
+/* ── Mobile controls: hidden until small screens ── */
+.menu-btn,.filter-btn,.drawer-close{display:none}
+.filter-btn{align-items:center;gap:6px;background:var(--gold-alpha-8);border:1px solid var(--border);border-radius:14px;color:var(--gold-pale);font-family:var(--f-label);font-size:13px;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;cursor:pointer;transition:all var(--dur-hover) var(--ease)}
+.filter-btn:hover{border-color:var(--border-strong);color:var(--gold-bright)}
+.filter-btn svg{width:13px;height:13px}
+.menu-btn{align-items:center;justify-content:center;width:38px;height:38px;background:none;border:1px solid var(--border);border-radius:8px;color:var(--gold-mid);cursor:pointer;flex-shrink:0}
+.drawer-close{position:absolute;top:8px;right:8px;width:30px;height:30px;background:none;border:1px solid var(--border);border-radius:6px;color:var(--gold-mid);font-size:16px;line-height:1;cursor:pointer}
+.drawer-overlay{position:fixed;inset:0;background:rgba(3,6,10,.66);z-index:99;animation:fade .25s var(--ease)}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* ── Decorative corner flourishes — large screens only (background layer) ── */
+.deco-corners{position:fixed;inset:0;pointer-events:none;z-index:0;display:none}
+.deco-corners .dc{position:absolute;width:150px;height:150px;color:var(--gold-mid);opacity:.38}
+.deco-corners .dc-tl{top:10px;left:calc(var(--sidebar-width,209px) + 14px)}
+.deco-corners .dc-br{bottom:10px;right:14px;transform:rotate(180deg)}
+
+/* ── Responsive ─────────────────────────────────────────
+   Breakpoints: desktop >1080 · tablet 681-1080 · mobile ≤680
+   ──────────────────────────────────────────────────────── */
+
+/* KPI cascade: all-in-row (≥1401, supports up to 6) → 3-up → 2-up → 1-up */
 @media(max-width:1400px){
-  .row-kpi{grid-template-columns:repeat(4,auto);justify-content:center}
-  .row-kpi .kpi-chart{grid-column:1/-1;height:auto;min-height:240px}
+  .row-kpi{grid-template-columns:repeat(3,1fr)}
   .row-mid{grid-template-columns:1fr 1fr}
   .row-bot{grid-template-columns:1fr 1fr}
 }
-@media(max-width:1080px){
-  .row-kpi{--kpi-h:240px;grid-template-columns:repeat(2,auto);justify-content:center}
-  .row-kpi .kpi-chart{grid-column:1/-1;height:auto;min-height:220px}
-  .kpi .kv{font-size:42px}
-}
-@media(max-width:860px){
-  .side{display:none}
-  .main{margin-left:0;padding:12px;grid-template-rows:auto auto auto auto}
-  .row-kpi{grid-template-columns:auto;justify-content:center}
+
+/* Decorative corners only appear at large widths */
+@media(min-width:1401px){ .deco-corners{display:block} }
+
+/* ── Tablet: icon-rail sidebar, filters on their own row ── */
+@media(min-width:681px) and (max-width:1080px){
+  :root{--sidebar-width:66px}
+  .side{padding:8px 6px;align-items:center}
+  .side-logo-img{max-width:46px}
+  .side-section{font-size:0;justify-content:center;padding:12px 0 6px}
+  .side-section::before,.side-section::after{font-size:6px}
+  .camp-list button{justify-content:center;padding:10px 2px;font-size:var(--text-md)}
+  .camp-list button .ct{display:none}
+  .camp-list button.on::before{top:6px;bottom:6px}
+  .side-nav{align-items:center}
+  .side-nav button{justify-content:center;font-size:0;letter-spacing:0;padding:10px 0}
+  .side-nav .ni{width:17px;height:17px}
+
+  .row-kpi{--kpi-h:240px;grid-template-columns:repeat(2,1fr)}
   .row-mid,.row-bot{grid-template-columns:1fr}
-  .row-kpi .kpi-chart{grid-column:1;justify-self:stretch;height:auto;min-height:200px}
-  .res-grid{grid-template-columns:repeat(2,1fr)}
+
+  /* Header wraps: filter bar drops to its own row below the title */
+  .main{grid-template-rows:auto auto auto auto}
+  .row-hdr{flex-wrap:wrap;min-height:74px;padding:10px 18px}
+  .hdr-right{order:3;width:100%;justify-content:flex-end;margin-top:8px}
+  .top-center-img{display:none}
+}
+
+/* ── Mobile: sidebar becomes an off-canvas drawer, filter = one button ── */
+@media(max-width:680px){
+  :root{--sidebar-width:0px}
+  .side{width:min(86vw,300px);transform:translateX(-100%);transition:transform var(--dur-transition) var(--ease);z-index:100}
+  .side.open{transform:translateX(0);box-shadow:var(--shadow-card)}
+  .drawer-close{display:block}
+
+  .main{margin-left:0;padding:10px;grid-template-rows:auto auto auto auto}
+
+  /* Header acts as the mobile bar: title + single Filter control */
+  .row-hdr{min-height:60px;padding:10px 14px}
+  .top-center-img{display:none}
+  .hdr-filter,.top-icon{display:none}
+  .filter-btn{display:inline-flex}
+  .hdr-title{font-size:var(--text-lg);letter-spacing:3px}
+  .hdr-sub{font-size:var(--text-sm)}
+
+  /* Everything stacks single-column, in priority order (DOM order) */
+  .row-kpi{--kpi-h:auto;grid-template-columns:1fr}
+  .kpi{height:auto;min-height:118px;padding:16px 12px}
+  .kpi-chart{height:auto;min-height:220px}
+  .row-mid,.row-bot{grid-template-columns:1fr}
+
+  /* Quick links become a vertical list of full-width buttons */
+  .res-grid{grid-template-columns:1fr}
+  .res-card{flex-direction:row;justify-content:flex-start;gap:12px;padding:14px 16px;text-align:left}
 }
 </style>
 </head>
 <body><div id="root"></div>
+<div class="deco-corners" aria-hidden="true">
+  <svg class="dc dc-tl" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 40 Q4 4 40 4" stroke="currentColor" stroke-width="1" opacity=".6"/>
+    <path d="M10 58 A52 52 0 0 1 58 10" stroke="currentColor" stroke-width=".7" stroke-dasharray="1 6" opacity=".5"/>
+    <path d="M22 6 L24 13 L22 11 L20 13 Z" fill="currentColor" opacity=".7"/>
+    <path d="M6 22 L8 26 L12 28 L8 30 L6 34 L4 30 L0 28 L4 26 Z" fill="currentColor" opacity=".55" transform="translate(30 26)"/>
+    <circle cx="14" cy="46" r="1.2" fill="currentColor" opacity=".6"/>
+    <circle cx="46" cy="14" r="1.2" fill="currentColor" opacity=".6"/>
+    <path d="M64 18 A14 14 0 1 0 70 30 A11 11 0 1 1 64 18 Z" fill="currentColor" opacity=".4"/>
+  </svg>
+  <svg class="dc dc-br" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 40 Q4 4 40 4" stroke="currentColor" stroke-width="1" opacity=".6"/>
+    <path d="M10 58 A52 52 0 0 1 58 10" stroke="currentColor" stroke-width=".7" stroke-dasharray="1 6" opacity=".5"/>
+    <path d="M22 6 L24 13 L22 11 L20 13 Z" fill="currentColor" opacity=".7"/>
+    <path d="M6 22 L8 26 L12 28 L8 30 L6 34 L4 30 L0 28 L4 26 Z" fill="currentColor" opacity=".55" transform="translate(30 26)"/>
+    <circle cx="14" cy="46" r="1.2" fill="currentColor" opacity=".6"/>
+    <circle cx="46" cy="14" r="1.2" fill="currentColor" opacity=".6"/>
+    <path d="M64 18 A14 14 0 1 0 70 30 A11 11 0 1 1 64 18 Z" fill="currentColor" opacity=".4"/>
+  </svg>
+</div>
 <svg id="grain" aria-hidden="true" focusable="false" style="position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;opacity:.035;z-index:9999;mix-blend-mode:overlay"><filter id="gf"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#gf)"/></svg>
 <script src="app.js"></script>
 </body>
