@@ -97,7 +97,7 @@
 
   /* ── Layout ── */
   --sidebar-width: 209px;
-  --sidebar-left: 16px;
+  --sidebar-left: 0px;
 
   /* ── Shadows ── */
   --shadow-card:  0 8px 24px rgba(0,0,0,0.60);

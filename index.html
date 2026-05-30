@@ -15,8 +15,8 @@
 body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);font-size:var(--text-lg);line-height:1.5;min-height:100vh;-webkit-font-smoothing:antialiased}
 .shell{display:flex;min-height:100vh}
 
-/* ── Sidebar — brand frame border-image ── */
-.side{width:var(--sidebar-width);min-height:100vh;background:linear-gradient(180deg,var(--bg-sidebar-top),var(--bg-sidebar-bottom));position:fixed;left:var(--sidebar-left,16px);top:0;bottom:0;z-index:100;display:flex;flex-direction:column;overflow-y:auto;border:40px solid transparent;border-image-source:url('https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/border%20panel.png');border-image-slice:21% 26% 21% 26% fill;border-image-repeat:stretch;border-image-outset:0px}
+/* ── Sidebar — frameless ── */
+.side{width:var(--sidebar-width);min-height:100vh;background:linear-gradient(180deg,var(--bg-sidebar-top),var(--bg-sidebar-bottom));position:fixed;left:var(--sidebar-left,0px);top:0;bottom:0;z-index:100;display:flex;flex-direction:column;overflow-y:auto;padding:8px 12px;border-right:1px solid var(--border)}
 .side-brand{padding:16px 8px 16px;text-align:center;position:relative}
 .side-brand::after{content:'';position:absolute;bottom:0;left:8px;right:8px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-mid),transparent)}
 .side-logo-img{display:block;width:100%;max-width:160px;height:auto;margin:0 auto;filter:drop-shadow(0 0 14px var(--gold-alpha-30))}
@@ -36,7 +36,7 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 .side-nav .ni{width:13px;height:13px;opacity:.45}.side-nav button.on .ni{opacity:.9}
 
 /* ── Main 4-row grid ── */
-.main{flex:1;margin-left:calc(var(--sidebar-left,16px) + var(--sidebar-width,209px));display:grid;grid-template-rows:74px auto auto auto;gap:12px;padding:9px 12px 24px;align-content:start}
+.main{flex:1;margin-left:calc(var(--sidebar-left,0px) + var(--sidebar-width,209px));display:grid;grid-template-rows:74px auto auto auto;gap:12px;padding:9px 12px 24px;align-content:start}
 
 /* ── Row 1: Header ── */
 .row-hdr{position:relative;background:linear-gradient(180deg,var(--gold-alpha-4),transparent);border:1px solid var(--border);border-radius:var(--r);display:flex;align-items:center;justify-content:space-between;padding:0 24px;overflow:hidden}
@@ -54,12 +54,12 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 .row-mid{display:grid;grid-template-columns:2.5fr 2.2fr 2fr 1.5fr;gap:12px}
 .row-bot{display:grid;grid-template-columns:2.8fr 2.2fr 1.5fr;gap:12px}
 
-/* ── Panel base — 9-slice border-image from brand frame ── */
-.panel{background-color:var(--bg-card);border:55px solid transparent;border-image-source:url('https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/border%20panel.png');border-image-slice:21% 26% 21% 26% fill;border-image-repeat:stretch;border-image-outset:4px;border-radius:0;position:relative;overflow:visible}
-.panel:hover{filter:drop-shadow(0 0 8px rgba(199,163,105,0.15))}
+/* ── Panel base — frameless ── */
+.panel{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 18px;position:relative;overflow:hidden;transition:border-color var(--dur-hover) var(--ease)}
+.panel:hover{border-color:var(--border-strong)}
 
-/* ── KPI cards — thinner frame than other panels ── */
-.kpi{width:calc(var(--kpi-h)*5/7);height:var(--kpi-h);padding:10px 6px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;border-width:24px;transition:all var(--dur-enter) var(--ease)}
+/* ── KPI cards — frameless, centered content ── */
+.kpi{width:calc(var(--kpi-h)*5/7);height:var(--kpi-h);padding:16px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:all var(--dur-enter) var(--ease)}
 .kpi:hover{transform:translateY(-2px)}
 .kpi .kl{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:2px;text-transform:uppercase;color:var(--text-3);margin-bottom:6px}
 .kpi .kv{font-family:var(--f-display);font-size:48px;font-weight:500;color:var(--text-1);line-height:1;letter-spacing:1px}
@@ -68,10 +68,10 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 .kpi.n1{--panel-accent:var(--danger)}.kpi.n1 .kv{color:var(--danger)}
 
 /* ── KPI chart panel — stretch to fill row height ── */
-.kpi-chart{height:var(--kpi-h);border-width:30px;align-self:stretch}
+.kpi-chart{height:var(--kpi-h);align-self:stretch}
 
 /* ── Chart / content panels ── */
-.cp{padding:4px 6px 4px}
+.cp{padding:14px 16px}
 .ph{display:flex;align-items:center;gap:6px;margin-bottom:10px}
 .ph h3{font-family:var(--f-display);font-size:var(--text-base);font-weight:500;color:var(--text-1);letter-spacing:2px;text-transform:uppercase}
 .ph .star{color:var(--gold-mid);font-size:9px;opacity:.6;flex-shrink:0}
@@ -144,9 +144,7 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 @media(max-width:1080px){
   .row-kpi{--kpi-h:240px;grid-template-columns:repeat(2,auto);justify-content:center}
   .row-kpi .kpi-chart{grid-column:1/-1;height:auto;min-height:220px}
-  .kpi{border-width:22px}
   .kpi .kv{font-size:42px}
-  .panel{border-width:40px}
 }
 @media(max-width:860px){
   .side{display:none}
@@ -155,8 +153,6 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
   .row-mid,.row-bot{grid-template-columns:1fr}
   .row-kpi .kpi-chart{grid-column:1;justify-self:stretch;height:auto;min-height:200px}
   .res-grid{grid-template-columns:repeat(2,1fr)}
-  .panel{border-width:30px}
-  .kpi{border-width:22px}
 }
 </style>
 </head>
