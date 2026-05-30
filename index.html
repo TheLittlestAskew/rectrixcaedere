@@ -70,6 +70,17 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 /* ── KPI chart panel — stretch to fill row height ── */
 .kpi-chart{grid-column:1/-1;height:var(--kpi-h);align-self:stretch}
 
+/* ── Profanity Meter — wide KPI card ── */
+.prof-meter{grid-column:span 2;height:var(--kpi-h);display:flex;flex-direction:column}
+.prof-meter .ph{margin-bottom:6px}
+.pf-top{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.pf-num{font-family:var(--f-display);font-size:clamp(30px,3vw,42px);font-weight:500;color:var(--danger);line-height:1;flex-shrink:0}
+.pf-meta{flex:1;min-width:0}
+.pf-tier{font-family:var(--f-label);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-pale)}
+.pf-lead{font-family:var(--f-body);font-size:12px;color:var(--text-3);margin:2px 0 6px}
+.pf-gauge{height:7px;border-radius:4px;background:var(--gold-alpha-8);border:1px solid var(--border);overflow:hidden}
+.pf-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--danger));border-radius:4px;transition:width var(--dur-transition) var(--ease)}
+
 /* ── Chart / content panels ── */
 .cp{padding:14px 16px}
 .ph{display:flex;align-items:center;gap:6px;margin-bottom:10px}
@@ -179,6 +190,7 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
   .side-nav .ni{width:17px;height:17px}
 
   .row-kpi{--kpi-h:240px;grid-template-columns:repeat(2,1fr)}
+  .prof-meter{grid-column:1/-1}
   .row-mid,.row-bot{grid-template-columns:1fr}
 
   /* Header wraps: filter bar drops to its own row below the title */
@@ -209,6 +221,7 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
   .row-kpi{--kpi-h:auto;grid-template-columns:1fr}
   .kpi{height:auto;min-height:118px;padding:16px 12px}
   .kpi-chart{height:auto;min-height:220px}
+  .prof-meter{grid-column:1/-1;height:auto}
   .row-mid,.row-bot{grid-template-columns:1fr}
 
   /* Quick links become a vertical list of full-width buttons */
