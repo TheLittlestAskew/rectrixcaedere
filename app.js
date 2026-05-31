@@ -82,7 +82,7 @@ function RIcon(p){
     faction:h('path',{d:'M8 2 L10 6 L14 6 L11 9 L12 13 L8 11 L4 13 L5 9 L2 6 L6 6Z',stroke:'currentColor',strokeWidth:'1.1',fill:'none'}),
     quest:h('g',null,h('rect',{x:3,y:2,width:10,height:12,rx:1,stroke:'currentColor',strokeWidth:'1.1',fill:'none'}),h('path',{d:'M5.5 6 H10.5 M5.5 9 H9',stroke:'currentColor',strokeWidth:'1.1'}))
   };
-  return h('svg',{width:22,height:22,viewBox:'0 0 16 16',fill:'none'},icons[p.i])
+  return h('svg',{width:32,height:32,viewBox:'0 0 16 16',fill:'none'},icons[p.i])
 }
 var RESS=[{n:'NPC Tracker',s:'character relationships',i:'npc'},{n:'Loot Tracker',s:'items & rewards',i:'loot'},{n:'Faction & Rep',s:'standing & alliances',i:'faction'},{n:'Quest Board',s:'open & closed quests',i:'quest'}];
 function ResCards(){return h('div',{className:'res-grid'},RESS.map(function(r,i){return h('div',{key:i,className:'res-card'},h('div',{className:'ri'},h(RIcon,{i:r.i})),h('div',{className:'rn'},r.n),h('div',{className:'rs'},r.s))}))}
