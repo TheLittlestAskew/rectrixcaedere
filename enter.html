@@ -78,13 +78,12 @@ body.crossed #veil{opacity:0;transform:scale(1.08);filter:blur(7px);pointer-even
   text-transform:uppercase;color:var(--rc-pale-gold-text);
   border:1px solid var(--rc-border-accent-strong);border-radius:3px;
   padding:17px 36px;position:relative;overflow:hidden;
-  transition:color .4s ease, border-color .4s ease, box-shadow .4s ease;
-  animation:breathe 3.6s ease-in-out 2s infinite}
+  transition:color .4s ease, border-color .4s ease, box-shadow .4s ease}
 .cross-btn::before{content:'';position:absolute;inset:0;z-index:-1;
   background:linear-gradient(180deg,var(--rc-soft-lunar-gold),var(--rc-warm-amber));
   transform:translateY(101%);transition:transform .45s cubic-bezier(.4,0,.2,1)}
 .cross-btn:hover{color:var(--rc-starless-navy);border-color:var(--rc-soft-lunar-gold);
-  box-shadow:0 0 32px -6px var(--rc-gold-glow);animation:none}
+  box-shadow:0 0 32px -6px var(--rc-gold-glow)}
 .cross-btn:hover::before{transform:translateY(0)}
 .cross-btn:focus-visible{outline:2px solid var(--rc-product-gold);outline-offset:4px}
 .cross-btn .flank{margin:0 14px;color:var(--rc-aged-copper-gold)}
@@ -204,7 +203,7 @@ footer .dot{color:var(--rc-aged-copper-gold);margin:0 8px}
     <header>
       <img class="sigil-logo" src="https://cdn.jsdelivr.net/gh/TheLittlestAskew/rectrixcaedere@main/.design/rc/imgs/logo_only-transparent2.png" alt="Rectrix Caedere">
       <div class="eyebrow">Rectrix&nbsp;Caedere&nbsp;&middot;&nbsp;The&nbsp;Archives</div>
-      <h1 class="title">Choose Your Table</h1>
+      <h1 class="title">Choose Your Path</h1>
       <p class="sub">Four campaigns. One deck. <em>Hover a card to turn it.</em></p>
     </header>
     <main class="deck" id="deck" aria-label="Campaign selection"></main>
