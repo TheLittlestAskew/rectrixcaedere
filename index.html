@@ -151,6 +151,7 @@ body.crossed .slot{opacity:1;transform:none;
   box-shadow:0 2px 8px rgba(0,0,0,.5)}
 .ribbon--paused{background:var(--rc-info)}
 .ribbon--soon{background:var(--rc-burnt-coral);color:var(--rc-text-vellum)}
+.ribbon--finale{background:linear-gradient(180deg,var(--rc-moonlit-apricot),var(--rc-warm-amber));color:#0b1118}
 .soon-plaque{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;
   font-family:var(--rc-font-label);font-weight:700;font-size:12px;letter-spacing:.2em;
   text-transform:uppercase;color:var(--rc-pale-gold-text);text-align:center;
@@ -226,7 +227,7 @@ const img  = f => IMG + f;
 const CAMPAIGNS = [
   { name:'Sky Is The Limit', arcana:'XVIII · The Moon', status:'active',
     face:'Sky_tarot_face.webp', href:'./sky-is-the-limit/' },
-  { name:'Pacts & Power', arcana:'XVI · The Tower', status:'active',
+  { name:'Pacts & Power', arcana:'XVI · The Tower', status:'active', flag:'finale',
     face:'pacts_tarot_face.webp', href:'./pacts-and-power/' },
   { name:'Where the Flowers Remember', arcana:'X · The Wheel of Fortune', status:'paused',
     face:'wtfr_tarot_face.webp', href:'./where-the-flowers-remember/' },
@@ -248,7 +249,7 @@ CAMPAIGNS.forEach((c,i)=>{
   const live=c.status!=='coming-soon';
   const slot=document.createElement('div');
   slot.className='slot'; slot.dataset.state=c.status; slot.style.setProperty('--i',i);
-  const ribbon=c.status==='active'?'':`<div class="ribbon ribbon--${c.status==='paused'?'paused':'soon'}">${STATUS_LABEL[c.status]}</div>`;
+  const ribbon=c.flag==='finale'?`<div class="ribbon ribbon--finale">Finale</div>`:(c.status==='active'?'':`<div class="ribbon ribbon--${c.status==='paused'?'paused':'soon'}">${STATUS_LABEL[c.status]}</div>`);
   const revealFace=live?`<div class="face face--reveal"><img src="${img(c.face)}" alt="${c.name} tarot card" loading="lazy"></div>`:'';
   const soon=c.status==='coming-soon'?`<div class="soon-plaque">Coming&nbsp;Soon<small>Art in progress</small></div>`:'';
   slot.innerHTML=`
@@ -262,7 +263,7 @@ CAMPAIGNS.forEach((c,i)=>{
         ${revealFace}
       </div>
     </div>
-    <div class="cap"><div class="nm">${c.name}</div><div class="meta">${c.status==='paused'?'Paused \u00B7 '+c.arcana:c.arcana}</div></div>`;
+    <div class="cap"><div class="nm">${c.name}</div><div class="meta">${c.flag==='finale'?'Finale \u00B7 '+c.arcana:(c.status==='paused'?'Paused \u00B7 '+c.arcana:c.arcana)}</div></div>`;
   const card=slot.querySelector('.card');
   if(live){
     card.addEventListener('click',()=>{
