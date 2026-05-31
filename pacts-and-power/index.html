@@ -138,12 +138,12 @@ ul.sig .ct{font-family:var(--fl);font-size:11px;color:var(--text2);margin-left:8
 .pcmodal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:24px;
   background:radial-gradient(120% 100% at 50% 40%,rgba(5,10,14,.7),rgba(5,10,14,.93));backdrop-filter:blur(6px)}
 .pcmodal.open{display:flex}
-.pcm-panel{position:relative;width:100%;max-width:760px;max-height:90vh;overflow-y:auto;
+.pcm-panel{position:relative;width:100%;max-width:920px;max-height:92vh;overflow-y:auto;
   background:linear-gradient(180deg,var(--smoked),var(--card));border:1px solid var(--border-strong);
-  border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.7);display:grid;grid-template-columns:300px 1fr;
+  border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.7);display:grid;grid-template-columns:420px 1fr;
   opacity:0;transform:translateY(14px) scale(.985);transition:opacity .4s ease,transform .4s cubic-bezier(.2,.7,.2,1)}
 .pcmodal.open .pcm-panel{opacity:1;transform:none}
-@media(max-width:640px){.pcm-panel{grid-template-columns:1fr;max-width:420px}}
+@media(max-width:780px){.pcm-panel{grid-template-columns:1fr;max-width:480px}}
 .pcm-art{padding:22px}
 .pcm-art img{width:100%;aspect-ratio:440/703;object-fit:cover;border-radius:12px;
   outline:1px solid var(--border);outline-offset:-1px;box-shadow:0 16px 40px rgba(0,0,0,.6)}
