@@ -10,7 +10,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root{
-  --navy:#050A0E;--card:#0D141C;--gold:#C7A369;--gold-bright:#DA9565;--gold-pale:#E8C690;
+  --navy:#050A0E;--card:#0D141C;--smoked:#162230;--gold:#C7A369;--gold-bright:#DA9565;--gold-pale:#E8C690;
   --amber:#AF755A;--copper:#8C5D3F;--coral:#B7634D;--info:#6B8AAD;--success:#4A9E6E;
   --text:#E8E4DC;--text2:#9A9590;--muted:#5E5A55;--vellum:#F5EFE2;
   --border:rgba(199,163,105,.25);--border-strong:rgba(199,163,105,.45);--glow:rgba(199,163,105,.30);
@@ -65,18 +65,20 @@ h1{font-family:var(--fd);font-weight:700;color:var(--vellum);font-size:clamp(30p
 .cta-note{margin-top:11px;font-family:var(--fl);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .roster{width:100%;margin-top:clamp(40px,6vh,72px)}
 .roster h2{font-family:var(--fdisp);font-weight:500;font-size:13px;letter-spacing:.24em;text-transform:uppercase;
-  color:var(--gold);text-align:center;margin-bottom:24px;display:flex;align-items:center;gap:14px;justify-content:center}
+  color:var(--gold);text-align:center;margin-bottom:8px;display:flex;align-items:center;gap:14px;justify-content:center}
 .roster h2::before,.roster h2::after{content:'';height:1px;width:60px;background:linear-gradient(90deg,transparent,var(--border-strong),transparent)}
+.roster .hint{text-align:center;font-family:var(--fl);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:24px}
 .party{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}
-.pc{width:128px;text-align:center}
+.pc{width:128px;text-align:center;cursor:pointer}
 .pc .pcimg{width:128px;aspect-ratio:440/703;border-radius:10px;overflow:hidden;outline:1px solid var(--border);
   outline-offset:-1px;box-shadow:0 10px 28px rgba(0,0,0,.5);background:var(--card);transition:transform .4s,box-shadow .4s}
-.pc:hover .pcimg{transform:translateY(-6px);box-shadow:0 18px 36px rgba(0,0,0,.6),0 0 24px -6px var(--glow)}
+.pc:hover .pcimg,.pc:focus-visible .pcimg{transform:translateY(-6px);box-shadow:0 18px 36px rgba(0,0,0,.6),0 0 24px -6px var(--glow)}
+.pc:focus-visible{outline:none}
 .pc .pcimg img{width:100%;height:100%;object-fit:cover;display:block}
 .pc .nm{font-family:var(--fdisp);font-size:13px;color:var(--text);margin-top:9px;line-height:1.2}
 .pc .rl{font-family:var(--fl);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:3px}
 
-/* ============ extended dashboard sections (added) ============ */
+/* ============ extended dashboard sections ============ */
 .section{width:100%;margin-top:clamp(40px,6vh,72px)}
 .section h2{font-family:var(--fdisp);font-weight:500;font-size:13px;letter-spacing:.24em;text-transform:uppercase;
   color:var(--gold);text-align:center;margin-bottom:24px;display:flex;align-items:center;gap:14px;justify-content:center}
@@ -132,9 +134,37 @@ ul.sig .ct{font-family:var(--fl);font-size:11px;color:var(--text2);margin-left:8
 .chartbox{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:22px 20px 16px;box-shadow:0 10px 28px rgba(0,0,0,.45)}
 .chartwrap{position:relative;height:320px}
 
+/* ============ PC popup modal ============ */
+.pcmodal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:24px;
+  background:radial-gradient(120% 100% at 50% 40%,rgba(5,10,14,.7),rgba(5,10,14,.93));backdrop-filter:blur(6px)}
+.pcmodal.open{display:flex}
+.pcm-panel{position:relative;width:100%;max-width:760px;max-height:90vh;overflow-y:auto;
+  background:linear-gradient(180deg,var(--smoked),var(--card));border:1px solid var(--border-strong);
+  border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.7);display:grid;grid-template-columns:300px 1fr;
+  opacity:0;transform:translateY(14px) scale(.985);transition:opacity .4s ease,transform .4s cubic-bezier(.2,.7,.2,1)}
+.pcmodal.open .pcm-panel{opacity:1;transform:none}
+@media(max-width:640px){.pcm-panel{grid-template-columns:1fr;max-width:420px}}
+.pcm-art{padding:22px}
+.pcm-art img{width:100%;aspect-ratio:440/703;object-fit:cover;border-radius:12px;
+  outline:1px solid var(--border);outline-offset:-1px;box-shadow:0 16px 40px rgba(0,0,0,.6)}
+.pcm-body{padding:26px 28px 30px;min-width:0}
+.pcm-arcana{font-family:var(--fl);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.pcm-name{font-family:var(--fd);font-weight:700;font-size:clamp(24px,4vw,33px);color:var(--vellum);line-height:1.05}
+.pcm-role{font-family:var(--fs);font-style:italic;font-size:16px;color:var(--gold-pale);margin-top:7px}
+.pcm-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin:22px 0 4px}
+.pcm-stat .v{font-family:var(--fdisp);font-weight:500;font-size:22px;color:var(--text);line-height:1}
+.pcm-stat .v.up{color:var(--success)}.pcm-stat .v.dn{color:var(--coral)}
+.pcm-stat .l{font-family:var(--fl);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.pcm-bio{font-weight:300;font-size:14px;line-height:1.65;color:var(--text2);margin-top:20px;border-top:1px solid var(--border);padding-top:16px}
+.pcm-bio.empty{color:var(--muted);font-style:italic;font-family:var(--fs);font-size:15px}
+.pcm-close{position:absolute;top:12px;right:14px;z-index:3;width:34px;height:34px;border-radius:50%;
+  border:1px solid var(--border-strong);background:rgba(13,20,28,.7);color:var(--gold-pale);font-size:18px;line-height:1;
+  cursor:pointer;display:grid;place-items:center;transition:border-color .3s,color .3s,transform .25s}
+.pcm-close:hover{border-color:var(--gold);color:var(--gold-bright);transform:rotate(90deg)}
+
 footer{margin-top:auto;padding-top:48px;font-family:var(--fl);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);text-align:center}
 footer .dot{color:var(--copper);margin:0 8px}
-@media(prefers-reduced-motion:reduce){.wrap{opacity:1;transform:none;animation:none}}
+@media(prefers-reduced-motion:reduce){.wrap{opacity:1;transform:none;animation:none}.pcm-panel{transition:none}}
 </style>
 </head>
 <body>
@@ -163,12 +193,13 @@ footer .dot{color:var(--copper);margin:0 8px}
     </div>
     <div class="roster">
       <h2>The Party</h2>
+      <div class="hint">Tap a card for details</div>
       <div class="party">
-        <div class="pc"><div class="pcimg"><img src="/assets/img/Orphie-card.webp" alt="Orphie Levistus"></div><div class="nm">Orphie Levistus</div><div class="rl">1,172 rolls</div></div>
-        <div class="pc"><div class="pcimg"><img src="/assets/img/Varis-card.webp" alt="Varis Aestra"></div><div class="nm">Varis Aestra</div><div class="rl">817 rolls</div></div>
-        <div class="pc"><div class="pcimg"><img src="/assets/img/Sanis-card.webp" alt="Sanis Reylana"></div><div class="nm">Sanis Reylana</div><div class="rl">458 rolls</div></div>
-        <div class="pc"><div class="pcimg"><img src="/assets/img/Ogre-card.webp" alt="Ogre"></div><div class="nm">Ogre</div><div class="rl">277 rolls</div></div>
-        <div class="pc"><div class="pcimg"><img src="/assets/img/Rin-card.webp" alt="Rinestra Genleth"></div><div class="nm">Rinestra Genleth</div><div class="rl">128 rolls</div></div>
+        <div class="pc" data-pc="orphie" tabindex="0" role="button" aria-label="Orphie Levistus details"><div class="pcimg"><img src="/assets/img/Orphie-card.webp" alt="Orphie Levistus"></div><div class="nm">Orphie Levistus</div><div class="rl">1,172 rolls</div></div>
+        <div class="pc" data-pc="varis" tabindex="0" role="button" aria-label="Varis Aestra details"><div class="pcimg"><img src="/assets/img/Varis-card.webp" alt="Varis Aestra"></div><div class="nm">Varis Aestra</div><div class="rl">817 rolls</div></div>
+        <div class="pc" data-pc="sanis" tabindex="0" role="button" aria-label="Sanis Reylana details"><div class="pcimg"><img src="/assets/img/Sanis-card.webp" alt="Sanis Reylana"></div><div class="nm">Sanis Reylana</div><div class="rl">458 rolls</div></div>
+        <div class="pc" data-pc="ogre" tabindex="0" role="button" aria-label="Ogre details"><div class="pcimg"><img src="/assets/img/Ogre-card.webp" alt="Ogre"></div><div class="nm">Ogre</div><div class="rl">277 rolls</div></div>
+        <div class="pc" data-pc="rinestra" tabindex="0" role="button" aria-label="Rinestra Genleth details"><div class="pcimg"><img src="/assets/img/Rin-card.webp" alt="Rinestra Genleth"></div><div class="nm">Rinestra Genleth</div><div class="rl">128 rolls</div></div>
       </div>
     </div>
 
@@ -282,6 +313,70 @@ footer .dot{color:var(--copper);margin:0 8px}
 
     <footer>Rectrix Caedere <span class="dot">&#10022;</span> Campaign Archive <span class="dot">&#10022;</span> rectrixcaedere.com</footer>
   </div>
+
+  <!-- ============ PC MODAL ============ -->
+  <div class="pcmodal" id="pcmodal" role="dialog" aria-modal="true" aria-label="Character details">
+    <div class="pcm-panel">
+      <button class="pcm-close" id="pcmClose" aria-label="Close">&times;</button>
+      <div class="pcm-art"><img id="pcmImg" src="" alt=""></div>
+      <div class="pcm-body">
+        <div class="pcm-arcana">Pacts &amp; Power &middot; The Party</div>
+        <div class="pcm-name" id="pcmName"></div>
+        <div class="pcm-role" id="pcmRole"></div>
+        <div class="pcm-grid">
+          <div class="pcm-stat"><div class="v" id="pcmRolls"></div><div class="l">Rolls Logged</div></div>
+          <div class="pcm-stat"><div class="v" id="pcmAvg"></div><div class="l">Avg Natural d20</div></div>
+          <div class="pcm-stat"><div class="v" id="pcmNat"></div><div class="l">Nat 20 / Nat 1</div></div>
+          <div class="pcm-stat"><div class="v" id="pcmBig"></div><div class="l">Biggest Single Hit</div></div>
+        </div>
+        <div class="pcm-bio" id="pcmBio"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ---- PC popup: edit PC_DATA to add bios / roles later ---- */
+(function(){
+  var PC_DATA = {
+    orphie:  {name:'Orphie Levistus',  img:'/assets/img/Orphie-card.webp', rolls:'1,172', avg:'10.59', avgcls:'',   nat:'49 / 42', sig:'Blazebringer',                big:'30', bio:''},
+    varis:   {name:'Varis Aestra',     img:'/assets/img/Varis-card.webp',  rolls:'817',   avg:'10.19', avgcls:'',   nat:'31 / 33', sig:'Force Breath / Scorching Ray', big:'67', bio:''},
+    sanis:   {name:'Sanis Reylana',    img:'/assets/img/Sanis-card.webp',  rolls:'458',   avg:'9.81',  avgcls:'dn', nat:'12 / 32', sig:'Longbow',                     big:'23', bio:''},
+    ogre:    {name:'Ogre',             img:'/assets/img/Ogre-card.webp',   rolls:'277',   avg:'10.41', avgcls:'up', nat:'10 / 3',  sig:'Duskblade',                   big:'28', bio:''},
+    rinestra:{name:'Rinestra Genleth', img:'/assets/img/Rin-card.webp',    rolls:'128',   avg:'10.53', avgcls:'',   nat:'6 / 6',   sig:'Scorching Ray',               big:'65', bio:''}
+  };
+  var modal=document.getElementById('pcmodal');
+  if(!modal) return;
+  var $=function(id){return document.getElementById(id);};
+  var lastFocus=null;
+  function open(slug){
+    var d=PC_DATA[slug]; if(!d) return;
+    var img=$('pcmImg'); img.src=d.img; img.alt=d.name+' tarot card';
+    $('pcmName').textContent=d.name;
+    $('pcmRole').textContent='Signature \u2014 '+d.sig;
+    $('pcmRolls').textContent=d.rolls;
+    var avg=$('pcmAvg'); avg.textContent=d.avg; avg.className='v'+(d.avgcls?' '+d.avgcls:'');
+    $('pcmNat').textContent=d.nat;
+    $('pcmBig').textContent=d.big;
+    var bio=$('pcmBio');
+    if(d.bio){ bio.className='pcm-bio'; bio.textContent=d.bio; }
+    else{ bio.className='pcm-bio empty'; bio.textContent='Character chronicle to be inscribed.'; }
+    lastFocus=document.activeElement;
+    modal.classList.add('open'); document.body.style.overflow='hidden';
+    $('pcmClose').focus();
+  }
+  function close(){
+    modal.classList.remove('open'); document.body.style.overflow='';
+    if(lastFocus&&lastFocus.focus) lastFocus.focus();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.pc[data-pc]'),function(pc){
+    pc.addEventListener('click',function(){open(pc.getAttribute('data-pc'));});
+    pc.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();open(pc.getAttribute('data-pc'));}});
+  });
+  modal.addEventListener('click',function(e){ if(e.target===modal) close(); });
+  $('pcmClose').addEventListener('click',close);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&modal.classList.contains('open')) close(); });
+})();
+</script>
 
 <script>
 (function(){
