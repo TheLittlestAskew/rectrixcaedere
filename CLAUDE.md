@@ -33,7 +33,7 @@ Core aesthetic: *dark celestial botanical tarot* — Art Nouveau framing, antiqu
 - **Recharts 2.12.7** via CDN (UMD) — do NOT upgrade; Recharts 3.x breaks with React 18 UMD
 - **CDN script order is critical:** React → ReactDOM → prop-types → Recharts. Missing prop-types = black screen.
 - **Vanilla CSS only** — no Tailwind, no preprocessors, no CSS-in-JS
-- **Single HTML file shell** (`index.html`) + **single JS file** (`app.js`) — no bundler, no build
+- **Single HTML file shell** (`dashboard.html`) + **single JS file** (`app.js`) — no bundler, no build
 - **File size limit ~15KB per file** — GitHub's push API truncates larger files. Split if needed.
 - **Dark-only** — no light mode, no `prefers-color-scheme` blocks, ever
 
@@ -52,7 +52,8 @@ Only the **Campaign Overview** page exists. Five pages are planned but unbuilt: 
 ## Files
 
 ```
-index.html                          # HTML shell + all CSS
+index.html                          # Veil + tarot deck landing (campaign selector)
+dashboard.html                      # SITL dashboard — HTML shell + all CSS
 app.js                              # All React components, data, charts
 tokens.css                          # CSS custom property design tokens
 RECTRIX_CAEDERE_PROJECT_BRIEF.md    # Full project brief
