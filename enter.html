@@ -33,7 +33,7 @@ body{
   background:var(--rc-starless-navy);
   background-image:
     radial-gradient(120% 90% at 38% 18%, rgba(5,10,14,.10) 0%, rgba(5,10,14,.55) 55%, rgba(5,10,14,.86) 100%),
-    url('https://cdn.jsdelivr.net/gh/TheLittlestAskew/rectrixcaedere@main/.design/rc/imgs/general_background.webp');
+    url('./assets/img/general_background.webp');
   background-size:cover; background-position:center 35%; background-attachment:fixed;
   min-height:100vh; position:relative;
 }
@@ -192,7 +192,7 @@ footer .dot{color:var(--rc-aged-copper-gold);margin:0 8px}
 
   <section id="veil">
     <div class="veil-inner">
-      <img class="veil-logo" src="https://cdn.jsdelivr.net/gh/TheLittlestAskew/rectrixcaedere@main/.design/rc/imgs/logo_only-transparent2.png" alt="Rectrix Caedere">
+      <img class="veil-logo" src="./assets/img/logo_only-transparent2.webp" alt="Rectrix Caedere">
       <h1 class="veil-l1">The veil is drawn.</h1>
       <p class="veil-l2">Will you cross the threshold?</p>
       <button id="cross" class="cross-btn"><span class="flank">&#10022;</span>I will cross<span class="flank">&#10022;</span></button>
@@ -201,7 +201,7 @@ footer .dot{color:var(--rc-aged-copper-gold);margin:0 8px}
 
   <div id="archive">
     <header>
-      <img class="sigil-logo" src="https://cdn.jsdelivr.net/gh/TheLittlestAskew/rectrixcaedere@main/.design/rc/imgs/logo_only-transparent2.png" alt="Rectrix Caedere">
+      <img class="sigil-logo" src="./assets/img/logo_only-transparent2.webp" alt="Rectrix Caedere">
       <div class="eyebrow">Rectrix&nbsp;Caedere&nbsp;&middot;&nbsp;The&nbsp;Archives</div>
       <h1 class="title">Choose Your Path</h1>
       <p class="sub">Four campaigns. One deck. <em>Hover a card to turn it.</em></p>
@@ -217,20 +217,19 @@ footer .dot{color:var(--rc-aged-copper-gold);margin:0 8px}
    LIVE : false = clicking a card shows a toast (the campaign sub-pages
           don't exist yet). Set TRUE once ./sky-is-the-limit/ etc. exist
           so the cards navigate for real.
-   IMG  : art is served from your .design/rc/imgs/ folder via the jsDelivr
-          CDN, so nothing needs to move and GitHub Pages dot-folder rules
-          don't matter. Repins to @main automatically.                       */
+   IMG  : art is served same-origin from /assets/img/ (WebP), cached by the
+          GitHub Pages CDN. No external CDN dependency.                       */
 const LIVE = false;
-const IMG  = 'https://cdn.jsdelivr.net/gh/TheLittlestAskew/rectrixcaedere@main/.design/rc/imgs/';
+const IMG  = './assets/img/';
 const img  = f => IMG + f;
 
 const CAMPAIGNS = [
   { name:'Sky Is The Limit', arcana:'XVIII · The Moon', status:'active',
-    face:'Sky_tarot_face.png', href:'./sky-is-the-limit/' },
+    face:'Sky_tarot_face.webp', href:'./sky-is-the-limit/' },
   { name:'Pacts & Power', arcana:'XVI · The Tower', status:'active',
-    face:'pacts_tarot_face.png', href:'./pacts-and-power/' },
+    face:'pacts_tarot_face.webp', href:'./pacts-and-power/' },
   { name:'Where the Flowers Remember', arcana:'X · The Wheel of Fortune', status:'paused',
-    face:'wtfr_tarot_face.png', href:'./where-the-flowers-remember/' },
+    face:'wtfr_tarot_face.webp', href:'./where-the-flowers-remember/' },
   { name:'Ashfall Brittania', arcana:'Awaiting the draw', status:'coming-soon',
     face:null, href:null }
 ];
@@ -257,7 +256,7 @@ CAMPAIGNS.forEach((c,i)=>{
       ${ribbon}
       <div class="card__inner">
         <div class="face face--rest">
-          <img src="${img('tarotcard_back.png')}" alt="${live?'Face-down tarot card':(c.name+' \u2014 card not yet revealed')}" loading="lazy">
+          <img src="${img('tarotcard_back.webp')}" alt="${live?'Face-down tarot card':(c.name+' \u2014 card not yet revealed')}" loading="lazy">
           ${soon}
         </div>
         ${revealFace}

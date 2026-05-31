@@ -141,7 +141,7 @@ function App(){
     h('nav',{className:'side'+(navOpen?' open':'')},
       h('div',{className:'side-brand'},
         h('button',{className:'drawer-close',onClick:closeNav,'aria-label':'Close menu'},'\u2715'),
-        h('img',{src:'https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/logo_tex-vert-transparent.png',alt:'Rectrix Caedere',className:'side-logo-img'})),
+        h('img',{src:'./assets/img/logo_tex-vert-transparent.webp',alt:'Rectrix Caedere',className:'side-logo-img'})),
       h('div',{className:'side-section'},'Campaigns'),
       h('ul',{className:'camp-list'},D.map(function(x){return h('li',{key:x.id},h('button',{className:(x.id===aId?'on':'')+(x.st==='p'?' off':''),onClick:x.st!=='p'?function(){set(x.id);closeNav()}:undefined,title:x.st==='p'?'No sessions recorded yet':undefined,tabIndex:x.st==='p'?-1:0,'aria-disabled':x.st==='p'?'true':undefined},h('span',null,x.sn),h('span',{className:'ct'},x.st==='p'?'uncharted':x.tr.toLocaleString())))})),
       h('div',{className:'side-div'}),
@@ -154,7 +154,7 @@ function App(){
           h('div',{className:'hdr-title'},'Rectrix Caedere'),
           h('div',{className:'hdr-sub'},c.nm+' -- Overview')
         ),
-        h('img',{src:'https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/.design/rc/imgs/topcenterheader.png',alt:'',className:'top-center-img','aria-hidden':'true'}),
+        h('img',{src:'./assets/img/topcenterheader.webp',alt:'',className:'top-center-img','aria-hidden':'true'}),
         h('div',{className:'hdr-right'},
           h('button',{className:'filter-btn',onClick:openNav,'aria-label':'Open filters and menu'},h('svg',{viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'1.8'},h('path',{d:'M3 5h18l-7 8v6l-4-2v-4z'})),h('span',null,'Filter')),
           h('div',{className:'hdr-filter'},'Filter by campaign'),
