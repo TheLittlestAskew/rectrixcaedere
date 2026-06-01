@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cinzel+Decorative:wght@400;700&family=Raleway:wght@300;400;500&family=Alegreya+Sans+SC:wght@400;500;700&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root{
   --navy:#050A0E;--card:#0D141C;--smoked:#162230;--gold:#C7A369;--gold-bright:#DA9565;--gold-pale:#E8C690;
@@ -187,8 +186,8 @@ footer .dot{color:var(--copper);margin:0 8px}
           <div class="stat"><div class="v">137</div><div class="l">Busiest Night</div></div>
           <div class="stat"><div class="v">2023</div><div class="l">First Cast</div></div>
         </div>
-        <a class="cta" href="/dashboard.html">Open the Roll Dashboard</a>
-        <div class="cta-note">Choose Pacts &amp; Power from the campaign list</div>
+        <a class="cta" href="/dashboard.html?c=2">Open the Roll Dashboard</a>
+        <div class="cta-note">Opens straight to Pacts &amp; Power</div>
       </div>
     </div>
     <div class="roster">
@@ -203,119 +202,11 @@ footer .dot{color:var(--copper);margin:0 8px}
       </div>
     </div>
 
-    <!-- ============ LUCK LEADERBOARD ============ -->
+    <!-- ============ ROLL ANALYTICS (moved to dashboard) ============ -->
     <section class="section">
-      <h2>Luck Leaderboard</h2>
-      <div class="ledger">
-        <table class="luck">
-          <thead><tr><th>Character</th><th>d20 Faces</th><th>Avg</th><th>Nat 20</th><th>Nat 1</th><th>Crit : Fumble</th></tr></thead>
-          <tbody>
-            <tr class="lucky"><td>Ogre</td><td>200</td><td>10.41</td><td>10</td><td>3</td><td><span class="rpill up">3.33</span></td></tr>
-            <tr><td>Orphie Levistus</td><td>1,007</td><td>10.59</td><td>49</td><td>42</td><td><span class="rpill up">1.17</span></td></tr>
-            <tr><td>Rinestra Genleth</td><td>68</td><td>10.53</td><td>6</td><td>6</td><td><span class="rpill ev">1.00</span></td></tr>
-            <tr><td>Varis Aestra</td><td>657</td><td>10.19</td><td>31</td><td>33</td><td><span class="rpill dn">0.94</span></td></tr>
-            <tr><td>Braun</td><td>43</td><td>10.19</td><td>1</td><td>2</td><td><span class="rpill dn">0.50</span></td></tr>
-            <tr class="cursed"><td>Sanis Reylana</td><td>349</td><td>9.81</td><td>12</td><td>32</td><td><span class="rpill dn">0.38</span></td></tr>
-          </tbody>
-          <tfoot><tr><td>Party &mdash; all hands</td><td>2,325</td><td>10.33</td><td>109</td><td>118</td><td><span class="rpill dn">0.92</span></td></tr></tfoot>
-        </table>
-      </div>
-      <p class="cap">Counts every individual d20 face rolled (advantage rolls count both dice). The party is <em>faintly cursed</em> &mdash; 118 fumbles to 109 crits, average natural d20 of 10.33 sitting just shy of the true 10.5. <strong>Sanis</strong> alone rolls below ten.</p>
-    </section>
-
-    <!-- ============ RECORDS & RECKONINGS ============ -->
-    <section class="section">
-      <h2>Records &amp; Reckonings</h2>
-      <div class="cards">
-        <div class="dcard">
-          <div class="tag">Roll-Volume Champion</div>
-          <h3>The Workhorse</h3>
-          <div class="big">1,172</div>
-          <div class="who">Orphie Levistus</div>
-          <div class="note">Roughly 40% of every die rolled this campaign &mdash; more than the next two hands combined.</div>
-        </div>
-        <div class="dcard">
-          <div class="tag">Damage King &middot; vs &middot; Biggest Hit</div>
-          <h3>Two Different Winners</h3>
-          <div class="split">
-            <div class="h"><div class="big">2,540</div><div class="who">Orphie &mdash; total</div></div>
-            <div class="h"><div class="big">67</div><div class="who">Varis &mdash; one blow</div></div>
-          </div>
-          <div class="note">The grinder and the nuke are not the same. Varis&rsquo;s single best (Force Breath, 18d6) more than doubled Orphie&rsquo;s hardest hit.</div>
-        </div>
-        <div class="dcard lucky">
-          <div class="tag">Blessed Dice</div>
-          <h3>The Favored</h3>
-          <div class="big up">10 : 3</div>
-          <div class="who">Ogre &mdash; nat 20s to nat 1s</div>
-          <div class="note">The only hand riding well above even, at 3.3 crits per fumble.</div>
-        </div>
-        <div class="dcard cursed">
-          <div class="tag">Cursed Dice</div>
-          <h3>The Forsaken</h3>
-          <div class="big dn">9.81</div>
-          <div class="who">Sanis Reylana &mdash; avg natural d20</div>
-          <div class="note">Twelve crits against thirty-two fumbles, and the only character whose average die falls below ten.</div>
-        </div>
-        <div class="dcard cursed">
-          <div class="tag">Longest Crit Drought</div>
-          <h3>The Dry Spell</h3>
-          <div class="big dn">109</div>
-          <div class="who">Varis &mdash; d20s with no nat 20</div>
-          <div class="note">A 109-roll stretch without a single natural 20 &mdash; yet still near the top for crits overall.</div>
-        </div>
-        <div class="dcard">
-          <div class="tag">Busiest Night</div>
-          <h3>The Marathon</h3>
-          <div class="big">137</div>
-          <div class="who">30 Nov 2025 &mdash; rolls in one session</div>
-          <div class="note">The heaviest dice night of the campaign. Runner-up: 16 Jul 2023, with 112 rolls across a full table.</div>
-        </div>
-        <div class="dcard">
-          <div class="tag">Highest Crit Rate</div>
-          <h3>The Spark</h3>
-          <div class="big up">8.8%</div>
-          <div class="who">Rinestra Genleth &mdash; nat 20s per d20</div>
-          <div class="note">Six natural 20s in just 68 d20s &mdash; nearly double the party&rsquo;s next-best rate. The catch: an identical nat 1 rate makes her the table&rsquo;s true boom-or-bust hand.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ SIGNATURES & HALL OF FAME ============ -->
-    <section class="section">
-      <h2>Signatures &amp; Hall of Fame</h2>
-      <div class="twocol">
-        <div class="dcard">
-          <div class="tag">Signature Move &middot; most-used action</div>
-          <h3>Who Is Who</h3>
-          <ul class="sig">
-            <li><span class="ch">Orphie</span><span><span class="mv">Blazebringer</span><span class="ct">278&times;</span></span></li>
-            <li><span class="ch">Varis</span><span><span class="mv">Arcana</span><span class="ct">82&times;</span></span></li>
-            <li><span class="ch">Sanis</span><span><span class="mv">Longbow</span><span class="ct">74&times;</span></span></li>
-            <li><span class="ch">Rinestra</span><span><span class="mv">Scorching Ray</span><span class="ct">38&times;</span></span></li>
-            <li><span class="ch">Ogre</span><span><span class="mv">Duskblade</span><span class="ct">37&times;</span></span></li>
-          </ul>
-        </div>
-        <div class="dcard">
-          <div class="tag">Biggest Hits &middot; top single damage</div>
-          <h3>Hall of Fame</h3>
-          <ul class="hof">
-            <li><span class="rk">I</span><span class="dm">67</span><span class="ds"><b>Varis</b> &middot; Force Breath (18d6) &middot; 7 Sep 2025</span></li>
-            <li><span class="rk">II</span><span class="dm">65</span><span class="ds"><b>Varis</b> &middot; Force Breath (18d6) &middot; 26 Aug 2025</span></li>
-            <li><span class="rk">III</span><span class="dm">60</span><span class="ds"><b>Varis</b> &middot; Force Breath (18d6) &middot; 7 Sep 2025</span></li>
-            <li><span class="rk">IV</span><span class="dm">51</span><span class="ds"><b>Varis</b> &middot; Force Breath (18d6) &middot; 7 Sep 2025</span></li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ d20 DISTRIBUTION ============ -->
-    <section class="section">
-      <h2>Are the Dice Honest?</h2>
-      <div class="chartbox">
-        <div class="chartwrap"><canvas id="d20chart"></canvas></div>
-        <p class="cap">Every raw d20 face rolled across the campaign &mdash; <em>2,325 die results</em>, modifiers stripped. The verdict: fair dice. <strong>11</strong> came up most (135&times;), unlucky <strong>13</strong> the shyest (94&times;). The number 1 showed <strong>118</strong> times to the number 20&rsquo;s <strong>109</strong>.</p>
-      </div>
+      <h2>Roll Analytics</h2>
+      <p class="lead">The luck leaderboard, records &amp; reckonings, hall of fame, and the full &ldquo;are the dice honest?&rdquo; distribution now live on the interactive dashboard &mdash; side by side with every other campaign.</p>
+      <a class="cta" href="/dashboard.html?c=2">Open the Pacts &amp; Power dashboard</a>
     </section>
 
     <footer>Rectrix Caedere <span class="dot">&#10022;</span> Campaign Archive <span class="dot">&#10022;</span> rectrixcaedere.com</footer>
@@ -385,45 +276,5 @@ footer .dot{color:var(--copper);margin:0 8px}
 })();
 </script>
 
-<script>
-(function(){
-  var el = document.getElementById('d20chart');
-  if(!el || typeof Chart === 'undefined') return;
-  var labels = Array.from({length:20}, function(_,i){return i+1;});
-  var counts = [118,127,113,121,128,117,110,112,113,127,135,113,94,117,125,120,107,113,106,109];
-  var expected = 2325/20;
-  var colors = counts.map(function(_,i){
-    var f = i+1;
-    if(f===1) return '#B7634D';
-    if(f===20) return '#4A9E6E';
-    if(f===11) return '#DA9565';
-    if(f===13) return '#6B8AAD';
-    return '#C7A369';
-  });
-  new Chart(el,{
-    type:'bar',
-    data:{labels:labels,datasets:[
-      {label:'Times rolled',data:counts,backgroundColor:colors,borderColor:'rgba(218,149,101,.3)',borderWidth:1,borderRadius:3,order:2},
-      {label:'Fair-dice expected',type:'line',data:Array(20).fill(expected),borderColor:'rgba(232,228,220,.45)',borderWidth:1.5,borderDash:[6,5],pointRadius:0,order:1}
-    ]},
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{
-        legend:{labels:{color:'#E8E4DC',font:{family:'Raleway',size:12},usePointStyle:true,boxWidth:8}},
-        tooltip:{backgroundColor:'#0D141C',borderColor:'#C7A369',borderWidth:1,titleColor:'#DA9565',bodyColor:'#E8E4DC',
-          titleFont:{family:'EB Garamond',size:16},bodyFont:{family:'Raleway',size:13},
-          callbacks:{
-            title:function(items){return 'Face '+items[0].label;},
-            label:function(item){return item.dataset.type==='line' ? 'Fair-dice expected: '+expected.toFixed(0) : item.formattedValue+' times rolled';}
-          }}
-      },
-      scales:{
-        x:{grid:{display:false},ticks:{color:'#9A9590',font:{family:'Raleway',size:12}},title:{display:true,text:'d20 face',color:'#5E5A55',font:{family:'Alegreya Sans SC',size:11}}},
-        y:{beginAtZero:true,grid:{color:'rgba(199,163,105,.12)'},ticks:{color:'#9A9590',font:{family:'Raleway',size:11}},title:{display:true,text:'times rolled',color:'#5E5A55',font:{family:'Alegreya Sans SC',size:11}}}
-      }
-    }
-  });
-})();
-</script>
 </body>
 </html>
