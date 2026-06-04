@@ -115,6 +115,8 @@ h1.chron{font-family:var(--fd);font-weight:700;font-size:clamp(30px,5.5vw,48px);
 .ap.skel{width:68px;height:22px;border-color:transparent;background:rgba(255,255,255,.04);animation:sh 1.8s infinite}
 .aquote{font-family:var(--fs);font-style:italic;font-size:15.5px;color:var(--gold-pale);
   border-left:2px solid var(--copper);padding-left:13px;line-height:1.55;opacity:.82}
+.aquote .who{display:block;font-family:var(--fl);font-style:normal;font-size:9.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted);margin-top:6px}
 footer{margin-top:auto;padding-top:64px;font-family:var(--fl);font-size:10px;letter-spacing:.2em;
   text-transform:uppercase;color:var(--muted);text-align:center}
 footer .dot{color:var(--copper);margin:0 8px}
@@ -173,12 +175,9 @@ var ARC=[
 
 function clean(s){
   return s.replace(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g,'$1')
-           .replace(/\*\*([^*]+)\*\*/g,'$1')
-           .replace(/\*([^*]+)\*/g,'$1')
-           .replace(/`([^`]+)`/g,'$1')
-           .replace(/^[#>|\-\s]+/gm,' ')
-           .replace(/\|[^\n]*/g,'')
-           .replace(/\s+/g,' ').trim();
+           .replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1')
+           .replace(/`([^`]+)`/g,'$1').replace(/^[#>|\-\s]+/gm,' ')
+           .replace(/\|[^\n]*/g,'').replace(/\s+/g,' ').trim();
 }
 
 function summary(md){
@@ -202,16 +201,33 @@ function quote(md){
   if(!m) m=md.match(/###\s*Quote\s*Board\s*\n+([\s\S]+?)(?=\n###|\n##|\n---)/i);
   if(!m) return null;
   var sec=m[1];
-  var orders=[
-    /\[(?:Poignant|Important to Story)\][^\n]*\n\*["\u201c]([^"\u201d*]{15,160})["\u201d]?\*/,
-    /\[Serious\][^\n]*\n\*["\u201c]([^"\u201d*]{15,160})["\u201d]?\*/,
-    /\*["\u201c]([^"\u201d*\n]{20,160})["\u201d]\*/
-  ];
-  for(var i=0;i<orders.length;i++){
-    var qm=sec.match(orders[i]);
-    if(qm) return qm[1].trim();
+  var re=/\*\*([^*\n]+)\*\*\s*[\u00b7\u2022:.\-]\s*\[([^\]\n]+)\][^\n]*\n\*["\u201c]([^"\u201d*\n]+)["\u201d]?\*/g;
+  var quotes=[],qm;
+  while((qm=re.exec(sec))!==null){
+    var sp=qm[1].trim(),tg=qm[2].trim(),tx=qm[3].trim();
+    if(tx.length<15||tx.length>180) continue;
+    quotes.push({sp:sp,tg:tg,tx:tx});
   }
-  return null;
+  if(!quotes.length) return null;
+  function score(q){
+    var t=q.tg.toLowerCase(),s=0;
+    if(/important to story/.test(t)) s+=100;
+    if(/threat/.test(t)) s+=70;
+    if(/poignant/.test(t)) s+=55;
+    if(/serious/.test(t)) s+=40;
+    if(/dm quip/.test(t)) s+=22;
+    if(/funny/.test(t)) s+=10;
+    if(/banter/.test(t)) s+=5;
+    if(/dm|chris|szadek|ral|kaya|vraska|nicol/i.test(q.sp)) s+=12;
+    if(/orphie/i.test(q.sp)) s-=10;
+    if(/ogre|sanis|rin|varis/i.test(q.sp)) s+=3;
+    if(q.tx.length>55) s+=4;
+    if(q.tx.length>90) s+=3;
+    s+=(q.sp.length%5);
+    return s;
+  }
+  quotes.sort(function(a,b){return score(b)-score(a);});
+  return quotes[0];
 }
 
 function earlySum(md){
@@ -224,8 +240,7 @@ function earlySum(md){
 }
 
 async function fetchMd(url){
-  try{var r=await fetch(url);return r.ok?await r.text():null;}
-  catch(e){return null;}
+  try{var r=await fetch(url);return r.ok?await r.text():null;}catch(e){return null;}
 }
 
 async function rollStats(){
@@ -255,7 +270,6 @@ async function rollStats(){
 async function init(){
   var tl=document.getElementById('tl');
   var h='';
-
   h+='<div class="era-hdr"><span class="era-hdr-lbl">The Early Campaign &nbsp;&middot;&nbsp; 2023&ndash;2024</span><div class="era-hdr-line"></div></div>';
   h+='<div class="early-grid">';
   for(var i=1;i<=16;i++){
@@ -264,13 +278,8 @@ async function init(){
       +'<div class="ecard-txt skel" id="et'+i+'">&nbsp;</div></div>';
   }
   h+='</div>';
-
-  h+='<div class="gap">'
-    +'<div class="gap-dots">&ctdot;</div>'
-    +'<div class="gap-title">The Lost Sessions</div>'
-    +'<div class="gap-txt">~35 sessions &nbsp;&middot;&nbsp; Before the Archive Began &nbsp;&middot;&nbsp; 2024&ndash;2025</div>'
-    +'</div>';
-
+  h+='<div class="gap"><div class="gap-dots">&ctdot;</div><div class="gap-title">The Lost Sessions</div>'
+    +'<div class="gap-txt">~35 sessions &nbsp;&middot;&nbsp; Before the Archive Began &nbsp;&middot;&nbsp; 2024&ndash;2025</div></div>';
   h+='<div class="era-hdr archive"><span class="era-hdr-lbl">The Archive &nbsp;&middot;&nbsp; July 2025&ndash;May 2026</span><div class="era-hdr-line"></div></div>';
   ARC.forEach(function(s){
     h+='<div class="anode'+(s.fin?' finale':'')+'">'
@@ -284,7 +293,6 @@ async function init(){
       +'<span class="ap skel" id="p1'+s.n+'">&nbsp;</span></div>'
       +'</div></div>';
   });
-
   tl.innerHTML=h;
 
   var statsP=rollStats();
@@ -303,19 +311,19 @@ async function init(){
       var sel=document.getElementById('as'+s.n);
       if(sel){
         if(md){
-          sel.textContent=summary(md);
-          sel.className='asum';
+          sel.textContent=summary(md);sel.className='asum';
           var q=quote(md);
           if(q){
             var qd=document.createElement('div');
             qd.className='aquote';
-            qd.textContent='\u201c'+q+'\u201d';
+            qd.textContent='\u201c'+q.tx+'\u201d';
+            var who=document.createElement('span');
+            who.className='who';
+            who.textContent='\u2014 '+q.sp;
+            qd.appendChild(who);
             sel.parentNode.insertBefore(qd,sel.nextSibling);
           }
-        } else {
-          sel.textContent='Session notes on file.';
-          sel.className='asum';
-        }
+        } else { sel.textContent='Session notes on file.';sel.className='asum'; }
       }
     });
   });
