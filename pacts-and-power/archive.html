@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Chronicle — Pacts &amp; Power · Rectrix Caedere</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cinzel+Decorative:wght@400;700&family=Raleway:wght@300;400;500&family=Alegreya+Sans+SC:wght@400;500;700&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#050A0E;--card:#0D141C;--smoked:#162230;--gold:#C7A369;--gold-bright:#DA9565;--gold-pale:#E8C690;
+  --amber:#AF755A;--copper:#8C5D3F;--coral:#B7634D;--info:#6B8AAD;--success:#4A9E6E;
+  --text:#E8E4DC;--text2:#9A9590;--muted:#5E5A55;--vellum:#F5EFE2;
+  --border:rgba(199,163,105,.25);--border-strong:rgba(199,163,105,.45);--glow:rgba(199,163,105,.30);
+  --fd:'Cinzel Decorative','Cinzel',serif;--fdisp:'Cinzel',serif;
+  --fb:'Raleway',system-ui,sans-serif;--fl:'Alegreya Sans SC','Raleway',sans-serif;--fs:'EB Garamond',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{min-height:100%}
+body{font-family:var(--fb);color:var(--text);background:var(--navy);
+  background-image:radial-gradient(120% 90% at 50% 12%,rgba(5,10,14,.15),rgba(5,10,14,.6) 55%,rgba(5,10,14,.93)),
+  url('/assets/img/general_background.webp');
+  background-size:cover;background-position:center 30%;background-attachment:fixed;
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  padding:64px 22px 80px;position:relative}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.back{position:fixed;top:20px;left:22px;z-index:20;font-family:var(--fl);font-size:12px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--gold-pale);text-decoration:none;
+  border:1px solid var(--border);border-radius:3px;padding:9px 16px;
+  background:rgba(13,20,28,.6);backdrop-filter:blur(4px);transition:border-color .35s,color .35s,box-shadow .4s}
+.back:hover{border-color:var(--gold);color:var(--gold-bright);box-shadow:0 0 22px -8px var(--glow)}
+.subnav{position:fixed;top:20px;right:22px;z-index:20;display:flex;gap:8px}
+.subnav a{font-family:var(--fl);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--text2);text-decoration:none;border:1px solid var(--border);border-radius:3px;
+  padding:9px 14px;background:rgba(13,20,28,.6);backdrop-filter:blur(4px);transition:border-color .3s,color .3s}
+.subnav a:hover{border-color:var(--border-strong);color:var(--gold-pale)}
+.wrap{width:100%;max-width:900px;display:flex;flex-direction:column;align-items:center;z-index:2;
+  opacity:0;transform:translateY(14px);animation:rise .9s cubic-bezier(.2,.7,.2,1) .1s forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+.logo{height:42px;margin-bottom:20px;filter:drop-shadow(0 0 14px rgba(218,149,101,.35))}
+.page-eye{font-family:var(--fl);font-size:11px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:8px;text-align:center}
+.page-eye::before,.page-eye::after{content:'';display:inline-block;width:22px;height:1px;
+  vertical-align:middle;background:linear-gradient(90deg,transparent,var(--copper))}
+.page-eye::before{margin-right:10px}
+.page-eye::after{margin-left:10px;background:linear-gradient(270deg,transparent,var(--copper))}
+h1.chron{font-family:var(--fd);font-weight:700;font-size:clamp(30px,5.5vw,48px);color:var(--vellum);
+  text-align:center;line-height:1.05;text-shadow:0 2px 22px rgba(0,0,0,.6);margin-bottom:10px}
+.chron-sub{font-family:var(--fs);font-style:italic;font-size:16px;color:var(--text2);
+  text-align:center;margin-bottom:36px}
+.era-bar{display:flex;flex-wrap:wrap;width:100%;background:var(--card);border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;margin-bottom:clamp(36px,5vh,60px)}
+.era-seg{flex:1;min-width:80px;padding:15px 16px;text-align:center;border-right:1px solid var(--border)}
+.era-seg:last-child{border-right:none}
+.era-seg .v{font-family:var(--fdisp);font-size:22px;color:var(--text);line-height:1}
+.era-seg .l{font-family:var(--fl);font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--muted);margin-top:5px}
+@media(max-width:560px){.era-bar{flex-direction:column}.era-seg{border-right:none;border-bottom:1px solid var(--border)}.era-seg:last-child{border-bottom:none}}
+.timeline{width:100%;position:relative;padding-left:36px}
+.timeline::before{content:'';position:absolute;left:13px;top:10px;bottom:10px;width:2px;
+  background:linear-gradient(180deg,transparent,var(--border) 5%,var(--border-strong) 50%,var(--border) 95%,transparent)}
+.era-hdr{display:flex;align-items:center;gap:14px;margin:clamp(20px,3.5vh,36px) 0 18px;position:relative}
+.era-hdr::before{content:'';position:absolute;left:-37px;top:50%;transform:translateY(-50%);
+  width:28px;height:28px;border-radius:50%;background:var(--smoked);border:2px solid var(--border-strong)}
+.era-hdr.archive::before{background:radial-gradient(circle,rgba(199,163,105,.18),var(--smoked));border-color:var(--gold)}
+.era-hdr-lbl{font-family:var(--fl);font-size:10px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--gold);white-space:nowrap}
+.era-hdr-line{flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+.early-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:4px}
+.ecard{background:rgba(22,34,48,.45);border:1px solid rgba(199,163,105,.1);border-radius:7px;
+  padding:12px 14px;opacity:.7;transition:opacity .3s,border-color .3s}
+.ecard:hover{opacity:1;border-color:rgba(199,163,105,.22)}
+.ecard-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.enum{font-family:var(--fdisp);font-size:11px;color:var(--muted);letter-spacing:.1em}
+.dm-badge{font-family:var(--fl);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);border:1px solid rgba(94,90,85,.28);border-radius:20px;padding:1px 7px}
+.ecard-txt{font-size:12px;font-weight:300;line-height:1.55;color:var(--text2)}
+.ecard-txt.skel{height:3em;border-radius:4px;background:linear-gradient(90deg,rgba(255,255,255,.03) 25%,rgba(255,255,255,.07) 50%,rgba(255,255,255,.03) 75%);background-size:200% 100%;animation:sh 1.8s infinite}
+@keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.gap{margin:clamp(28px,4.5vh,48px) 0;padding:28px 24px;position:relative;
+  background:linear-gradient(135deg,rgba(22,34,48,.5),rgba(13,20,28,.7));
+  border:1px dashed rgba(199,163,105,.18);border-radius:10px;text-align:center;overflow:hidden}
+.gap::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(45deg,transparent,transparent 12px,rgba(199,163,105,.018) 12px,rgba(199,163,105,.018) 13px)}
+.gap-dots{font-family:var(--fd);font-size:28px;color:rgba(199,163,105,.18);line-height:1;margin-bottom:6px}
+.gap-title{font-family:var(--fdisp);font-size:15px;color:rgba(232,228,220,.35);letter-spacing:.06em;margin-bottom:5px}
+.gap-txt{font-family:var(--fl);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(94,90,85,.7)}
+.anode{position:relative;margin-bottom:18px}
+.anode::before{content:'';position:absolute;left:-27px;top:20px;width:14px;height:14px;
+  border-radius:50%;background:var(--smoked);border:2px solid var(--gold);
+  background:radial-gradient(circle,rgba(199,163,105,.2),var(--smoked));z-index:1}
+.anode.finale::before{border-color:var(--coral);background:radial-gradient(circle,rgba(183,99,77,.28),var(--smoked));
+  box-shadow:0 0 14px -3px rgba(183,99,77,.4)}
+.acard{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:22px 24px;
+  transition:border-color .35s,box-shadow .4s;position:relative;overflow:hidden}
+.acard:hover{border-color:var(--border-strong);box-shadow:0 12px 36px rgba(0,0,0,.45),0 0 0 1px rgba(199,163,105,.07)}
+.acard.finale{border-color:rgba(183,99,77,.38);box-shadow:0 0 30px -12px rgba(183,99,77,.22)}
+.acard.finale:hover{border-color:rgba(183,99,77,.6);box-shadow:0 14px 40px rgba(0,0,0,.5),0 0 30px -8px rgba(183,99,77,.28)}
+.atop{display:flex;align-items:baseline;gap:10px;margin-bottom:5px;flex-wrap:wrap}
+.anum{font-family:var(--fdisp);font-size:13px;color:var(--muted);letter-spacing:.1em}
+.adate{font-family:var(--fl);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.abadge{font-family:var(--fl);font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  padding:2px 9px;border-radius:20px;border:1px solid var(--coral);color:var(--coral);margin-left:auto}
+.atitle{font-family:var(--fdisp);font-weight:500;font-size:clamp(17px,2.8vw,22px);
+  color:var(--gold-pale);line-height:1.2;margin-bottom:12px}
+.asum{font-weight:300;font-size:13.5px;line-height:1.65;color:var(--text2);margin-bottom:12px}
+.asum.skel{height:3.8em;border-radius:4px;background:linear-gradient(90deg,rgba(255,255,255,.03) 25%,rgba(255,255,255,.07) 50%,rgba(255,255,255,.03) 75%);background-size:200% 100%;animation:sh 1.8s infinite}
+.apills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.ap{font-family:var(--fl);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 10px;border-radius:20px;border:1px solid var(--border);color:var(--text2)}
+.ap.up{border-color:rgba(74,158,110,.3);color:#7fc59c;background:rgba(74,158,110,.08)}
+.ap.dn{border-color:rgba(183,99,77,.3);color:#d28e79;background:rgba(183,99,77,.08)}
+.ap.skel{width:68px;height:22px;border-color:transparent;background:rgba(255,255,255,.04);animation:sh 1.8s infinite}
+.aquote{font-family:var(--fs);font-style:italic;font-size:15.5px;color:var(--gold-pale);
+  border-left:2px solid var(--copper);padding-left:13px;line-height:1.55;opacity:.82}
+footer{margin-top:auto;padding-top:64px;font-family:var(--fl);font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--muted);text-align:center}
+footer .dot{color:var(--copper);margin:0 8px}
+@media(prefers-reduced-motion:reduce){.wrap{opacity:1;transform:none;animation:none}.skel,.ecard-txt.skel,.ap.skel{animation:none}}
+</style>
+</head>
+<body>
+<a class="back" href="/pacts-and-power/">&#8592;&nbsp;&nbsp;Pacts &amp; Power</a>
+<div class="subnav">
+  <a href="/dashboard.html?c=2">Roll Dashboard</a>
+  <a href="/">The Deck</a>
+</div>
+<div class="wrap">
+  <img class="logo" src="/assets/img/logo_only-transparent2.webp" alt="Rectrix Caedere">
+  <div class="page-eye">Pacts &amp; Power</div>
+  <h1 class="chron">The Chronicle</h1>
+  <p class="chron-sub">Seventy-two sessions. Three years. Every pact made. Every power seized.</p>
+  <div class="era-bar">
+    <div class="era-seg"><div class="v">72</div><div class="l">Total Sessions</div></div>
+    <div class="era-seg"><div class="v">16</div><div class="l">DM Briefed</div></div>
+    <div class="era-seg"><div class="v">~35</div><div class="l">Lost to Time</div></div>
+    <div class="era-seg"><div class="v">21</div><div class="l">Fully Archived</div></div>
+    <div class="era-seg"><div class="v">2023</div><div class="l">First Session</div></div>
+    <div class="era-seg"><div class="v">2026</div><div class="l">Finale</div></div>
+  </div>
+  <div class="timeline" id="tl"></div>
+  <footer>Rectrix Caedere <span class="dot">&#10022;</span> Pacts &amp; Power <span class="dot">&#10022;</span> The Chronicle</footer>
+</div>
+<script>
+var SB='https://vtrtyagltwdrbastpppl.supabase.co';
+var AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0cnR5YWdsdHdkcmJhc3RwcHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTY5NTAsImV4cCI6MjA5MTkzMjk1MH0.hnpwjHGIqiUN_VmmIkOAAFGGCKsyYgl7AO3FW5vDIeM';
+var VR='https://raw.githubusercontent.com/TheLittlestAskew/pacts_power_vault/main';
+
+var ARC=[
+  {n:'01',d:'2025-07-13',lbl:'July 13, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_01_071325_Into_the_Ghost_Mind.md',t:'Into the Ghost Mind'},
+  {n:'02',d:'2025-07-27',lbl:'July 27, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_02_072725_I_Cant_Rebuild_You.md',t:"I Can\u2019t Rebuild You"},
+  {n:'03',d:'2025-08-10',lbl:'August 10, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_03_081025_Thats_Why_No_One_Will_Remember_Your_Name.md',t:"That\u2019s Why No One Will Remember Your Name"},
+  {n:'04',d:'2025-08-26',lbl:'August 26, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_04_082625_The_Spark_and_the_Swarm.md',t:'The Spark and the Swarm'},
+  {n:'05',d:'2025-09-07',lbl:'September 7, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_05_090725_Do_You_Smell_That_Its_Breakfast_Time.md',t:'Do You Smell That? It\u2019s Breakfast Time'},
+  {n:'06',d:'2025-09-17',lbl:'September 17, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_06_091725_Soul_Integrated_Soul_Storage_Get_It_Right.md',t:'Soul Integrated Soul Storage \u2014 Get It Right'},
+  {n:'07',d:'2025-10-05',lbl:'October 5, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_07_100525_The_Reylana_Infiltration.md',t:'The Reylana Infiltration'},
+  {n:'08',d:'2025-10-19',lbl:'October 19, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_08_101925_Blood_Runs_Thicker_Than_Water.md',t:'Blood Runs Thicker Than Water'},
+  {n:'10',d:'2025-11-30',lbl:'November 30, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_10_113025_What_Are_You_Waiting_For_Sanis.md',t:'What Are You Waiting For, Sanis?'},
+  {n:'11',d:'2025-12-14',lbl:'December 14, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_11_121425_You_Cant_Just_Buy_the_Sun.md',t:"You Can\u2019t Just Buy the Sun"},
+  {n:'12',d:'2026-01-11',lbl:'January 11, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_12_011126_The_Masquerade_Auction.md',t:'The Masquerade Auction'},
+  {n:'13',d:'2026-01-25',lbl:'January 25, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_13_012526_Fucking_Barbarians.md',t:'Fucking Barbarians'},
+  {n:'14',d:'2026-02-13',lbl:'February 13, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_14_021326_Hold_the_Wall.md',t:'Hold the Wall'},
+  {n:'15',d:'2026-02-22',lbl:'February 22, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_15_022226_Reforging_the_Guildpact.md',t:'Reforging the Guildpact'},
+  {n:'16',d:'2026-03-13',lbl:'March 13, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_16_031326_A_Scared_Child.md',t:'A Scared Child'},
+  {n:'17',d:'2026-04-02',lbl:'April 2, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_17_040226_The_Guildpact_Reborn.md',t:'The Guildpact Reborn'},
+  {n:'18',d:'2026-04-05',lbl:'April 5, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_18_040526_Pacts_and_Power.md',t:'Pacts and Power'},
+  {n:'19',d:'2026-04-19',lbl:'April 19, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_19_041926_Hi_Im_Ogre.md',t:"Hi, I\u2019m Ogre"},
+  {n:'20',d:'2026-05-14',lbl:'May 14, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_20_051426_I_Just_Need_Your_Soul.md',t:'I Just Need Your Soul'},
+  {n:'21',d:'2026-05-31',lbl:'May 31, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_21_053126_I_Miss_You_Buddy.md',t:'I Miss You, Buddy',fin:true}
+];
+
+function clean(s){
+  return s.replace(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g,'$1')
+           .replace(/\*\*([^*]+)\*\*/g,'$1')
+           .replace(/\*([^*]+)\*/g,'$1')
+           .replace(/`([^`]+)`/g,'$1')
+           .replace(/^[#>|\-\s]+/gm,' ')
+           .replace(/\|[^\n]*/g,'')
+           .replace(/\s+/g,' ').trim();
+}
+
+function summary(md){
+  var m=md.match(/###\s*Narrative\s+Summary\s*\n+([\s\S]+?)(?=\n###|\n##\s*Section|\n---)/i);
+  if(!m) m=md.match(/##[^#\n]*Narrative\s+Summary[^#\n]*\n+([\s\S]+?)(?=\n##|\n---)/i);
+  if(!m) m=md.match(/##[^#\n]*Summary[^#\n]*\n+([\s\S]+?)(?=\n##|\n---)/i);
+  if(m){
+    var txt=clean(m[1]);
+    var ss=txt.match(/[A-Z][^.!?]*[.!?]+/g)||[];
+    if(ss.length>=2) return ss.slice(0,2).join(' ').trim();
+    return txt.slice(0,260).trim()+(txt.length>260?'\u2026':'');
+  }
+  var lines=md.split('\n').filter(function(l){
+    return l.trim()&&!l.startsWith('#')&&!l.startsWith('|')&&!l.startsWith('-')&&!l.startsWith('>')&&l.length>30;
+  });
+  return lines.length?clean(lines[0]).slice(0,240):'Session notes on file.';
+}
+
+function quote(md){
+  var m=md.match(/##\s*Section\s*7[\s\S]*?###\s*Quote\s*Board\s*\n+([\s\S]+?)(?=\n###|\n##\s*Section\s*[89]|\n---)/i);
+  if(!m) m=md.match(/###\s*Quote\s*Board\s*\n+([\s\S]+?)(?=\n###|\n##|\n---)/i);
+  if(!m) return null;
+  var sec=m[1];
+  var orders=[
+    /\[(?:Poignant|Important to Story)\][^\n]*\n\*["\u201c]([^"\u201d*]{15,160})["\u201d]?\*/,
+    /\[Serious\][^\n]*\n\*["\u201c]([^"\u201d*]{15,160})["\u201d]?\*/,
+    /\*["\u201c]([^"\u201d*\n]{20,160})["\u201d]\*/
+  ];
+  for(var i=0;i<orders.length;i++){
+    var qm=sec.match(orders[i]);
+    if(qm) return qm[1].trim();
+  }
+  return null;
+}
+
+function earlySum(md){
+  if(!md) return 'Brief overview on file.';
+  var lines=md.split('\n').filter(function(l){
+    return l.trim()&&!l.startsWith('#')&&!l.startsWith('|')&&l.length>20;
+  });
+  if(!lines.length) return 'Brief overview on file.';
+  return clean(lines[0]).slice(0,180)+(clean(lines[0]).length>180?'\u2026':'');
+}
+
+async function fetchMd(url){
+  try{var r=await fetch(url);return r.ok?await r.text():null;}
+  catch(e){return null;}
+}
+
+async function rollStats(){
+  try{
+    var r=await fetch(SB+'/rest/v1/pp_session_rolls?select=session_date,dice_notation,individual_values&limit=6000',
+      {headers:{apikey:AK,Authorization:'Bearer '+AK,Accept:'application/json'}});
+    if(!r.ok) return {};
+    var rows=await r.json();
+    var bd={};
+    rows.forEach(function(row){
+      var d=row.session_date; if(!d) return;
+      if(!bd[d]) bd[d]={total:0,n20:0,n1:0};
+      bd[d].total++;
+      if(row.dice_notation&&/^1d20/.test(row.dice_notation)){
+        var v=row.individual_values;
+        if(typeof v==='string'){try{v=JSON.parse(v);}catch(e){}}
+        if(Array.isArray(v)&&v.length){
+          if(v[0]===20) bd[d].n20++;
+          if(v[0]===1)  bd[d].n1++;
+        }
+      }
+    });
+    return bd;
+  }catch(e){return {};}
+}
+
+async function init(){
+  var tl=document.getElementById('tl');
+  var h='';
+
+  h+='<div class="era-hdr"><span class="era-hdr-lbl">The Early Campaign &nbsp;&middot;&nbsp; 2023&ndash;2024</span><div class="era-hdr-line"></div></div>';
+  h+='<div class="early-grid">';
+  for(var i=1;i<=16;i++){
+    h+='<div class="ecard" id="ec'+i+'"><div class="ecard-top"><span class="enum">Session '+i+'</span>'
+      +'<span class="dm-badge">DM Brief</span></div>'
+      +'<div class="ecard-txt skel" id="et'+i+'">&nbsp;</div></div>';
+  }
+  h+='</div>';
+
+  h+='<div class="gap">'
+    +'<div class="gap-dots">&ctdot;</div>'
+    +'<div class="gap-title">The Lost Sessions</div>'
+    +'<div class="gap-txt">~35 sessions &nbsp;&middot;&nbsp; Before the Archive Began &nbsp;&middot;&nbsp; 2024&ndash;2025</div>'
+    +'</div>';
+
+  h+='<div class="era-hdr archive"><span class="era-hdr-lbl">The Archive &nbsp;&middot;&nbsp; July 2025&ndash;May 2026</span><div class="era-hdr-line"></div></div>';
+  ARC.forEach(function(s){
+    h+='<div class="anode'+(s.fin?' finale':'')+'">'
+      +'<div class="acard'+(s.fin?' finale':'')+'">'
+      +'<div class="atop"><span class="anum">'+s.n+'</span><span class="adate">'+s.lbl+'</span>'
+      +(s.fin?'<span class="abadge">Finale</span>':'')+' </div>'
+      +'<div class="atitle">'+s.t+'</div>'
+      +'<div class="asum skel" id="as'+s.n+'">&nbsp;</div>'
+      +'<div class="apills"><span class="ap skel" id="pt'+s.n+'">&nbsp;</span>'
+      +'<span class="ap skel" id="p20'+s.n+'">&nbsp;</span>'
+      +'<span class="ap skel" id="p1'+s.n+'">&nbsp;</span></div>'
+      +'</div></div>';
+  });
+
+  tl.innerHTML=h;
+
+  var statsP=rollStats();
+
+  for(var j=1;j<=16;j++){
+    (function(n){
+      fetchMd(VR+'/01-Sessions/Early%20Sessions/Session%20'+n+'.md').then(function(md){
+        var el=document.getElementById('et'+n);
+        if(el){el.textContent=earlySum(md);el.className='ecard-txt';}
+      });
+    })(j);
+  }
+
+  ARC.forEach(function(s){
+    fetchMd(VR+'/'+s.f).then(function(md){
+      var sel=document.getElementById('as'+s.n);
+      if(sel){
+        if(md){
+          sel.textContent=summary(md);
+          sel.className='asum';
+          var q=quote(md);
+          if(q){
+            var qd=document.createElement('div');
+            qd.className='aquote';
+            qd.textContent='\u201c'+q+'\u201d';
+            sel.parentNode.insertBefore(qd,sel.nextSibling);
+          }
+        } else {
+          sel.textContent='Session notes on file.';
+          sel.className='asum';
+        }
+      }
+    });
+  });
+
+  statsP.then(function(bd){
+    ARC.forEach(function(s){
+      var st=bd[s.d]||{total:0,n20:0,n1:0};
+      var pt=document.getElementById('pt'+s.n);
+      var p20=document.getElementById('p20'+s.n);
+      var p1=document.getElementById('p1'+s.n);
+      if(pt){pt.textContent=st.total+' rolls';pt.className='ap';}
+      if(p20){p20.textContent='nat\u202f20 \u00d7\u202f'+st.n20;p20.className='ap up';}
+      if(p1){p1.textContent='nat\u202f1 \u00d7\u202f'+st.n1;p1.className='ap dn';}
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
