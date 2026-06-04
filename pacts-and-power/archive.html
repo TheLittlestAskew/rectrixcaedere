@@ -175,9 +175,12 @@ var ARC=[
 
 function clean(s){
   return s.replace(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g,'$1')
-           .replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1')
-           .replace(/`([^`]+)`/g,'$1').replace(/^[#>|\-\s]+/gm,' ')
-           .replace(/\|[^\n]*/g,'').replace(/\s+/g,' ').trim();
+           .replace(/\*\*([^*]+)\*\*/g,'$1')
+           .replace(/\*([^*]+)\*/g,'$1')
+           .replace(/`([^`]+)`/g,'$1')
+           .replace(/^[#>|\-\s]+/gm,' ')
+           .replace(/\|[^\n]*/g,'')
+           .replace(/\s+/g,' ').trim();
 }
 
 function summary(md){
@@ -218,9 +221,8 @@ function quote(md){
     if(/dm quip/.test(t)) s+=22;
     if(/funny/.test(t)) s+=10;
     if(/banter/.test(t)) s+=5;
-    if(/dm|chris|szadek|ral|kaya|vraska|nicol/i.test(q.sp)) s+=12;
-    if(/orphie/i.test(q.sp)) s-=10;
-    if(/ogre|sanis|rin|varis/i.test(q.sp)) s+=3;
+    // PCs (the party) rank above DM/NPC quotes; PCs equal to each other
+    if(/orphie|ogre|sanis|rin(?!estra)?|rinestra|varis/i.test(q.sp)) s+=8;
     if(q.tx.length>55) s+=4;
     if(q.tx.length>90) s+=3;
     s+=(q.sp.length%5);
