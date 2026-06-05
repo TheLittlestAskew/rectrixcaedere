@@ -117,6 +117,14 @@ h1.chron{font-family:var(--fd);font-weight:700;font-size:clamp(30px,5.5vw,48px);
   border-left:2px solid var(--copper);padding-left:13px;line-height:1.55;opacity:.82}
 .aquote .who{display:block;font-family:var(--fl);font-style:normal;font-size:9.5px;letter-spacing:.18em;
   text-transform:uppercase;color:var(--muted);margin-top:6px}
+.atags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tg{font-family:var(--fl);font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;
+  padding:3px 10px;border-radius:20px;border:1px solid;white-space:nowrap}
+.tg.combat{border-color:rgba(183,99,77,.45);color:#d28e79;background:rgba(183,99,77,.1)}
+.tg.questnew{border-color:rgba(199,163,105,.5);color:var(--gold-pale);background:rgba(199,163,105,.1)}
+.tg.questdone{border-color:rgba(74,158,110,.45);color:#7fc59c;background:rgba(74,158,110,.1)}
+.tg.levelup{border-color:rgba(107,138,173,.45);color:#9db8d4;background:rgba(107,138,173,.1)}
+.tg.split{border-color:rgba(139,107,181,.45);color:#b59cd0;background:rgba(139,107,181,.1)}
 footer{margin-top:auto;padding-top:64px;font-family:var(--fl);font-size:10px;letter-spacing:.2em;
   text-transform:uppercase;color:var(--muted);text-align:center}
 footer .dot{color:var(--copper);margin:0 8px}
@@ -175,12 +183,9 @@ var ARC=[
 
 function clean(s){
   return s.replace(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g,'$1')
-           .replace(/\*\*([^*]+)\*\*/g,'$1')
-           .replace(/\*([^*]+)\*/g,'$1')
-           .replace(/`([^`]+)`/g,'$1')
-           .replace(/^[#>|\-\s]+/gm,' ')
-           .replace(/\|[^\n]*/g,'')
-           .replace(/\s+/g,' ').trim();
+           .replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1')
+           .replace(/`([^`]+)`/g,'$1').replace(/^[#>|\-\s]+/gm,' ')
+           .replace(/\|[^\n]*/g,'').replace(/\s+/g,' ').trim();
 }
 
 function summary(md){
@@ -221,7 +226,6 @@ function quote(md){
     if(/dm quip/.test(t)) s+=22;
     if(/funny/.test(t)) s+=10;
     if(/banter/.test(t)) s+=5;
-    // PCs (the party) rank above DM/NPC quotes; PCs equal to each other
     if(/orphie|ogre|sanis|rin(?!estra)?|rinestra|varis/i.test(q.sp)) s+=8;
     if(q.tx.length>55) s+=4;
     if(q.tx.length>90) s+=3;
@@ -230,6 +234,24 @@ function quote(md){
   }
   quotes.sort(function(a,b){return score(b)-score(a);});
   return quotes[0];
+}
+
+function tags(md){
+  var t=[];
+  if(!/no\s+(?:traditional\s+)?combat|no\s+initiative\s+was\s+rolled/i.test(md)){
+    t.push({lbl:'\u2694\u00a0\u00a0Combat',cls:'combat'});
+  }
+  var nq=(md.match(/\(\s*New[\s\u2014\-]/g)||[]).length;
+  if(nq>0) t.push({lbl:'\u2726\u00a0\u00a0New Quest'+(nq>1?'\u00a0\u00d7'+nq:''),cls:'questnew'});
+  var dq=(md.match(/\(\s*Completed\s+This\s+Session/gi)||[]).length;
+  if(dq>0) t.push({lbl:'\u2713\u00a0\u00a0Quest Done'+(dq>1?'\u00a0\u00d7'+dq:''),cls:'questdone'});
+  if(!/no\s+level[\s\-]?up/i.test(md)&&/leveled\s+up|level[\s\-]?up\s+(?:triggered|achieved|this)|new\s+level\s+gained|reached\s+level\s+\d/i.test(md)){
+    t.push({lbl:'\u21e7\u00a0\u00a0Level Up',cls:'levelup'});
+  }
+  if(/party\s+split|split\s+(?:the\s+)?party|split\s+into\s+(?:two|three|multiple)\s+(?:group|sub|part)/i.test(md)){
+    t.push({lbl:'\u29C9\u00a0\u00a0Party Split',cls:'split'});
+  }
+  return t;
 }
 
 function earlySum(md){
@@ -314,6 +336,13 @@ async function init(){
       if(sel){
         if(md){
           sel.textContent=summary(md);sel.className='asum';
+          var tArr=tags(md);
+          if(tArr.length){
+            var tw=document.createElement('div');
+            tw.className='atags';
+            tw.innerHTML=tArr.map(function(t){return '<span class="tg '+t.cls+'">'+t.lbl+'</span>';}).join('');
+            sel.parentNode.insertBefore(tw,sel);
+          }
           var q=quote(md);
           if(q){
             var qd=document.createElement('div');
