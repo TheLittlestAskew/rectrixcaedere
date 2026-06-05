@@ -182,47 +182,58 @@ var ARC=[
 ];
 
 function clean(s){
-  return s.replace(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g,'$1')
-           .replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1')
-           .replace(/`([^`]+)`/g,'$1').replace(/^[#>|\-\s]+/gm,' ')
-           .replace(/\|[^\n]*/g,'').replace(/\s+/g,' ').trim();
+  return s.replace(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g,'$1').replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1').replace(/`([^`]+)`/g,'$1').replace(/^[#>|\-\s]+/gm,' ').replace(/\|[^\n]*/g,'').replace(/\s+/g,' ').trim();
 }
 
 function summary(md){
-  var m=md.match(/###\s*Narrative\s+Summary\s*\n+([\s\S]+?)(?=\n###|\n##\s*Section|\n---)/i);
-  if(!m) m=md.match(/##[^#\n]*Narrative\s+Summary[^#\n]*\n+([\s\S]+?)(?=\n##|\n---)/i);
-  if(!m) m=md.match(/##[^#\n]*Summary[^#\n]*\n+([\s\S]+?)(?=\n##|\n---)/i);
+  var m=/(?:###?\s*|\*\*)Narrative\s+Summary[.:*\s]*/i.exec(md);
+  var sec;
   if(m){
-    var txt=clean(m[1]);
-    var ss=txt.match(/[A-Z][^.!?]*[.!?]+/g)||[];
-    if(ss.length>=2) return ss.slice(0,2).join(' ').trim();
-    return txt.slice(0,260).trim()+(txt.length>260?'\u2026':'');
+    var a=md.slice(m.index+m[0].length);
+    var e=a.match(/\n##|\n---|\n\n\*\*[A-Z]/);
+    sec=e?a.slice(0,e.index):a.slice(0,2500);
+  } else {
+    var s2=md.match(/##[^#\n]*Summary[^#\n]*\n+([\s\S]+?)(?=\n##|\n---)/i);
+    if(s2) sec=s2[1];
+    else {
+      var ln=md.split('\n').filter(function(l){return l.trim()&&!/^[#|>\-]|^---/.test(l)&&l.length>40;});
+      return ln.length?clean(ln[0]).slice(0,240):'Session notes on file.';
+    }
   }
-  var lines=md.split('\n').filter(function(l){
-    return l.trim()&&!l.startsWith('#')&&!l.startsWith('|')&&!l.startsWith('-')&&!l.startsWith('>')&&l.length>30;
-  });
-  return lines.length?clean(lines[0]).slice(0,240):'Session notes on file.';
+  var txt=clean(sec),ss=txt.match(/[A-Z][^.!?]*[.!?]+/g)||[];
+  var p=ss.filter(function(s){return s.split(/\s+/).length>8&&s.length>50;});
+  if(p.length>=2) return p.slice(0,2).join(' ').trim();
+  if(p.length) return p[0].trim();
+  if(ss.length) return ss.slice(0,2).join(' ').trim();
+  return txt.slice(0,260).trim()+(txt.length>260?'\u2026':'');
 }
 
 function quote(md){
-  var m=md.match(/##\s*Section\s*7[\s\S]*?###\s*Quote\s*Board\s*\n+([\s\S]+?)(?=\n###|\n##\s*Section\s*[89]|\n---)/i);
-  if(!m) m=md.match(/###\s*Quote\s*Board\s*\n+([\s\S]+?)(?=\n###|\n##|\n---)/i);
+  var m=/(?:###?\s*|\*\*)Quote\s*Board/i.exec(md);
   if(!m) return null;
-  var sec=m[1];
-  var re=/\*\*([^*\n]+)\*\*\s*[\u00b7\u2022:.\-]\s*\[([^\]\n]+)\][^\n]*\n\*["\u201c]([^"\u201d*\n]+)["\u201d]?\*/g;
-  var quotes=[],qm;
-  while((qm=re.exec(sec))!==null){
-    var sp=qm[1].trim(),tg=qm[2].trim(),tx=qm[3].trim();
-    if(tx.length<15||tx.length>180) continue;
-    quotes.push({sp:sp,tg:tg,tx:tx});
+  var a=md.slice(m.index).replace(/^[^\n]+\n/,'');
+  var e=a.match(/\n##|\n---|\n\n\*\*(?:Profanity|Curse|Continuity|Patterns|Archivist|Themes|Related|Alternate)/i);
+  var sec=e?a.slice(0,e.index):a.slice(0,6000);
+  var Q=[],qm;
+  var r1=/\*\*([^*\n]+)\*\*\s*[\u00b7\u2022:.\-]\s*\[([^\]\n]+)\][^\n]*\n\*["\u201c]([^"\u201d*\n]+)["\u201d]?\*/g;
+  while((qm=r1.exec(sec))!==null){
+    var x=qm[3].trim();
+    if(x.length>=15&&x.length<=200) Q.push({sp:qm[1].trim(),tg:qm[2].trim(),tx:x});
   }
-  if(!quotes.length) return null;
+  var r2=/\|\s*([^|\n]+?)\s*\|\s*["\u201c]([^"\u201d\n|]+?)["\u201d]?\s*\|\s*([^|\n]+?)\s*\|/g;
+  while((qm=r2.exec(sec))!==null){
+    var sp=qm[1].trim(),x=qm[2].trim(),tg=qm[3].trim();
+    if(/^(speaker|quote|tag)$/i.test(sp)||/^-+$/.test(sp)) continue;
+    sp=sp.replace(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g,'$1').replace(/\s*\([^)]*\)\s*$/,'').trim();
+    if(x.length>=15&&x.length<=200) Q.push({sp:sp,tg:tg,tx:x});
+  }
+  if(!Q.length) return null;
   function score(q){
     var t=q.tg.toLowerCase(),s=0;
     if(/important to story/.test(t)) s+=100;
     if(/threat/.test(t)) s+=70;
     if(/poignant/.test(t)) s+=55;
-    if(/serious/.test(t)) s+=40;
+    if(/serious|dramatic/.test(t)) s+=40;
     if(/dm quip/.test(t)) s+=22;
     if(/funny/.test(t)) s+=10;
     if(/banter/.test(t)) s+=5;
@@ -232,33 +243,27 @@ function quote(md){
     s+=(q.sp.length%5);
     return s;
   }
-  quotes.sort(function(a,b){return score(b)-score(a);});
-  return quotes[0];
+  Q.sort(function(a,b){return score(b)-score(a);});
+  return Q[0];
 }
 
 function tags(md){
   var t=[];
-  if(!/no\s+(?:traditional\s+)?combat|no\s+initiative\s+was\s+rolled/i.test(md)){
-    t.push({lbl:'\u2694\u00a0\u00a0Combat',cls:'combat'});
-  }
-  var nq=(md.match(/\(\s*New[\s\u2014\-]/g)||[]).length;
+  if(!/no\s+(?:traditional\s+)?combat|no\s+initiative\s+(?:was\s+)?rolled/i.test(md)) t.push({lbl:'\u2694\u00a0\u00a0Combat',cls:'combat'});
+  var qs=md.match(/(?:##|###|\*\*)[^\n]*\bQuests?\b[^\n]*\n([\s\S]+?)(?=\n##|\n---|\n\n\*\*[A-Z])/i);
+  var qC=qs?qs[1]:md;
+  var nq=(qC.match(/^\s*[-*]\s*\*\*[^*\n]*\bNew\b[^*\n]*:\s*\*\*/gim)||[]).length;
   if(nq>0) t.push({lbl:'\u2726\u00a0\u00a0New Quest'+(nq>1?'\u00a0\u00d7'+nq:''),cls:'questnew'});
-  var dq=(md.match(/\(\s*Completed\s+This\s+Session/gi)||[]).length;
+  var dq=(qC.match(/^\s*[-*]\s*\*\*[^*\n]*Completed[^*\n]*:\s*\*\*/gim)||[]).length;
   if(dq>0) t.push({lbl:'\u2713\u00a0\u00a0Quest Done'+(dq>1?'\u00a0\u00d7'+dq:''),cls:'questdone'});
-  if(!/no\s+level[\s\-]?up/i.test(md)&&/leveled\s+up|level[\s\-]?up\s+(?:triggered|achieved|this)|new\s+level\s+gained|reached\s+level\s+\d/i.test(md)){
-    t.push({lbl:'\u21e7\u00a0\u00a0Level Up',cls:'levelup'});
-  }
-  if(/party\s+split|split\s+(?:the\s+)?party|split\s+into\s+(?:two|three|multiple)\s+(?:group|sub|part)/i.test(md)){
-    t.push({lbl:'\u29C9\u00a0\u00a0Party Split',cls:'split'});
-  }
+  if(!/no\s+level[\s\-]?up/i.test(md)&&/leveled\s+up|levels?\s+up|level[\s\-]?up\s+(?:triggered|achieved|this|at)|milestone\s+level|reach(?:ed|es)?\s+level\s+\d|\*\*\d+\s*[\u2192>\-]+\s*\d+\*\*/i.test(md)) t.push({lbl:'\u21e7\u00a0\u00a0Level Up',cls:'levelup'});
+  if(/(?:party|the\s+party|pcs?)\s+split|split\s+(?:the\s+)?party|split\s+up|split\s+in[t]?o\s+(?:two|three|multiple|sub|small)/i.test(md)) t.push({lbl:'\u29C9\u00a0\u00a0Party Split',cls:'split'});
   return t;
 }
 
 function earlySum(md){
   if(!md) return 'Brief overview on file.';
-  var lines=md.split('\n').filter(function(l){
-    return l.trim()&&!l.startsWith('#')&&!l.startsWith('|')&&l.length>20;
-  });
+  var lines=md.split('\n').filter(function(l){return l.trim()&&!l.startsWith('#')&&!l.startsWith('|')&&l.length>20;});
   if(!lines.length) return 'Brief overview on file.';
   return clean(lines[0]).slice(0,180)+(clean(lines[0]).length>180?'\u2026':'');
 }
@@ -269,8 +274,7 @@ async function fetchMd(url){
 
 async function rollStats(){
   try{
-    var r=await fetch(SB+'/rest/v1/pp_session_rolls?select=session_date,dice_notation,individual_values&limit=6000',
-      {headers:{apikey:AK,Authorization:'Bearer '+AK,Accept:'application/json'}});
+    var r=await fetch(SB+'/rest/v1/pp_session_rolls?select=session_date,dice_notation,individual_values&limit=6000',{headers:{apikey:AK,Authorization:'Bearer '+AK,Accept:'application/json'}});
     if(!r.ok) return {};
     var rows=await r.json();
     var bd={};
@@ -297,25 +301,13 @@ async function init(){
   h+='<div class="era-hdr"><span class="era-hdr-lbl">The Early Campaign &nbsp;&middot;&nbsp; 2023&ndash;2024</span><div class="era-hdr-line"></div></div>';
   h+='<div class="early-grid">';
   for(var i=1;i<=16;i++){
-    h+='<div class="ecard" id="ec'+i+'"><div class="ecard-top"><span class="enum">Session '+i+'</span>'
-      +'<span class="dm-badge">DM Brief</span></div>'
-      +'<div class="ecard-txt skel" id="et'+i+'">&nbsp;</div></div>';
+    h+='<div class="ecard" id="ec'+i+'"><div class="ecard-top"><span class="enum">Session '+i+'</span><span class="dm-badge">DM Brief</span></div><div class="ecard-txt skel" id="et'+i+'">&nbsp;</div></div>';
   }
   h+='</div>';
-  h+='<div class="gap"><div class="gap-dots">&ctdot;</div><div class="gap-title">The Lost Sessions</div>'
-    +'<div class="gap-txt">~35 sessions &nbsp;&middot;&nbsp; Before the Archive Began &nbsp;&middot;&nbsp; 2024&ndash;2025</div></div>';
+  h+='<div class="gap"><div class="gap-dots">&ctdot;</div><div class="gap-title">The Lost Sessions</div><div class="gap-txt">~35 sessions &nbsp;&middot;&nbsp; Before the Archive Began &nbsp;&middot;&nbsp; 2024&ndash;2025</div></div>';
   h+='<div class="era-hdr archive"><span class="era-hdr-lbl">The Archive &nbsp;&middot;&nbsp; July 2025&ndash;May 2026</span><div class="era-hdr-line"></div></div>';
   ARC.forEach(function(s){
-    h+='<div class="anode'+(s.fin?' finale':'')+'">'
-      +'<div class="acard'+(s.fin?' finale':'')+'">'
-      +'<div class="atop"><span class="anum">'+s.n+'</span><span class="adate">'+s.lbl+'</span>'
-      +(s.fin?'<span class="abadge">Finale</span>':'')+' </div>'
-      +'<div class="atitle">'+s.t+'</div>'
-      +'<div class="asum skel" id="as'+s.n+'">&nbsp;</div>'
-      +'<div class="apills"><span class="ap skel" id="pt'+s.n+'">&nbsp;</span>'
-      +'<span class="ap skel" id="p20'+s.n+'">&nbsp;</span>'
-      +'<span class="ap skel" id="p1'+s.n+'">&nbsp;</span></div>'
-      +'</div></div>';
+    h+='<div class="anode'+(s.fin?' finale':'')+'"><div class="acard'+(s.fin?' finale':'')+'"><div class="atop"><span class="anum">'+s.n+'</span><span class="adate">'+s.lbl+'</span>'+(s.fin?'<span class="abadge">Finale</span>':'')+' </div><div class="atitle">'+s.t+'</div><div class="asum skel" id="as'+s.n+'">&nbsp;</div><div class="apills"><span class="ap skel" id="pt'+s.n+'">&nbsp;</span><span class="ap skel" id="p20'+s.n+'">&nbsp;</span><span class="ap skel" id="p1'+s.n+'">&nbsp;</span></div></div></div>';
   });
   tl.innerHTML=h;
 
