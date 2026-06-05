@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session — Pacts &amp; Power · Rectrix Caedere</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cinzel+Decorative:wght@400;700&family=Raleway:wght@300;400;500&family=Alegreya+Sans+SC:wght@400;500;700&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked@13.0.3/marked.min.js"></script>
+<style>
+:root{
+  --navy:#050A0E;--card:#0D141C;--smoked:#162230;--gold:#C7A369;--gold-bright:#DA9565;--gold-pale:#E8C690;
+  --amber:#AF755A;--copper:#8C5D3F;--coral:#B7634D;--info:#6B8AAD;--success:#4A9E6E;
+  --text:#E8E4DC;--text2:#9A9590;--muted:#5E5A55;--vellum:#F5EFE2;
+  --border:rgba(199,163,105,.25);--border-strong:rgba(199,163,105,.45);--glow:rgba(199,163,105,.30);
+  --fd:'Cinzel Decorative','Cinzel',serif;--fdisp:'Cinzel',serif;
+  --fb:'Raleway',system-ui,sans-serif;--fl:'Alegreya Sans SC','Raleway',sans-serif;--fs:'EB Garamond',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{min-height:100%}
+body{font-family:var(--fb);color:var(--text);background:var(--navy);
+  background-image:radial-gradient(120% 90% at 50% 12%,rgba(5,10,14,.15),rgba(5,10,14,.6) 55%,rgba(5,10,14,.93)),
+  url('/assets/img/general_background.webp');
+  background-size:cover;background-position:center 30%;background-attachment:fixed;
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  padding:64px 22px 60px;position:relative}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.back{position:fixed;top:20px;left:22px;z-index:20;font-family:var(--fl);font-size:12px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--gold-pale);text-decoration:none;
+  border:1px solid var(--border);border-radius:3px;padding:9px 16px;
+  background:rgba(13,20,28,.6);backdrop-filter:blur(4px);transition:border-color .35s,color .35s,box-shadow .4s}
+.back:hover{border-color:var(--gold);color:var(--gold-bright);box-shadow:0 0 22px -8px var(--glow)}
+.wrap{width:100%;max-width:820px;display:flex;flex-direction:column;z-index:2;
+  opacity:0;transform:translateY(14px);animation:rise .9s cubic-bezier(.2,.7,.2,1) .1s forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+.logo{height:38px;margin:0 auto 22px;filter:drop-shadow(0 0 14px rgba(218,149,101,.35))}
+.eyebrow{font-family:var(--fl);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:10px}
+h1.title{font-family:var(--fd);font-weight:700;font-size:clamp(26px,4.6vw,40px);color:var(--vellum);
+  text-align:center;line-height:1.12;margin-bottom:12px;text-shadow:0 2px 22px rgba(0,0,0,.6)}
+.fbadge{display:inline-block;margin-left:10px;font-family:var(--fl);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);border:1px solid var(--coral);border-radius:20px;padding:3px 10px;vertical-align:middle}
+.date{font-family:var(--fs);font-style:italic;font-size:15.5px;color:var(--text);text-align:center;margin-bottom:18px}
+.metarow{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:12px}
+.pill,.tag{font-family:var(--fl);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:3px 11px;border-radius:20px;border:1px solid;font-weight:500;white-space:nowrap}
+.pill{border-color:var(--border);color:var(--text)}
+.pill.up{border-color:rgba(74,158,110,.4);color:#7fc59c;background:rgba(74,158,110,.1)}
+.pill.dn{border-color:rgba(183,99,77,.4);color:#d28e79;background:rgba(183,99,77,.1)}
+.tag.combat{border-color:rgba(183,99,77,.45);color:#d28e79;background:rgba(183,99,77,.1)}
+.tag.questnew{border-color:rgba(199,163,105,.5);color:var(--gold-pale);background:rgba(199,163,105,.1)}
+.tag.questdone{border-color:rgba(74,158,110,.45);color:#7fc59c;background:rgba(74,158,110,.1)}
+.tag.levelup{border-color:rgba(107,138,173,.45);color:#9db8d4;background:rgba(107,138,173,.1)}
+.tag.split{border-color:rgba(139,107,181,.45);color:#b59cd0;background:rgba(139,107,181,.1)}
+.divider{margin:30px 0 26px;text-align:center;font-family:var(--fd);color:var(--copper);font-size:18px;opacity:.7}
+.divider::before,.divider::after{content:'';display:inline-block;width:90px;height:1px;background:linear-gradient(90deg,transparent,var(--copper),transparent);vertical-align:middle;margin:0 14px}
+.md{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:clamp(24px,4vw,40px);box-shadow:0 14px 40px rgba(0,0,0,.4);overflow:hidden}
+.md > *:first-child{margin-top:0}
+.md > *:last-child{margin-bottom:0}
+.md h1{font-family:var(--fd);font-weight:700;font-size:24px;color:var(--vellum);margin:0 0 16px;line-height:1.18;border-bottom:1px solid var(--border);padding-bottom:10px}
+.md h2{font-family:var(--fdisp);font-weight:500;font-size:18px;color:var(--gold-pale);margin:34px 0 14px;letter-spacing:.04em;line-height:1.25}
+.md h3{font-family:var(--fdisp);font-weight:500;font-size:15px;color:var(--gold);margin:26px 0 10px;letter-spacing:.04em;line-height:1.25}
+.md h4{font-family:var(--fl);font-weight:700;font-size:11px;color:var(--gold);margin:20px 0 8px;letter-spacing:.2em;text-transform:uppercase}
+.md p{font-size:14.5px;line-height:1.75;color:var(--text);margin:0 0 14px;font-weight:300}
+.md strong{color:var(--vellum);font-weight:600}
+.md em{font-family:var(--fs);font-style:italic;color:var(--gold-pale);font-size:1.04em}
+.md a{color:var(--gold-bright);text-decoration:none;border-bottom:1px solid rgba(218,149,101,.3);transition:border-color .25s,color .25s}
+.md a:hover{color:var(--gold-pale);border-color:var(--gold-bright)}
+.md ul,.md ol{margin:8px 0 16px 22px;padding-left:6px}
+.md li{font-size:14.5px;line-height:1.7;color:var(--text);margin-bottom:6px;font-weight:300}
+.md li::marker{color:var(--copper)}
+.md li > p{margin-bottom:6px}
+.md blockquote{font-family:var(--fs);font-style:italic;font-size:15px;color:var(--gold-pale);border-left:3px solid var(--copper);padding:8px 0 8px 18px;margin:16px 0;line-height:1.6}
+.md blockquote p{margin-bottom:8px;color:var(--gold-pale);font-style:italic;font-size:15px;font-family:var(--fs)}
+.md hr{border:none;border-top:1px solid var(--border);margin:32px 0}
+.md code{font-family:'SF Mono',Consolas,'Courier New',monospace;font-size:12.5px;color:var(--gold-pale);background:rgba(199,163,105,.08);padding:1px 6px;border-radius:3px}
+.md pre{background:var(--smoked);border:1px solid var(--border);border-radius:6px;padding:14px;overflow-x:auto;margin:14px 0}
+.md pre code{background:none;padding:0;color:var(--text)}
+.tbl-wrap{margin:18px 0;overflow-x:auto;border:1px solid var(--border);border-radius:6px;background:rgba(13,20,28,.4)}
+.md table{width:100%;border-collapse:collapse;font-size:13px;min-width:max-content}
+.md thead{background:rgba(199,163,105,.1)}
+.md th{font-family:var(--fl);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-align:left;padding:10px 14px;border-bottom:1px solid var(--border);font-weight:600;white-space:nowrap}
+.md td{padding:9px 14px;border-bottom:1px solid rgba(199,163,105,.1);color:var(--text);font-weight:300;line-height:1.55;vertical-align:top}
+.md tbody tr:last-child td{border-bottom:none}
+.md tbody tr:hover{background:rgba(199,163,105,.04)}
+.md td strong{color:var(--vellum)}
+.snav{display:flex;justify-content:space-between;gap:14px;margin-top:30px}
+.snav a{flex:1;font-family:var(--fl);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold-pale);text-decoration:none;border:1px solid var(--border);border-radius:3px;
+  padding:14px 18px;background:rgba(13,20,28,.5);transition:border-color .3s,color .3s,box-shadow .35s;text-align:center}
+.snav a:hover{border-color:var(--gold);color:var(--gold-bright);box-shadow:0 0 22px -8px var(--glow)}
+.snav a.disabled{opacity:.3;pointer-events:none}
+.snav .lbl{display:block;font-size:9px;color:var(--text2);letter-spacing:.2em;margin-bottom:3px;font-weight:400}
+.snav .ttl{display:block;color:var(--gold-pale);font-size:11px;font-weight:600;letter-spacing:.1em}
+.snav a:hover .ttl{color:var(--gold-bright)}
+footer{margin-top:40px;padding-top:28px;font-family:var(--fl);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text2);text-align:center;border-top:1px solid var(--border)}
+footer a{color:var(--gold-pale);text-decoration:none;border-bottom:1px solid var(--border)}
+footer a:hover{color:var(--gold-bright);border-color:var(--gold-bright)}
+footer .dot{color:var(--copper);margin:0 8px}
+.loading,.err{font-family:var(--fs);font-style:italic;color:var(--text2);text-align:center;padding:60px 20px;font-size:16px}
+.err{color:var(--coral);font-style:normal;font-family:var(--fb)}
+.err a{color:var(--gold-pale);text-decoration:underline}
+@media(prefers-reduced-motion:reduce){.wrap{opacity:1;transform:none;animation:none}}
+@media(max-width:600px){.snav{flex-direction:column}}
+</style>
+</head>
+<body>
+<a class="back" href="/pacts-and-power/archive.html">&#8592;&nbsp;&nbsp;The Chronicle</a>
+<div class="wrap">
+  <img class="logo" src="/assets/img/logo_only-transparent2.webp" alt="Rectrix Caedere">
+  <div class="eyebrow" id="snum">Pacts &amp; Power</div>
+  <h1 class="title" id="stitle">Loading&hellip;</h1>
+  <div class="date" id="sdate"></div>
+  <div class="metarow" id="spills"></div>
+  <div class="metarow" id="stags"></div>
+  <div class="divider">&#10022;</div>
+  <article class="md" id="body"><div class="loading">Summoning the chronicle&hellip;</div></article>
+  <div class="snav" id="snav"></div>
+  <footer>Rectrix Caedere <span class="dot">&#10022;</span> Pacts &amp; Power <span class="dot">&#10022;</span> <a href="/pacts-and-power/archive.html">The Chronicle</a></footer>
+</div>
+<script>
+var SB='https://vtrtyagltwdrbastpppl.supabase.co';
+var AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0cnR5YWdsdHdkcmJhc3RwcHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTY5NTAsImV4cCI6MjA5MTkzMjk1MH0.hnpwjHGIqiUN_VmmIkOAAFGGCKsyYgl7AO3FW5vDIeM';
+var VR='https://raw.githubusercontent.com/TheLittlestAskew/pacts_power_vault/main';
+var ARC=[
+  {n:'01',d:'2025-07-13',lbl:'July 13, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_01_071325_Into_the_Ghost_Mind.md',t:'Into the Ghost Mind'},
+  {n:'02',d:'2025-07-27',lbl:'July 27, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_02_072725_I_Cant_Rebuild_You.md',t:"I Can\u2019t Rebuild You"},
+  {n:'03',d:'2025-08-10',lbl:'August 10, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_03_081025_Thats_Why_No_One_Will_Remember_Your_Name.md',t:"That\u2019s Why No One Will Remember Your Name"},
+  {n:'04',d:'2025-08-26',lbl:'August 26, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_04_082625_The_Spark_and_the_Swarm.md',t:'The Spark and the Swarm'},
+  {n:'05',d:'2025-09-07',lbl:'September 7, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_05_090725_Do_You_Smell_That_Its_Breakfast_Time.md',t:'Do You Smell That? It\u2019s Breakfast Time'},
+  {n:'06',d:'2025-09-17',lbl:'September 17, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_06_091725_Soul_Integrated_Soul_Storage_Get_It_Right.md',t:'Soul Integrated Soul Storage \u2014 Get It Right'},
+  {n:'07',d:'2025-10-05',lbl:'October 5, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_07_100525_The_Reylana_Infiltration.md',t:'The Reylana Infiltration'},
+  {n:'08',d:'2025-10-19',lbl:'October 19, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_08_101925_Blood_Runs_Thicker_Than_Water.md',t:'Blood Runs Thicker Than Water'},
+  {n:'10',d:'2025-11-30',lbl:'November 30, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_10_113025_What_Are_You_Waiting_For_Sanis.md',t:'What Are You Waiting For, Sanis?'},
+  {n:'11',d:'2025-12-14',lbl:'December 14, 2025',f:'01-Sessions/Session%20Notes/Notes%202025/PP_11_121425_You_Cant_Just_Buy_the_Sun.md',t:"You Can\u2019t Just Buy the Sun"},
+  {n:'12',d:'2026-01-11',lbl:'January 11, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_12_011126_The_Masquerade_Auction.md',t:'The Masquerade Auction'},
+  {n:'13',d:'2026-01-25',lbl:'January 25, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_13_012526_Fucking_Barbarians.md',t:'Fucking Barbarians'},
+  {n:'14',d:'2026-02-13',lbl:'February 13, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_14_021326_Hold_the_Wall.md',t:'Hold the Wall'},
+  {n:'15',d:'2026-02-22',lbl:'February 22, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_15_022226_Reforging_the_Guildpact.md',t:'Reforging the Guildpact'},
+  {n:'16',d:'2026-03-13',lbl:'March 13, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_16_031326_A_Scared_Child.md',t:'A Scared Child'},
+  {n:'17',d:'2026-04-02',lbl:'April 2, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_17_040226_The_Guildpact_Reborn.md',t:'The Guildpact Reborn'},
+  {n:'18',d:'2026-04-05',lbl:'April 5, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_18_040526_Pacts_and_Power.md',t:'Pacts and Power'},
+  {n:'19',d:'2026-04-19',lbl:'April 19, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_19_041926_Hi_Im_Ogre.md',t:"Hi, I\u2019m Ogre"},
+  {n:'20',d:'2026-05-14',lbl:'May 14, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_20_051426_I_Just_Need_Your_Soul.md',t:'I Just Need Your Soul'},
+  {n:'21',d:'2026-05-31',lbl:'May 31, 2026',f:'01-Sessions/Session%20Notes/Notes%202026/PP_21_053126_I_Miss_You_Buddy.md',t:'I Miss You, Buddy',fin:true}
+];
+
+function getN(){var m=location.search.match(/[?&]n=([^&]+)/);return m?m[1]:null;}
+
+function tags(md){
+  var t=[];
+  if(!/no\s+(?:traditional\s+)?combat|no\s+initiative\s+(?:was\s+)?rolled/i.test(md)) t.push({lbl:'\u2694\u00a0\u00a0Combat',cls:'combat'});
+  var qs=md.match(/(?:##|###|\*\*)[^\n]*\bQuests?\b[^\n]*\n([\s\S]+?)(?=\n##|\n---|\n\n\*\*[A-Z])/i);
+  var qC=qs?qs[1]:md;
+  var nq=(qC.match(/^\s*[-*]\s*\*\*[^*\n]*\bNew\b[^*\n]*:\s*\*\*/gim)||[]).length;
+  if(nq>0) t.push({lbl:'\u2726\u00a0\u00a0New Quest'+(nq>1?'\u00a0\u00d7'+nq:''),cls:'questnew'});
+  var dq=(qC.match(/^\s*[-*]\s*\*\*[^*\n]*Completed[^*\n]*:\s*\*\*/gim)||[]).length;
+  if(dq>0) t.push({lbl:'\u2713\u00a0\u00a0Quest Done'+(dq>1?'\u00a0\u00d7'+dq:''),cls:'questdone'});
+  if(!/no\s+level[\s\-]?up/i.test(md)&&/leveled\s+up|levels?\s+up|level[\s\-]?up\s+(?:triggered|achieved|this|at)|milestone\s+level|reach(?:ed|es)?\s+level\s+\d|\*\*\d+\s*[\u2192>\-]+\s*\d+\*\*/i.test(md)) t.push({lbl:'\u21e7\u00a0\u00a0Level Up',cls:'levelup'});
+  if(/(?:party|the\s+party|pcs?)\s+split|split\s+(?:the\s+)?party|split\s+up|split\s+in[t]?o\s+(?:two|three|multiple|sub|small)/i.test(md)) t.push({lbl:'\u29C9\u00a0\u00a0Party Split',cls:'split'});
+  return t;
+}
+
+async function rollStats(date){
+  try{
+    var r=await fetch(SB+'/rest/v1/pp_session_rolls?session_date=eq.'+date+'&select=dice_notation,individual_values&limit=2000',{headers:{apikey:AK,Authorization:'Bearer '+AK}});
+    if(!r.ok) return null;
+    var rows=await r.json();
+    var s={total:rows.length,n20:0,n1:0};
+    rows.forEach(function(r){
+      if(r.dice_notation&&/^1d20/.test(r.dice_notation)){
+        var v=r.individual_values;
+        if(typeof v==='string'){try{v=JSON.parse(v);}catch(e){}}
+        if(Array.isArray(v)&&v.length){if(v[0]===20) s.n20++;if(v[0]===1) s.n1++;}
+      }
+    });
+    return s;
+  }catch(e){return null;}
+}
+
+function transformMd(md){
+  md=md.replace(/^---\s*\n[\s\S]*?\n---\s*\n/,'');
+  md=md.replace(/\[\[PP_(\d+)_[^\]|]*?(?:\|([^\]]+))?\]\]/g,function(m,n,disp){return '['+(disp||'Session '+n)+'](session.html?n='+n+')';});
+  md=md.replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g,function(m,a,b){return b||a;});
+  return md;
+}
+
+function wrapTables(html){return html.replace(/<table>/g,'<div class="tbl-wrap"><table>').replace(/<\/table>/g,'</table></div>');}
+
+async function init(){
+  var n=getN();
+  if(!n){document.getElementById('body').innerHTML='<div class="err">No session specified. <a href="/pacts-and-power/archive.html">Go to the Chronicle</a></div>';return;}
+  var idx=-1,s=null;
+  for(var i=0;i<ARC.length;i++){if(ARC[i].n===n){s=ARC[i];idx=i;break;}}
+  if(!s){document.getElementById('body').innerHTML='<div class="err">Unknown session &ldquo;'+n+'&rdquo;. <a href="/pacts-and-power/archive.html">Go to the Chronicle</a></div>';return;}
+  document.title=s.n+' \u00b7 '+s.t+' \u2014 Pacts & Power';
+  document.getElementById('snum').textContent='Pacts \u00b7 Power \u00b7 Session '+s.n;
+  document.getElementById('stitle').innerHTML=s.t+(s.fin?' <span class="fbadge">Finale</span>':'');
+  document.getElementById('sdate').textContent=s.lbl;
+  var snav=document.getElementById('snav');
+  var prevHtml='',nextHtml='';
+  if(idx>0){var p=ARC[idx-1];prevHtml='<a href="session.html?n='+p.n+'"><span class="lbl">&larr; Session '+p.n+'</span><span class="ttl">'+p.t+'</span></a>';}
+  else prevHtml='<a class="disabled"><span class="lbl">&larr; Previous</span><span class="ttl">\u2014</span></a>';
+  if(idx<ARC.length-1){var nx=ARC[idx+1];nextHtml='<a href="session.html?n='+nx.n+'"><span class="lbl">Session '+nx.n+' &rarr;</span><span class="ttl">'+nx.t+'</span></a>';}
+  else nextHtml='<a class="disabled"><span class="lbl">Next &rarr;</span><span class="ttl">\u2014</span></a>';
+  snav.innerHTML=prevHtml+nextHtml;
+  try{
+    var resp=await fetch(VR+'/'+s.f);
+    if(!resp.ok) throw new Error('fetch failed');
+    var md=await resp.text();
+    var html=wrapTables(marked.parse(transformMd(md)));
+    document.getElementById('body').innerHTML=html;
+    var tArr=tags(md);
+    if(tArr.length){document.getElementById('stags').innerHTML=tArr.map(function(t){return '<span class="tag '+t.cls+'">'+t.lbl+'</span>';}).join('');}
+    var stats=await rollStats(s.d);
+    if(stats){document.getElementById('spills').innerHTML='<span class="pill">'+stats.total+' rolls</span><span class="pill up">nat\u202f20 \u00d7\u202f'+stats.n20+'</span><span class="pill dn">nat\u202f1 \u00d7\u202f'+stats.n1+'</span>';}
+  }catch(e){
+    document.getElementById('body').innerHTML='<div class="err">Failed to load session notes. <a href="/pacts-and-power/archive.html">Back to the Chronicle</a></div>';
+  }
+}
+
+if(typeof marked!=='undefined'){init();}else{window.addEventListener('load',init);}
+</script>
+</body>
+</html>
