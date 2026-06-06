@@ -149,6 +149,11 @@ footer .dot{color:var(--copper);margin:0 8px}
 .pp-fullrule{text-align:center;color:var(--gold);letter-spacing:.4em;font-size:11px;margin:26px 0 16px;width:100%}
 .pp-mini{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px}
 .pp-fnotes{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:22px;width:100%}
+.pp3 .tbl-wrap{overflow-x:auto;margin:0 0 10px}
+.pp3 table,#z-mbody table{width:100%;border-collapse:collapse;font-size:12.5px;margin:4px 0 10px}
+.pp3 th,#z-mbody th{font-family:var(--fl);text-transform:uppercase;letter-spacing:.06em;font-size:10.5px;font-weight:500;color:var(--gold-pale);background:var(--smoked);text-align:left;padding:7px 10px;border-bottom:1px solid var(--border)}
+.pp3 td,#z-mbody td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.05);color:var(--text2);vertical-align:top}
+.pp3 tr:last-child td,#z-mbody tr:last-child td{border-bottom:none}
 td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weight:500}
 .pp-overlay{position:fixed;inset:0;z-index:300;background:rgba(3,6,10,.82);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:32px 20px}
 .pp-overlay.open{display:flex}
@@ -190,18 +195,18 @@ td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weigh
         <div class="pp-lbl" style="margin:14px 0 4px">Party present</div><div class="pp-chips" id="z-party"></div>
         <div class="pp-lbl" id="z-guestnote" style="display:none;font-size:10px;color:var(--muted);margin-top:8px">&#42; guest planeswalker</div></section>
       <section class="pp-card"><h2>Quests &amp; objectives</h2><div id="z-quests"></div></section>
+      <section class="pp-card"><h2>Profanity record</h2><div id="z-prof"></div></section>
     </div>
     <div class="pp-col">
       <section class="pp-card pp-read"><h2>Narrative summary</h2><div class="pp-prev" id="z-narr"></div><button class="pp-more" onclick="ppModal('narr')">Read more</button></section>
       <section class="pp-card pp-read" id="z-scene-card"><h2>Scene / timeline</h2><div class="pp-prev" id="z-scene"></div><button class="pp-more" onclick="ppModal('scene')">See all</button></section>
       <section class="pp-card pp-read"><h2>Themes &amp; beats</h2><div class="pp-prev" id="z-themes"></div><button class="pp-more" onclick="ppModal('themes')">Read more</button></section>
+      <section class="pp-card"><h2>Quote board</h2><div id="z-quotes"></div></section>
     </div>
     <div class="pp-col">
       <section class="pp-card"><h2>NPCs</h2><div class="pp-legend"><span><i class="pp-dot enemy"></i>Enemy</span><span><i class="pp-dot friendly"></i>Friendly</span><span><i class="pp-dot neutral"></i>Neutral</span></div><div id="z-npcs"></div></section>
       <section class="pp-card"><h2>Locations</h2><div id="z-locs"></div></section>
       <section class="pp-card"><h2>Loot &amp; artifacts</h2><div id="z-loot"></div></section>
-      <section class="pp-card"><h2>Quote board</h2><div id="z-quotes"></div></section>
-      <section class="pp-card"><h2>Profanity record</h2><div id="z-prof"></div></section>
     </div>
   </div>
   <div class="pp-fullrule" id="z-logrule" style="display:none">&#10022;&nbsp;&nbsp;Logs&nbsp;&nbsp;&#10022;</div>
