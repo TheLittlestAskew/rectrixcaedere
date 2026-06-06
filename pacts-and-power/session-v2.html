@@ -150,15 +150,17 @@ footer .dot{color:var(--copper);margin:0 8px}
 .pp-mini{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px}
 .pp-fnotes{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:22px;width:100%}
 td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weight:500}
-.pp-overlay{position:fixed;inset:0;z-index:200;background:rgba(3,6,10,.8);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;padding:60px 20px;overflow-y:auto}
+.pp-overlay{position:fixed;inset:0;z-index:300;background:rgba(3,6,10,.82);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:32px 20px}
 .pp-overlay.open{display:flex}
-.pp-modal{background:var(--smoked);border:1px solid var(--border-strong);border-radius:10px;max-width:720px;width:100%;padding:32px 36px;position:relative;text-align:left}
+.pp-modal{background:var(--smoked);border:1px solid var(--border-strong);border-radius:10px;max-width:920px;width:100%;max-height:calc(100vh - 64px);position:relative;text-align:left;display:flex;flex-direction:column;overflow:hidden}
+.pp-mhead{padding:30px 40px 0;flex:0 0 auto}
 .pp-modal h3{font-family:var(--fdisp);font-weight:500;font-size:24px;color:var(--text);margin-bottom:4px}
-.pp-mrule{height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin:14px 0 20px}
+.pp-mrule{height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin:14px 0 0}
+#z-mbody{padding:18px 40px 30px;overflow-y:auto;flex:1 1 auto}
 #z-mbody p{color:var(--text2);font-size:15px;line-height:1.7;margin-bottom:14px}
 #z-mbody.pov{font-family:var(--fs)}#z-mbody.pov p{font-style:italic;color:var(--text);line-height:1.8}
 #z-mbody strong{color:var(--text)}#z-mbody ul,#z-mbody ol{margin:0 0 14px 18px;color:var(--text2)}#z-mbody li{margin-bottom:8px}
-.pp-close{position:absolute;top:14px;right:18px;background:none;border:none;color:var(--muted);font-size:24px;cursor:pointer}.pp-close:hover{color:var(--gold)}
+.pp-close{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--muted);font-size:24px;cursor:pointer;z-index:2}.pp-close:hover{color:var(--gold)}
 @media(max-width:900px){.pp-grid,.pp-mini,.pp-fnotes{grid-template-columns:1fr}}
 </style>
 </head>
@@ -213,7 +215,6 @@ td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weigh
     <section class="pp-card"><h2>Continuity flags</h2><div id="z-flags"></div></section>
   </div>
 </div>
-<div class="pp-overlay" id="z-overlay" onclick="if(event.target===this)ppClose()"><div class="pp-modal"><button class="pp-close" onclick="ppClose()" aria-label="Close">&times;</button><div class="pp-eyebrow" id="z-meyebrow"></div><h3 id="z-mtitle"></h3><div class="pp-mrule"></div><div id="z-mbody"></div></div></div>
   <div class="snav" id="snav"></div>
   <footer>Rectrix Caedere <span class="dot">&#10022;</span> Pacts &amp; Power <span class="dot">&#10022;</span> <a href="/pacts-and-power/archive.html">The Chronicle</a></footer>
 </div>
@@ -303,7 +304,7 @@ var ZP2C={Taylor:'Orphie',Chet:'Ogre',Rachel:'Rin',Gabe:'Sanis',Vincent:'Varis',
 var ZDISP={'Nicol Bolas':'enemy','Vraska':'enemy','Eternals':'enemy','Domri':'enemy','Bolas':'enemy','Ral Zarek':'friendly','Tomik':'friendly','Niv-Mizzet':'friendly','Kaya Cassir':'neutral','Szadek':'neutral'};
 function zdispo(n){return ZDISP[n]||'neutral';}
 var ZMOD={};
-function ppModal(k){var m=ZMOD[k];if(!m)return;document.getElementById('z-meyebrow').textContent=m.eb||'';document.getElementById('z-mtitle').textContent=m.t||'';var b=document.getElementById('z-mbody');b.className=(k==='pov'?'pov':'');b.innerHTML=m.h||'';document.getElementById('z-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function ppModal(k){var m=ZMOD[k];if(!m)return;document.getElementById('z-meyebrow').textContent=m.eb||'';document.getElementById('z-mtitle').textContent=m.t||'';var b=document.getElementById('z-mbody');b.className=(k==='pov'?'pov':'');b.innerHTML=m.h||'';b.scrollTop=0;document.getElementById('z-overlay').classList.add('open');document.body.style.overflow='hidden';}
 function ppClose(){document.getElementById('z-overlay').classList.remove('open');document.body.style.overflow='';}
 document.addEventListener('keydown',function(e){if(e.key==='Escape')ppClose();});
 
@@ -442,5 +443,12 @@ async function init(){
 
 if(typeof marked!=='undefined'){init();}else{window.addEventListener('load',init);}
 </script>
+<div class="pp-overlay" id="z-overlay" onclick="if(event.target===this)ppClose()">
+  <div class="pp-modal">
+    <button class="pp-close" onclick="ppClose()" aria-label="Close">&times;</button>
+    <div class="pp-mhead"><div class="pp-eyebrow" id="z-meyebrow"></div><h3 id="z-mtitle"></h3><div class="pp-mrule"></div></div>
+    <div id="z-mbody"></div>
+  </div>
+</div>
 </body>
 </html>
