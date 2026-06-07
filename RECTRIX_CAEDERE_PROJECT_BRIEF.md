@@ -55,7 +55,7 @@ Campaign data is currently hardcoded in `app.js` as a JavaScript array. Four cam
 |---|---|---|---|---|
 | Sky Is The Limit (SITL) | 1 | active | 946 | 15 |
 | Pacts & Power (P&P) | 2 | active | 2,907 | 72 |
-| Ashfall Brittania (AFB) | 3 | active | 855 | 8 |
+| Ashfall Britannia (AFB) | 3 | active | 855 | 8 |
 | Where the Flowers Remember (WTFR) | 4 | paused | 0 | 0 |
 
 ### Future: Live Supabase
