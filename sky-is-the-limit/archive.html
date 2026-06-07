@@ -36,6 +36,14 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:60;opa
 .subnav{position:fixed;top:20px;right:22px;z-index:30;display:flex;gap:8px}
 .subnav a{font-family:var(--fl);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-pale);text-decoration:none;border:1px solid var(--border);border-radius:3px;padding:9px 14px;background:rgba(13,20,28,.6);backdrop-filter:blur(4px);transition:border-color .3s,color .3s}
 .subnav a:hover{border-color:var(--border-strong);color:var(--gold-bright)}
+/* ── Jump rail (scroll to a session) ── */
+.jumprail{position:fixed;right:8px;top:50%;transform:translateY(-50%);z-index:25;display:flex;flex-direction:column;gap:2px;align-items:center;padding:9px 6px;border:1px solid var(--border);border-radius:26px;background:rgba(7,13,20,.66);backdrop-filter:blur(5px);box-shadow:0 0 24px -10px var(--glow)}
+.jumprail .jr-cap{font-family:var(--fl);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.jumprail a{font-family:var(--fl);font-size:10px;color:var(--text2);text-decoration:none;width:24px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:11px;transition:color .25s,background .25s}
+.jumprail a:hover{color:var(--gold-bright)}
+.jumprail a.active{color:var(--navy);background:linear-gradient(180deg,var(--gold-bright),var(--amber));font-weight:700;box-shadow:0 0 12px -3px var(--glow)}
+@media(min-width:621px) and (max-width:979px){.jumprail{display:none}}
+@media(max-width:620px){.jumprail{right:4px;padding:7px 4px}.jumprail a{width:21px;height:18px;font-size:9px}}
 
 /* ── Header ── */
 header{text-align:center;padding:74px 22px 10px;position:relative;z-index:2}
@@ -71,7 +79,7 @@ h1.title{font-family:var(--fd);font-weight:700;font-size:clamp(34px,7vw,62px);co
   box-shadow:0 0 22px -8px var(--glow)}
 
 /* each session row places a card to one side, a node on the spine */
-.depth{position:relative;display:flex;align-items:center;min-height:142px;margin:6px 0;
+.depth{position:relative;display:flex;align-items:center;min-height:142px;margin:6px 0;scroll-margin-top:84px;
   opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease,ease),transform .7s var(--ease,ease)}
 .depth.in{opacity:1;transform:none}
 .depth.left{justify-content:flex-start}.depth.right{justify-content:flex-end}
@@ -130,6 +138,7 @@ footer a{color:var(--gold-pale);text-decoration:none}footer a:hover{color:var(--
 <div class="depthveil" id="veil"></div>
 <a class="back" href="/sky-is-the-limit/index.html">&#8592;&nbsp;&nbsp;Sky Is The Limit</a>
 <nav class="subnav"><a href="/dashboard.html?c=1">Roll Dashboard</a></nav>
+<nav class="jumprail" id="jumprail" aria-label="Jump to session"></nav>
 
 <header>
   <img class="logo" src="/assets/img/logo_only-transparent2.webp" alt="Rectrix Caedere">
@@ -179,7 +188,7 @@ function build(){
   ARC.forEach(function(s,i){
     if(s.wp){html+='<div class="waypoint"><span>'+esc(s.wp)+'</span></div>';}
     var side=(i%2===0)?'left':'right';
-    html+='<div class="depth '+side+'" data-n="'+s.n+'">'
+    html+='<div class="depth '+side+'" id="s'+s.n+'" data-n="'+s.n+'">'
       +'<span class="node"></span><span class="connector"></span>'
       +'<a class="tcard'+(s.fin?' fin':'')+'" href="/sky-is-the-limit/session.html?n='+s.n+'" tabindex="0">'
         +'<div class="flip">'
@@ -205,6 +214,20 @@ function build(){
     +'</div>';
   });
   host.innerHTML=html;
+
+  // jump rail (built from ARC; click jumps via #anchor, smooth-scroll is CSS)
+  var rail=document.getElementById('jumprail');
+  if(rail){
+    var rh='<span class="jr-cap">Dive</span>';
+    ARC.forEach(function(s){rh+='<a href="#s'+s.n+'" data-jr="'+s.n+'" title="Session '+s.n+' \u2014 '+esc(s.t).replace(/"/g,'&quot;')+'">'+s.n+'</a>';});
+    rail.innerHTML=rh;
+    rail.querySelectorAll('a[data-jr]').forEach(function(a){
+      a.addEventListener('click',function(){var t=document.getElementById('s'+a.getAttribute('data-jr'));if(t)t.classList.add('in');});
+    });
+    var spy=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var n=e.target.getAttribute('data-n');
+      rail.querySelectorAll('a[data-jr]').forEach(function(a){a.classList.toggle('active',a.getAttribute('data-jr')===n);});}});},{rootMargin:'-45% 0px -45% 0px',threshold:0});
+    document.querySelectorAll('.depth').forEach(function(d){spy.observe(d);});
+  }
 
   // reveal on scroll
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.18});
