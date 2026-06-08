@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Ash Record — Ashfall Britannia · Rectrix Caedere</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cinzel+Decorative:wght@400;700&family=Raleway:wght@300;400;500&family=Alegreya+Sans+SC:wght@400;500;700&family=Lora:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Rectrix Caedere ground */
+  --navy:#050A0E;--card:#0C1118;--smoked:#141d28;--vellum:#F4EBDD;
+  --text:#E6E1D7;--text2:#9a958c;--muted:#6b665e;
+  /* the light arc: cold ash -> warm ember */
+  --ash:#7d8794;            /* dead, cold, top of timeline */
+  --ash-dim:#566069;
+  --copper:#8C5D3F;--gold:#C7A369;--gold-pale:#E8C690;--apricot:#DA9565;--ember:#E8A24A;
+  --coral:#B7634D;
+  --crimson:#c2554f;        /* nat 1 / bad */
+  --emerald:#4fa074;        /* nat 20 / good */
+  --border:rgba(199,163,105,.22);--border-strong:rgba(199,163,105,.42);--glow:rgba(218,149,101,.30);
+  --fd:'Cinzel Decorative','Cinzel',serif;--fdisp:'Cinzel',serif;
+  --fb:'Raleway',system-ui,sans-serif;--fl:'Alegreya Sans SC','Raleway',sans-serif;--fs:'Lora',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{min-height:100%}
+body{font-family:var(--fb);color:var(--text);background:var(--navy);
+  background-image:
+    radial-gradient(130% 80% at 50% -8%, rgba(232,162,74,.10), rgba(5,10,14,0) 42%),
+    radial-gradient(120% 90% at 50% 12%, rgba(5,10,14,.10), rgba(5,10,14,.62) 55%, rgba(5,10,14,.95)),
+    url('/assets/img/general_background.webp');
+  background-size:cover;background-position:center 28%;background-attachment:fixed;
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  padding:64px 22px 80px;position:relative;overflow-x:hidden}
+
+/* ——— FALLING ASH ——— */
+.ash{position:fixed;inset:-10% 0 0 0;pointer-events:none;z-index:1;}
+.ash i{position:absolute;top:-8%;border-radius:50%;background:rgba(210,205,196,.55);
+  filter:blur(.3px);opacity:0;animation:fall linear infinite}
+@keyframes fall{
+  0%{transform:translate3d(0,-10vh,0);opacity:0}
+  8%{opacity:.7}
+  92%{opacity:.5}
+  100%{transform:translate3d(var(--dx,14px),112vh,0);opacity:0}
+}
+/* film grain over everything */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+.back{position:fixed;top:20px;left:22px;z-index:30;font-family:var(--fl);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-pale);text-decoration:none;border:1px solid var(--border);border-radius:3px;padding:9px 16px;background:rgba(12,17,24,.65);backdrop-filter:blur(4px);transition:border-color .35s,color .35s,box-shadow .4s}
+.back:hover{border-color:var(--gold);color:var(--gold-pale);box-shadow:0 0 22px -8px var(--glow)}
+.subnav{position:fixed;top:20px;right:22px;z-index:30;display:flex;gap:8px}
+.subnav a{font-family:var(--fl);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-pale);text-decoration:none;border:1px solid var(--border);border-radius:3px;padding:9px 14px;background:rgba(12,17,24,.65);backdrop-filter:blur(4px);transition:border-color .3s,color .3s}
+.subnav a:hover{border-color:var(--border-strong);color:var(--gold-pale)}
+
+.wrap{width:100%;max-width:900px;display:flex;flex-direction:column;align-items:center;z-index:3;opacity:0;transform:translateY(14px);animation:rise .9s cubic-bezier(.2,.7,.2,1) .1s forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+.logo{height:40px;margin-bottom:20px;filter:drop-shadow(0 0 14px rgba(218,149,101,.30))}
+.page-eye{font-family:var(--fl);font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;text-align:center}
+.page-eye::before,.page-eye::after{content:'';display:inline-block;width:22px;height:1px;vertical-align:middle;background:linear-gradient(90deg,transparent,var(--copper))}
+.page-eye::before{margin-right:10px}.page-eye::after{margin-left:10px;background:linear-gradient(270deg,transparent,var(--copper))}
+h1.chron{font-family:var(--fd);font-weight:700;font-size:clamp(32px,6vw,52px);color:var(--vellum);text-align:center;line-height:1.04;text-shadow:0 2px 26px rgba(0,0,0,.65),0 0 40px rgba(232,162,74,.08);margin-bottom:12px}
+.chron-sub{font-family:var(--fs);font-style:italic;font-size:16px;color:var(--text);text-align:center;max-width:560px;margin-bottom:38px;line-height:1.5}
+
+/* stat bar */
+.era-bar{display:flex;flex-wrap:wrap;width:100%;background:linear-gradient(180deg,rgba(20,29,40,.7),rgba(12,17,24,.7));border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:clamp(34px,5vh,56px)}
+.era-seg{flex:1;min-width:104px;padding:15px 14px;text-align:center;border-right:1px solid var(--border)}
+.era-seg:last-child{border-right:none}
+.era-seg .v{font-family:var(--fdisp);font-size:22px;color:var(--gold-pale);line-height:1}
+.era-seg .v.sun{color:var(--ember);text-shadow:0 0 18px rgba(232,162,74,.45)}
+.era-seg .v.skel{display:inline-block;width:40px;height:20px;border-radius:4px;color:transparent;background:linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(255,255,255,.09) 50%,rgba(255,255,255,.04) 75%);background-size:200% 100%;animation:sh 1.6s infinite}
+.era-seg .l{font-family:var(--fl);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text2);margin-top:6px}
+@media(max-width:600px){.era-seg{flex-basis:33.33%;border-bottom:1px solid var(--border)}}
+
+/* timeline */
+.timeline{width:100%;position:relative;padding-left:38px}
+.timeline::before{content:'';position:absolute;left:13px;top:6px;bottom:6px;width:2px;
+  background:linear-gradient(180deg,
+    transparent,
+    var(--ash-dim) 4%,
+    var(--ash) 16%,
+    var(--copper) 46%,
+    var(--gold) 66%,
+    var(--apricot) 82%,
+    var(--ember) 94%,
+    transparent);
+  box-shadow:0 0 24px -6px rgba(232,162,74,.25)}
+
+.era-hdr{display:flex;align-items:center;gap:14px;margin:clamp(22px,3.6vh,38px) 0 18px;position:relative}
+.era-hdr::before{content:'';position:absolute;left:-39px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;background:var(--smoked);border:2px solid var(--ash-dim)}
+.era-hdr.dark::before{border-color:var(--copper);background:radial-gradient(circle,rgba(140,93,63,.22),var(--smoked))}
+.era-hdr.light::before{border-color:var(--ember);background:radial-gradient(circle,rgba(232,162,74,.28),var(--smoked));box-shadow:0 0 18px -4px rgba(232,162,74,.5)}
+.era-hdr-lbl{font-family:var(--fl);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--ash);white-space:nowrap}
+.era-hdr.dark .era-hdr-lbl{color:var(--gold)}
+.era-hdr.light .era-hdr-lbl{color:var(--ember)}
+.era-hdr-line{flex:1;height:1px;background:linear-gradient(90deg,currentColor,transparent);opacity:.4}
+
+/* gap / fog-of-war card */
+.gap{margin:6px 0 4px;padding:24px 22px;position:relative;background:linear-gradient(135deg,rgba(20,29,40,.45),rgba(12,17,24,.65));border:1px dashed rgba(125,135,148,.28);border-radius:10px;text-align:center;overflow:hidden}
+.gap::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(45deg,transparent,transparent 11px,rgba(125,135,148,.04) 11px,rgba(125,135,148,.04) 12px)}
+.gap-dots{font-family:var(--fd);font-size:26px;color:rgba(125,135,148,.35);line-height:1;margin-bottom:4px}
+.gap-title{font-family:var(--fdisp);font-size:16px;color:rgba(230,225,215,.6);letter-spacing:.05em;margin-bottom:6px}
+.gap-txt{font-family:var(--fs);font-style:italic;font-size:13.5px;color:var(--text2);line-height:1.5;max-width:560px;margin:0 auto 8px}
+.gap-meta{font-family:var(--fl);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(125,135,148,.9)}
+
+/* session node + card */
+.anode{position:relative;margin-bottom:16px}
+.anode::before{content:'';position:absolute;left:-29px;top:22px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,rgba(199,163,105,.25),var(--smoked));border:2px solid var(--gold);z-index:2}
+.anode.cold::before{border-color:var(--ash);background:radial-gradient(circle,rgba(125,135,148,.2),var(--smoked))}
+.anode.sun::before{border-color:var(--ember);background:radial-gradient(circle,rgba(232,162,74,.4),var(--smoked));box-shadow:0 0 16px -2px rgba(232,162,74,.6)}
+
+.acard{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px 22px;transition:border-color .35s,box-shadow .4s,transform .25s;position:relative;overflow:hidden;display:block;text-decoration:none;color:inherit;cursor:pointer}
+.acard:hover{border-color:var(--border-strong);box-shadow:0 12px 36px rgba(0,0,0,.45),0 0 0 1px rgba(199,163,105,.06);transform:translateY(-2px)}
+/* era tints on the card edge */
+.acard.cold{border-left:2px solid rgba(125,135,148,.4)}
+.acard.warm{border-left:2px solid rgba(199,163,105,.45)}
+.acard.sun{border-left:2px solid var(--ember);box-shadow:0 0 34px -14px rgba(232,162,74,.4)}
+.acard.sun:hover{border-color:rgba(232,162,74,.6);box-shadow:0 14px 42px rgba(0,0,0,.5),0 0 40px -10px rgba(232,162,74,.45)}
+.acard.sun::after{content:'';position:absolute;top:-40%;right:-20%;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(232,162,74,.14),transparent 70%);pointer-events:none}
+.acard.broken{border-style:dashed;border-color:rgba(125,135,148,.32)}
+
+.atop{display:flex;align-items:baseline;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.anum{font-family:var(--fdisp);font-size:13px;color:var(--text2);letter-spacing:.12em}
+.adate{font-family:var(--fl);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text2)}
+.abadge{font-family:var(--fl);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;padding:2px 9px;border-radius:20px;margin-left:auto;white-space:nowrap}
+.abadge.partial{border:1px solid rgba(125,135,148,.5);color:#aab2bb}
+.abadge.lost{border:1px solid rgba(125,135,148,.5);color:#aab2bb}
+.atitle{font-family:var(--fdisp);font-weight:500;font-size:clamp(17px,2.7vw,21px);color:var(--gold-pale);line-height:1.2;margin-bottom:11px}
+.acard.sun .atitle{color:var(--ember);text-shadow:0 0 22px rgba(232,162,74,.35)}
+
+.atags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:11px}
+.tg{font-family:var(--fl);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;padding:3px 9px;border-radius:20px;border:1px solid;white-space:nowrap}
+.tg.combat{border-color:rgba(183,99,77,.45);color:#d28e79;background:rgba(183,99,77,.1)}
+.tg.level{border-color:rgba(107,138,173,.5);color:#9db8d4;background:rgba(107,138,173,.12)}
+.tg.sun{border-color:rgba(232,162,74,.55);color:var(--ember);background:rgba(232,162,74,.12)}
+.tg.cliff{border-color:rgba(183,99,77,.55);color:#e0a08c;background:rgba(183,99,77,.14)}
+.tg.subdm{border-color:rgba(139,107,181,.5);color:#b59cd0;background:rgba(139,107,181,.1)}
+.tg.rp{border-color:rgba(125,135,148,.5);color:#aeb6bf;background:rgba(125,135,148,.1)}
+
+.asum{font-weight:300;font-size:13.5px;line-height:1.62;color:var(--text);margin-bottom:11px}
+.asum.skel,.aq.skel{height:3.4em;border-radius:4px;color:transparent;background:linear-gradient(90deg,rgba(255,255,255,.03) 25%,rgba(255,255,255,.07) 50%,rgba(255,255,255,.03) 75%);background-size:200% 100%;animation:sh 1.6s infinite}
+@keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+.aquote{font-family:var(--fs);font-style:italic;font-size:15.5px;color:var(--vellum);border-left:2px solid var(--copper);padding-left:14px;line-height:1.6;letter-spacing:.01em;margin-bottom:11px}
+.acard.sun .aquote{border-left-color:var(--ember)}
+.aquote .who{display:block;font-family:var(--fl);font-style:normal;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-pale);margin-top:7px}
+
+.apills{display:flex;flex-wrap:wrap;gap:6px}
+.ap{font-family:var(--fl);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:20px;border:1px solid var(--border);color:var(--text)}
+.ap.up{border-color:rgba(79,160,116,.32);color:#7fc59c;background:rgba(79,160,116,.08)}
+.ap.dn{border-color:rgba(194,85,79,.32);color:#d68e84;background:rgba(194,85,79,.08)}
+.ap.skel{width:64px;height:21px;border-color:transparent;background:rgba(255,255,255,.04);color:transparent;animation:sh 1.6s infinite}
+
+footer{margin-top:auto;padding-top:56px;font-family:var(--fl);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text2);text-align:center;line-height:2}
+footer .dot{color:var(--copper);margin:0 8px}
+footer .swear{color:var(--gold-pale)}
+@media(prefers-reduced-motion:reduce){
+  .wrap{opacity:1;transform:none;animation:none}
+  .ash{display:none}
+  .skel,.asum.skel,.aq.skel,.ap.skel,.era-seg .v.skel{animation:none}
+}
+</style>
+</head>
+<body>
+<div class="ash" id="ash" aria-hidden="true"></div>
+<a class="back" href="/ashfall-britannia/">&#8592;&nbsp;&nbsp;Ashfall Britannia</a>
+<div class="subnav">
+  <a href="/dashboard.html?c=3">Roll Dashboard</a>
+  <a href="/">The Deck</a>
+</div>
+
+<div class="wrap">
+  <img class="logo" src="/assets/img/logo_only-transparent2.webp" alt="Rectrix Caedere">
+  <div class="page-eye">Ashfall Britannia</div>
+  <h1 class="chron">Beyond the Walls</h1>
+  <p class="chron-sub">Nine sessions into a sunless Britain &mdash; the boot camp lost to ash, the Sun Shard dragged back into the dark. Every roll the record kept.</p>
+
+  <div class="era-bar">
+    <div class="era-seg"><div class="v">9</div><div class="l">Sessions Chronicled</div></div>
+    <div class="era-seg"><div class="v">4&#8201;&rarr;&#8201;8</div><div class="l">Levels Climbed</div></div>
+    <div class="era-seg"><div class="v skel" id="sv-rolls">&nbsp;</div><div class="l">Rolls Cast</div></div>
+    <div class="era-seg"><div class="v skel" id="sv-n20">&nbsp;</div><div class="l">Nat&#8201;20s</div></div>
+    <div class="era-seg"><div class="v skel" id="sv-n1">&nbsp;</div><div class="l">Nat&#8201;1s</div></div>
+    <div class="era-seg"><div class="v sun">&#9737;</div><div class="l">The Sun Shard &mdash; Recovered</div></div>
+  </div>
+
+  <div class="timeline" id="tl"></div>
+
+  <footer>
+    Rectrix Caedere <span class="dot">&#10022;</span> Ashfall Britannia <span class="dot">&#10022;</span> The Ash Record
+    <br><span id="profline" style="opacity:.75"></span>
+  </footer>
+</div>
+
+<script>
+/* ——— sources ——— */
+var SB='https://vtrtyagltwdrbastpppl.supabase.co';
+var AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0cnR5YWdsdHdkcmJhc3RwcHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTY5NTAsImV4cCI6MjA5MTkzMjk1MH0.hnpwjHGIqiUN_VmmIkOAAFGGCKsyYgl7AO3FW5vDIeM';
+var VR='https://raw.githubusercontent.com/TheLittlestAskew/ashfall_vault/main';
+var QB=VR+'/00-Campaign-Hub/Trackers/Quote%20Board%20S01-S10.md';
+var PF=VR+'/00-Campaign-Hub/Trackers/Profanity%20Ledger%20S01-S10.md';
+var SESS='01-Sessions';
+
+/* ——— the chronicle (curated; d = roll-archive-date join key) ——— */
+var ARC=[
+ {n:'01',d:'2026-02-12',lbl:'February 13, 2026',t:'Graduation Day',
+  f:SESS+'/Session%2001%20%E2%80%94%20Graduation%20Day.md',era:'cold',
+  tags:[{l:'\u2694 Combat',c:'combat'},{l:'\u21e7 Level 4\u21925',c:'level'}]},
+ {n:'02',d:'2026-02-16',lbl:'February 17, 2026',t:'Ashes of the Living',
+  f:SESS+'/Session%2002%20%E2%80%94%20Ashes%20of%20the%20Living.md',era:'cold',
+  tags:[{l:'\u2694 Combat',c:'combat'}]},
+ {n:'03',d:'2026-02-24',lbl:'February 24, 2026',t:'Mr. Cat, Esquire',
+  f:SESS+'/Session%2003%20%E2%80%94%20Mr.%20Cat,%20Esquire.md',era:'cold',
+  tags:[{l:'\u2694 Combat',c:'combat'},{l:'\u26a1 Cliffhanger',c:'cliff'}]},
+ {n:'04',d:'2026-03-03',lbl:'March 4, 2026',t:'A Gust of Wind',
+  f:SESS+'/Session%2004%20%E2%80%94%20A%20Gust%20of%20Wind.md',era:'warm',
+  tags:[{l:'\u2694 Combat',c:'combat'},{l:'\u21e7 Level 5\u21926',c:'level'},{l:'\u29c9 Sub-DM',c:'subdm'}]},
+ {n:'04.5',d:'2026-03-11',lbl:'~March 11, 2026',t:'The Basement',
+  f:SESS+'/Session%2004.5%20%E2%80%94%20The%20Basement%20(UNRECORDED).md',era:'warm',broken:true,
+  badge:{l:'Lost Session',c:'lost'},
+  tags:[{l:'\u21e7 Level 6\u21927',c:'level'},{l:'\u2014 Reconstructed',c:'rp'}]},
+ {n:'05',d:'2026-03-24',lbl:'March 24, 2026',t:'The Bell of Saint Ardas',
+  f:SESS+'/Session%2005%20%E2%80%94%20The%20Bell%20of%20Saint%20Ardas.md',era:'warm',
+  tags:[{l:'\u25cf Roleplay',c:'rp'}]},
+ {n:'06',d:'2026-04-01',lbl:'April 1, 2026',t:'Protect the Light',
+  f:SESS+'/Session%2006%20%E2%80%94%20Protect%20the%20Light.md',era:'warm',
+  tags:[{l:'\u2694 Combat',c:'combat'},{l:'\u2737 Hargraven joins',c:'level'}]},
+ {n:'07',d:'2026-04-20',lbl:'April 20, 2026',t:'The Sun Shard',
+  f:SESS+'/Session%2007%20%E2%80%94%20The%20Sun%20Shard.md',era:'sun',sun:true,
+  tags:[{l:'\u2694 Combat',c:'combat'},{l:'\u2600 Sun Shard claimed',c:'sun'}]},
+ {n:'08',d:'2026-05-04',lbl:'May 4, 2026',t:'Silence in the Library',
+  f:SESS+'/Session%2008%20%E2%80%94%20Silence%20in%20the%20Library.md',era:'sun',
+  tags:[{l:'\u2694 Combat',c:'combat'},{l:'\u2600 Solar Fist mounted',c:'sun'},{l:'\u26a1 Cliffhanger',c:'cliff'}]},
+ {n:'09',d:'2026-05-11',lbl:'May 11, 2026',t:'The Battle of the Veiled Dawn',
+  f:SESS+'/Session%2009%20%E2%80%94%20The%20Battle%20of%20the%20Veiled%20Dawn%20(PARTIAL%20RECORDING).md',era:'sun',broken:true,
+  badge:{l:'Partial Recording',c:'partial'},
+  tags:[{l:'\u2694 Combat',c:'combat'},{l:'\u21e7 Level 7\u21928',c:'level'}]}
+];
+
+/* ——— text helpers ——— */
+function clean(s){
+  return s.replace(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g,'$1')
+          .replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1')
+          .replace(/`([^`]+)`/g,'$1')
+          .replace(/[\u2600-\u27BF\uD83C-\uDBFF\uDC00-\uDFFF\u2190-\u21FF\u2B00-\u2BFF\u2150-\u218F\uFE0F\u26A0\u2691\u2705\u274C]/g,'')
+          .replace(/\s+/g,' ').trim();
+}
+function firstSentences(txt,maxChars){
+  var ss=txt.match(/[A-Z\u201c][^.!?]*[.!?]+["\u201d]?/g)||[];
+  var pick=ss.filter(function(s){return s.split(/\s+/).length>6&&s.length>40;});
+  var out;
+  if(pick.length>=2) out=pick.slice(0,2).join(' ');
+  else if(pick.length) out=pick[0];
+  else if(ss.length) out=ss.slice(0,2).join(' ');
+  else out=txt;
+  if(out.length>maxChars) out=out.slice(0,maxChars).replace(/\s+\S*$/,'')+'\u2026';
+  return out.trim();
+}
+/* Ashfall notes: pull the "## Summary" section */
+function summary(md){
+  var m=/^##\s+Summary\s*$/m.exec(md);
+  if(!m){ // fallback: first real paragraph after frontmatter
+    var body=md.replace(/^---[\s\S]*?---/,'');
+    var ln=body.split('\n').filter(function(l){return l.trim()&&!/^[#>|\-]|^\s*\|/.test(l)&&l.length>40;});
+    return ln.length?firstSentences(clean(ln[0]),260):'Session notes on file.';
+  }
+  var a=md.slice(m.index+m[0].length);
+  var e=a.search(/\n##\s|\n---/);
+  var sec=e>=0?a.slice(0,e):a;
+  return firstSentences(clean(sec),270);
+}
+
+/* ——— quote board (one fetch, split by ## S0N) ——— */
+function parseQuotes(md){
+  var map={};
+  if(!md) return map;
+  var parts=md.split(/\n(?=##\s+S\d)/);
+  parts.forEach(function(block){
+    var h=/^##\s+S(\d+(?:\.\d+)?)/m.exec(block);
+    if(!h) return;
+    var key=h[1].replace(/^0+/,'')||'0';
+    var qs=[],qm;
+    var re=/\*\*([^\n*]+?)\u00b7\s*\[([^\]]+)\]\*\*\s*\n>\s*["\u201c]([^"\u201d]+)["\u201d]?/g;
+    while((qm=re.exec(block))!==null){
+      var sp=qm[1].replace(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g,'$1').trim();
+      var tag=qm[2].trim(), tx=qm[3].trim();
+      if(tx.length>=14&&tx.length<=185) qs.push({sp:sp,tag:tag,tx:tx});
+    }
+    if(qs.length) map[key]=qs;
+  });
+  return map;
+}
+function pickQuote(list){
+  if(!list||!list.length) return null;
+  // showcase in-world lines only — never auto-surface out-of-character "above-table" chatter
+  var inWorld=list.filter(function(q){return !/above-table|\u2192/i.test(q.sp);});
+  if(inWorld.length) list=inWorld;
+  else return null;
+  function score(q){
+    var t=q.tag.toLowerCase(),s=0;
+    if(/poignant/.test(t))s+=100;
+    else if(/serious/.test(t))s+=80;
+    else if(/dm quip/.test(t))s+=50;
+    else if(/funny/.test(t))s+=46;
+    else if(/banter/.test(t))s+=22;
+    if(q.tx.length>45)s+=4; if(q.tx.length>80)s+=3; if(q.tx.length>140)s-=4;
+    s+=(q.tx.length%5); // stable jitter
+    return s;
+  }
+  return list.slice().sort(function(a,b){return score(b)-score(a);})[0];
+}
+
+/* ——— supabase roll stats, bucketed by session_date ——— */
+function rollStats(){
+  return fetch(SB+'/rest/v1/ashfall_session_rolls?select=session_date,dice_notation,individual_values&limit=4000',
+    {headers:{apikey:AK,Authorization:'Bearer '+AK,Accept:'application/json'}})
+   .then(function(r){return r.ok?r.json():[];})
+   .then(function(rows){
+     var bd={},tot={total:0,n20:0,n1:0};
+     rows.forEach(function(row){
+       var d=row.session_date; if(!d) return;
+       if(!bd[d]) bd[d]={total:0,n20:0,n1:0};
+       bd[d].total++; tot.total++;
+       if(row.dice_notation&&/^1d20/.test(row.dice_notation)){
+         var v=row.individual_values;
+         if(typeof v==='string'){try{v=JSON.parse(v);}catch(e){}}
+         if(Array.isArray(v)&&v.length){
+           if(v[0]===20){bd[d].n20++;tot.n20++;}
+           if(v[0]===1){bd[d].n1++;tot.n1++;}
+         }
+       }
+     });
+     return {bd:bd,tot:tot};
+   }).catch(function(){return {bd:{},tot:{total:0,n20:0,n1:0}};});
+}
+
+function fetchMd(url){return fetch(url).then(function(r){return r.ok?r.text():null;}).catch(function(){return null;});}
+
+/* ——— ash particles ——— */
+function makeAsh(){
+  var host=document.getElementById('ash');
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var N=46;
+  for(var i=0;i<N;i++){
+    var f=document.createElement('i');
+    var sz=(Math.random()*2.4+0.8).toFixed(2);
+    f.style.width=sz+'px';f.style.height=sz+'px';
+    f.style.left=(Math.random()*100).toFixed(2)+'%';
+    var dur=(Math.random()*16+14).toFixed(1);
+    f.style.animationDuration=dur+'s';
+    f.style.animationDelay=(-Math.random()*dur).toFixed(1)+'s';
+    f.style.setProperty('--dx',(Math.random()*60-20).toFixed(0)+'px');
+    f.style.opacity=(Math.random()*0.4+0.3).toFixed(2);
+    host.appendChild(f);
+  }
+}
+
+/* ——— build ——— */
+function eraHeader(cls,label){
+  return '<div class="era-hdr '+cls+'"><span class="era-hdr-lbl">'+label+'</span><div class="era-hdr-line"></div></div>';
+}
+function card(s){
+  var cls='acard '+(s.sun?'sun':(s.era==='cold'?'cold':'warm'))+(s.broken?' broken':'');
+  var node='anode'+(s.sun?' sun':(s.era==='cold'?' cold':''));
+  var badge=s.badge?'<span class="abadge '+s.badge.c+'">'+s.badge.l+'</span>':'';
+  var tags=(s.tags||[]).map(function(t){return '<span class="tg '+t.c+'">'+t.l+'</span>';}).join('');
+  return '<div class="'+node+'"><a class="'+cls+'" href="session.html?n='+s.n+'">'
+    +'<div class="atop"><span class="anum">Session '+s.n+'</span><span class="adate">'+s.lbl+'</span>'+badge+'</div>'
+    +'<div class="atitle">'+s.t+'</div>'
+    +(tags?'<div class="atags">'+tags+'</div>':'')
+    +'<div class="asum skel" id="as'+s.id+'">&nbsp;</div>'
+    +'<div class="aq" id="aq'+s.id+'"></div>'
+    +'<div class="apills"><span class="ap skel" id="pt'+s.id+'">&nbsp;</span><span class="ap skel" id="p20'+s.id+'">&nbsp;</span><span class="ap skel" id="p1'+s.id+'">&nbsp;</span></div>'
+    +'</a></div>';
+}
+
+function init(){
+  makeAsh();
+  ARC.forEach(function(s){s.id=s.n.replace('.','_');});
+  var tl=document.getElementById('tl'),h='';
+
+  /* boot-camp fog-of-war */
+  h+=eraHeader('','Before the Records \u00b7 Boot Camp \u00b7 Nov 2025');
+  h+='<div class="gap"><div class="gap-dots">&ctdot;</div>'
+    +'<div class="gap-title">The Ashwarden Trials</div>'
+    +'<div class="gap-txt">Before the chronicle began, the recruits trained behind the walls and walked their first patrols into the dark. No recording, no notes &mdash; only the dice remember.</div>'
+    +'<div class="gap-meta" id="bootmeta">~196 rolls survive &nbsp;&middot;&nbsp; Unchronicled</div></div>';
+
+  h+=eraHeader('','Behind the Walls \u00b7 Feb 2026');
+  h+=card(ARC[0])+card(ARC[1]);
+  h+=eraHeader('dark','Into the Dark \u00b7 Feb&ndash;Apr 2026');
+  h+=card(ARC[2])+card(ARC[3])+card(ARC[4])+card(ARC[5])+card(ARC[6]);
+  h+=eraHeader('light','The Light Recovered \u00b7 Apr&ndash;May 2026');
+  h+=card(ARC[7])+card(ARC[8])+card(ARC[9]);
+  tl.innerHTML=h;
+
+  /* stats */
+  rollStats().then(function(R){
+    document.getElementById('sv-rolls').textContent=R.tot.total||'\u2014';document.getElementById('sv-rolls').className='v';
+    document.getElementById('sv-n20').textContent=R.tot.n20;document.getElementById('sv-n20').className='v';
+    document.getElementById('sv-n1').textContent=R.tot.n1;document.getElementById('sv-n1').className='v';
+    var bc=R.bd['2025-11-12'];
+    if(bc) document.getElementById('bootmeta').innerHTML=bc.total+' rolls survive &nbsp;&middot;&nbsp; Unchronicled';
+    ARC.forEach(function(s){
+      var st=R.bd[s.d]||{total:0,n20:0,n1:0};
+      var pt=document.getElementById('pt'+s.id),p20=document.getElementById('p20'+s.id),p1=document.getElementById('p1'+s.id);
+      if(pt){pt.textContent=st.total+' rolls';pt.className='ap';}
+      if(p20){p20.textContent='nat\u202f20 \u00d7\u202f'+st.n20;p20.className='ap up';}
+      if(p1){p1.textContent='nat\u202f1 \u00d7\u202f'+st.n1;p1.className='ap dn';}
+    });
+  });
+
+  /* quotes (single fetch) */
+  var quoteMapP=fetchMd(QB).then(parseQuotes);
+
+  /* per-session summary + quote */
+  ARC.forEach(function(s){
+    fetchMd(VR+'/'+s.f).then(function(md){
+      var sel=document.getElementById('as'+s.id);
+      if(sel){
+        if(md){sel.textContent=summary(md);sel.className='asum';}
+        else{sel.textContent='Session notes on file.';sel.className='asum';}
+      }
+    });
+    quoteMapP.then(function(map){
+      var key=String(parseFloat(s.n)); // '04.5'->'4.5', '01'->'1'
+      var q=pickQuote(map[key]);
+      var box=document.getElementById('aq'+s.id);
+      if(box&&q){
+        box.className='aquote';
+        box.innerHTML='\u201c'+q.tx.replace(/</g,'&lt;')+'\u201d<span class="who">\u2014 '+q.sp.replace(/</g,'&lt;')+'</span>';
+      }
+    });
+  });
+
+  /* profanity easter egg: sum the bold per-row session totals */
+  fetchMd(PF).then(function(md){
+    if(!md) return;
+    var m,total=0,re=/\*\*(\d+)\*\*/g;
+    while((m=re.exec(md))!==null) total+=parseInt(m[1],10);
+    if(total>0) document.getElementById('profline').innerHTML='Curses sworn, and counted: <span class="swear">'+total+'</span> (attributed)';
+  });
+}
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
