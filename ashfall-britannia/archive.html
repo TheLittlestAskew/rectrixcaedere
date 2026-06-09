@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cinzel+Decorative:wght@400;700&family=Raleway:wght@300;400;500&family=Alegreya+Sans+SC:wght@400;500;700&family=Lora:ital@0;1&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="/assets/img/vamp.webp">
 <style>
 :root{
   /* Rectrix Caedere ground */
@@ -49,6 +50,12 @@ body{font-family:var(--fb);color:var(--text);background:var(--navy);
 /* film grain over everything */
 body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.05;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ——— JUMP SCARE ——— */
+#scare{position:fixed;inset:0;z-index:99999;background:#000;display:flex;align-items:center;justify-content:center}
+#scare img{width:100%;height:100%;object-fit:cover;opacity:0}
+#scare.show img{opacity:1}                 /* snaps in, no transition — that's the point */
+#scare.gone{opacity:0;transition:opacity .15s ease-out}
 
 .back{position:fixed;top:20px;left:22px;z-index:30;font-family:var(--fl);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-pale);text-decoration:none;border:1px solid var(--border);border-radius:3px;padding:9px 16px;background:rgba(12,17,24,.65);backdrop-filter:blur(4px);transition:border-color .35s,color .35s,box-shadow .4s}
 .back:hover{border-color:var(--gold);color:var(--gold-pale);box-shadow:0 0 22px -8px var(--glow)}
@@ -165,6 +172,26 @@ footer .swear{color:var(--gold-pale)}
 </style>
 </head>
 <body>
+<div id="scare" aria-hidden="true"><img src="/assets/img/vamp.webp" alt=""></div>
+<script>
+(function(){
+  var s=document.getElementById('scare');
+  if(!s) return;
+  // honor reduced-motion: no sudden full-screen flash for those users
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){ s.parentNode.removeChild(s); return; }
+  var img=s.querySelector('img');
+  var HOLD=190, FADE=180, MAXWAIT=700;   // tweak HOLD for a longer/shorter scare
+  function vanish(){ s.classList.add('gone'); setTimeout(function(){ if(s.parentNode) s.parentNode.removeChild(s); }, FADE+60); }
+  function flash(){ s.classList.add('show'); setTimeout(vanish, HOLD); }
+  if(img.complete && img.naturalWidth>0){ flash(); }
+  else{
+    var done=false;
+    img.addEventListener('load',function(){ if(!done){done=true;flash();} });
+    img.addEventListener('error',function(){ if(s.parentNode) s.parentNode.removeChild(s); }); // image missing -> skip, load normally
+    setTimeout(function(){ if(done) return; done=true; if(img.naturalWidth>0) flash(); else if(s.parentNode) s.parentNode.removeChild(s); }, MAXWAIT);
+  }
+})();
+</script>
 <div class="ash" id="ash" aria-hidden="true"></div>
 <a class="back" href="/ashfall-britannia/">&#8592;&nbsp;&nbsp;Ashfall Britannia</a>
 <div class="subnav">
