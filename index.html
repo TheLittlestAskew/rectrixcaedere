@@ -232,14 +232,16 @@ const LIVE = true;
 const IMG  = './assets/img/';
 const img  = f => IMG + f;
 
+const INSPIRED = {src:'flame_dragon_emblem.webp', label:'Part of the Inspired R&R group'};
 const CAMPAIGNS = [
-  { name:'Sky Is The Limit', arcana:'XVIII · The Moon', status:'active', inspired:true,
+  { name:'Sky Is The Limit', arcana:'XVIII · The Moon', status:'active', badge:INSPIRED,
     face:'Sky_tarot_face.webp', href:'./sky-is-the-limit/' },
-  { name:'Pacts & Power', arcana:'XVI · The Tower', status:'active', flag:'finale', inspired:true,
+  { name:'Pacts & Power', arcana:'XVI · The Tower', status:'active', flag:'finale', badge:INSPIRED,
     face:'pacts_tarot_face.webp', href:'./pacts-and-power/' },
-  { name:'Where the Flowers Remember', arcana:'X · The Wheel of Fortune', status:'paused', inspired:true,
+  { name:'Where the Flowers Remember', arcana:'X · The Wheel of Fortune', status:'paused', badge:INSPIRED,
     face:'wtfr_tarot_face.webp', href:'./where-the-flowers-remember/' },
   { name:'Ashfall Britannia', arcana:'XIII · Death', status:'active',
+    badge:{src:'dungeon_archway_logo.webp', label:'Part of a campaign group'},
     face:'ashfall_britannia_tarot_face.webp', href:'./ashfall-britannia/' }
 ];
 const STATUS_LABEL = {active:'Active', paused:'Paused', 'coming-soon':'Coming soon'};
@@ -259,7 +261,7 @@ CAMPAIGNS.forEach((c,i)=>{
   slot.className='slot'; slot.dataset.state=c.status; slot.style.setProperty('--i',i);
   const ribbon=c.flag==='finale'?`<div class="ribbon ribbon--finale">Finale</div>`:(c.status==='active'?'':`<div class="ribbon ribbon--${c.status==='paused'?'paused':'soon'}">${STATUS_LABEL[c.status]}</div>`);
   const revealFace=live?`<div class="face face--reveal"><img src="${img(c.face)}" alt="${c.name} tarot card" loading="lazy"></div>`:'';
-  const badge=c.inspired?`<img class="group-badge" src="${img('flame_dragon_emblem.webp')}" alt="" role="img" aria-label="Part of the Inspired R&R group" title="Part of the Inspired R&R group" loading="lazy">`:'';
+  const badge=c.badge?`<img class="group-badge" src="${img(c.badge.src)}" alt="" role="img" aria-label="${c.badge.label}" title="${c.badge.label}" loading="lazy">`:'';
   const soon=c.status==='coming-soon'?`<div class="soon-plaque">Coming&nbsp;Soon<small>Art in progress</small></div>`:'';
   slot.innerHTML=`
     <div class="card" tabindex="${live?0:-1}" role="${live?'button':'img'}" aria-label="${live?('Enter '+c.name):(c.name+' \u2014 coming soon')}">
