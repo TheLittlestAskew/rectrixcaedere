@@ -152,6 +152,14 @@ body.crossed .slot{opacity:1;transform:none;
 .ribbon--paused{background:var(--rc-info)}
 .ribbon--soon{background:var(--rc-burnt-coral);color:var(--rc-text-vellum)}
 .ribbon--finale{background:linear-gradient(180deg,var(--rc-moonlit-apricot),var(--rc-warm-amber));color:#0b1118}
+.group-badge{position:absolute;left:11px;bottom:12px;z-index:4;
+  height:clamp(40px,11.5%,54px);width:auto;pointer-events:none;
+  filter:drop-shadow(0 2px 5px rgba(0,0,0,.6)) drop-shadow(0 0 9px rgba(0,0,0,.35));
+  transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.slot[data-state="active"] .card:hover .group-badge,
+.slot[data-state="paused"] .card:hover .group-badge,
+.slot[data-state="active"] .card:focus-within .group-badge,
+.slot[data-state="paused"] .card:focus-within .group-badge{transform:scale(1.06)}
 .soon-plaque{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;
   font-family:var(--rc-font-label);font-weight:700;font-size:12px;letter-spacing:.2em;
   text-transform:uppercase;color:var(--rc-pale-gold-text);text-align:center;
@@ -225,11 +233,11 @@ const IMG  = './assets/img/';
 const img  = f => IMG + f;
 
 const CAMPAIGNS = [
-  { name:'Sky Is The Limit', arcana:'XVIII · The Moon', status:'active',
+  { name:'Sky Is The Limit', arcana:'XVIII · The Moon', status:'active', inspired:true,
     face:'Sky_tarot_face.webp', href:'./sky-is-the-limit/' },
-  { name:'Pacts & Power', arcana:'XVI · The Tower', status:'active', flag:'finale',
+  { name:'Pacts & Power', arcana:'XVI · The Tower', status:'active', flag:'finale', inspired:true,
     face:'pacts_tarot_face.webp', href:'./pacts-and-power/' },
-  { name:'Where the Flowers Remember', arcana:'X · The Wheel of Fortune', status:'paused',
+  { name:'Where the Flowers Remember', arcana:'X · The Wheel of Fortune', status:'paused', inspired:true,
     face:'wtfr_tarot_face.webp', href:'./where-the-flowers-remember/' },
   { name:'Ashfall Britannia', arcana:'XIII · Death', status:'active',
     face:'ashfall_britannia_tarot_face.webp', href:'./ashfall-britannia/' }
@@ -251,10 +259,12 @@ CAMPAIGNS.forEach((c,i)=>{
   slot.className='slot'; slot.dataset.state=c.status; slot.style.setProperty('--i',i);
   const ribbon=c.flag==='finale'?`<div class="ribbon ribbon--finale">Finale</div>`:(c.status==='active'?'':`<div class="ribbon ribbon--${c.status==='paused'?'paused':'soon'}">${STATUS_LABEL[c.status]}</div>`);
   const revealFace=live?`<div class="face face--reveal"><img src="${img(c.face)}" alt="${c.name} tarot card" loading="lazy"></div>`:'';
+  const badge=c.inspired?`<img class="group-badge" src="${img('inspired_rnr_badge.webp')}" alt="" role="img" aria-label="Part of the Inspired R&R group" title="Part of the Inspired R&R group" loading="lazy">`:'';
   const soon=c.status==='coming-soon'?`<div class="soon-plaque">Coming&nbsp;Soon<small>Art in progress</small></div>`:'';
   slot.innerHTML=`
     <div class="card" tabindex="${live?0:-1}" role="${live?'button':'img'}" aria-label="${live?('Enter '+c.name):(c.name+' \u2014 coming soon')}">
       ${ribbon}
+      ${badge}
       <div class="card__inner">
         <div class="face face--rest">
           <img src="${img('tarotcard_back.webp')}" alt="${live?'Face-down tarot card':(c.name+' \u2014 card not yet revealed')}" loading="lazy">
