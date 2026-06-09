@@ -94,6 +94,10 @@ body.crossed #veil{opacity:0;transform:scale(1.08);filter:blur(7px);pointer-even
   padding:clamp(28px,5vh,72px) 20px 48px;
   opacity:0;visibility:hidden;transition:opacity .9s ease .35s, visibility 0s linear .35s}
 body.crossed #archive{opacity:1;visibility:visible;transition:opacity .9s ease .35s}
+html.rc-skip-veil #veil{display:none}
+html.rc-skip-veil #archive{opacity:1;visibility:visible;transition:none}
+html.rc-skip-veil .slot{opacity:1;transform:none;transition:none}
+html.rc-skip-veil body{overflow:auto}
 header{text-align:center;max-width:760px;z-index:2;margin-bottom:clamp(26px,4vh,52px)}
 .sigil-logo{height:62px;width:auto;margin:0 auto 14px;display:block;
   filter:drop-shadow(0 0 12px rgba(218,149,101,.3))}
@@ -188,6 +192,10 @@ footer .dot{color:var(--rc-aged-copper-gold);margin:0 8px}
   .veil-inner>*{opacity:1;transform:none} .slot{opacity:1;transform:none} .card{transform:none !important}
 }
 </style>
+<script>
+  /* If the veil was already crossed this visit, skip straight to the deck (no re-crossing). */
+  try { if (sessionStorage.getItem('rc_crossed') === '1') document.documentElement.classList.add('rc-skip-veil'); } catch (e) {}
+</script>
 </head>
 <body class="pre">
 
@@ -288,6 +296,7 @@ CAMPAIGNS.forEach((c,i)=>{
 });
 
 document.getElementById('cross').addEventListener('click',()=>{
+  try{ sessionStorage.setItem('rc_crossed','1'); }catch(e){}
   document.body.classList.add('crossed'); document.body.classList.remove('pre');
   setTimeout(()=>{ const v=document.getElementById('veil'); if(v) v.style.display='none'; },1200);
 });
