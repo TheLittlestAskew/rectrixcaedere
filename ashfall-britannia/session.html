@@ -29,9 +29,10 @@ body{font-family:var(--fb);color:var(--text);background:var(--navy);
   background-size:cover;background-position:center 28%;background-attachment:fixed;
   min-height:100vh;display:flex;flex-direction:column;align-items:center;
   padding:64px 22px 60px;position:relative;overflow-x:hidden}
-.ash{position:fixed;inset:-10% 0 0 0;pointer-events:none;z-index:1}
-.ash i{position:absolute;top:-8%;border-radius:50%;background:rgba(210,205,196,.5);filter:blur(.3px);opacity:0;animation:fall linear infinite}
-@keyframes fall{0%{transform:translate3d(0,-10vh,0);opacity:0}8%{opacity:.6}92%{opacity:.45}100%{transform:translate3d(var(--dx,14px),112vh,0);opacity:0}}
+.ash{position:fixed;inset:-12% 0 0 0;pointer-events:none;z-index:1}
+.ash i{position:absolute;top:-10%;border-radius:50%;background:rgba(222,216,204,.9);box-shadow:0 0 3px rgba(222,216,204,.5);opacity:0;animation:fall linear infinite}
+.ash i.ember{background:rgba(232,162,74,.85);box-shadow:0 0 7px rgba(232,162,74,.75)}
+@keyframes fall{0%{transform:translate3d(0,-10vh,0) scale(1);opacity:0}6%{opacity:.95}50%{transform:translate3d(calc(var(--dx,14px)*.5),52vh,0) scale(.96)}94%{opacity:.72}100%{transform:translate3d(var(--dx,14px),114vh,0) scale(.9);opacity:0}}
 body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .back{position:fixed;top:20px;left:22px;z-index:30;font-family:var(--fl);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-pale);text-decoration:none;border:1px solid var(--border);border-radius:3px;padding:9px 16px;background:rgba(12,17,24,.65);backdrop-filter:blur(4px);transition:border-color .35s,color .35s,box-shadow .4s}
 .back:hover{border-color:var(--gold);color:var(--gold-pale);box-shadow:0 0 22px -8px var(--glow)}
@@ -102,7 +103,7 @@ footer .dot{color:var(--copper);margin:0 8px}
 .loading,.err{font-family:var(--fs);font-style:italic;color:var(--text2);text-align:center;padding:60px 20px;font-size:16px}
 .err{color:var(--coral);font-style:normal;font-family:var(--fb)}
 .err a{color:var(--gold-pale);text-decoration:underline}
-@media(prefers-reduced-motion:reduce){.wrap{opacity:1;transform:none;animation:none}.ash{display:none}}
+@media(prefers-reduced-motion:reduce){.wrap{opacity:1;transform:none;animation:none}.ash i{animation:none}}
 @media(max-width:600px){.snav{flex-direction:column}}
 </style>
 </head>
@@ -214,8 +215,10 @@ function rollStats(date){
 
 function ash(){
   var host=document.getElementById('ash');
-  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  for(var i=0;i<40;i++){var f=document.createElement('i');var sz=(Math.random()*2.2+0.8).toFixed(2);f.style.width=sz+'px';f.style.height=sz+'px';f.style.left=(Math.random()*100).toFixed(2)+'%';var d=(Math.random()*16+14).toFixed(1);f.style.animationDuration=d+'s';f.style.animationDelay=(-Math.random()*d).toFixed(1)+'s';f.style.setProperty('--dx',(Math.random()*60-20).toFixed(0)+'px');f.style.opacity=(Math.random()*0.4+0.3).toFixed(2);host.appendChild(f);}
+  if(!host)return;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var N=reduce?40:66;
+  for(var i=0;i<N;i++){var f=document.createElement('i');var sz=(Math.random()*3.2+1).toFixed(2);f.style.width=sz+'px';f.style.height=sz+'px';f.style.left=(Math.random()*100).toFixed(2)+'%';if(Math.random()<0.16)f.className='ember';if(reduce){f.style.top=(Math.random()*100).toFixed(2)+'%';f.style.opacity=(Math.random()*0.25+0.12).toFixed(2);}else{var d=(Math.random()*15+11).toFixed(1);f.style.animationDuration=d+'s';f.style.animationDelay=(-Math.random()*d).toFixed(1)+'s';f.style.setProperty('--dx',(Math.random()*80-30).toFixed(0)+'px');}host.appendChild(f);}
 }
 
 function init(){
