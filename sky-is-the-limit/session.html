@@ -167,23 +167,24 @@ td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weigh
 #z-mbody strong{color:var(--text)}#z-mbody ul,#z-mbody ol{margin:0 0 14px 18px;color:var(--text2)}#z-mbody li{margin-bottom:8px}
 .pp-close{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--muted);font-size:24px;cursor:pointer;z-index:2}.pp-close:hover{color:var(--gold)}
 @media(max-width:900px){.pp-grid,.pp-mini,.pp-fnotes{grid-template-columns:1fr}}
-.pp-audio .pa-parts{display:flex;gap:6px;margin-bottom:13px;flex-wrap:wrap}
-.pp-audio .pa-part{font-family:var(--fl);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-pale);background:rgba(13,20,28,.6);border:1px solid var(--border);border-radius:20px;padding:4px 12px;cursor:pointer;transition:border-color .3s,color .3s}
-.pp-audio .pa-part.on{border-color:var(--gold);color:var(--gold-bright)}
-.pp-audio .pa-part.lost{color:var(--coral);cursor:default;opacity:.8}
-.pp-audio .pa-bar{display:flex;align-items:center;gap:12px}
-.pp-audio .pa-play{flex:0 0 auto;width:38px;height:38px;border-radius:50%;border:1px solid var(--border-strong);background:linear-gradient(180deg,var(--smoked),var(--card));color:var(--gold-pale);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .3s,color .3s,box-shadow .4s}
-.pp-audio .pa-play:hover{border-color:var(--gold);color:var(--gold-bright);box-shadow:0 0 14px var(--glow)}
-.pp-audio .pa-play svg{width:15px;height:15px;fill:currentColor;display:block}
-.pp-audio .pa-track{position:relative;flex:1 1 auto;height:5px;border-radius:3px;background:var(--border);cursor:pointer}
-.pp-audio .pa-track:focus-visible{outline:1px solid var(--gold);outline-offset:4px}
-.pp-audio .pa-fill{position:absolute;top:0;left:0;height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,var(--copper),var(--gold))}
-.pp-audio .pa-knob{position:absolute;top:50%;left:0;width:11px;height:11px;border-radius:50%;background:var(--gold-pale);transform:translate(-50%,-50%);box-shadow:0 0 6px var(--glow);opacity:0;transition:opacity .2s}
-.pp-audio .pa-track:hover .pa-knob,.pp-audio .pa-track:focus-visible .pa-knob{opacity:1}
-.pp-audio .pa-time{flex:0 0 auto;font-family:var(--fl);font-size:11px;letter-spacing:.07em;color:var(--muted);white-space:nowrap}
-.pp-audio .pa-time .pa-sep{margin:0 4px;opacity:.5}
-.pp-audio .pa-lost-note{font-family:var(--fl);font-size:11px;color:var(--coral);margin-top:2px}
-.pp-audio.is-busy .pa-time{opacity:.45}
+  /* ===== Session recording player ===== */
+  .pp-audio .pa-parts{display:flex;gap:6px;margin-bottom:13px;flex-wrap:wrap}
+  .pp-audio .pa-part{font-family:var(--fl);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-pale);background:rgba(13,20,28,.6);border:1px solid var(--border);border-radius:20px;padding:4px 12px;cursor:pointer;transition:border-color .3s,color .3s}
+  .pp-audio .pa-part.on{border-color:var(--gold);color:var(--gold-bright)}
+  .pp-audio .pa-part.lost{color:var(--coral);cursor:default;opacity:.8}
+  .pp-audio .pa-bar{display:flex;align-items:center;gap:12px}
+  .pp-audio .pa-play{flex:0 0 auto;width:38px;height:38px;border-radius:50%;border:1px solid var(--border-strong);background:linear-gradient(180deg,var(--smoked),var(--card));color:var(--gold-pale);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .3s,color .3s,box-shadow .4s}
+  .pp-audio .pa-play:hover{border-color:var(--gold);color:var(--gold-bright);box-shadow:0 0 14px var(--glow)}
+  .pp-audio .pa-play svg{width:15px;height:15px;fill:currentColor;display:block}
+  .pp-audio .pa-track{position:relative;flex:1 1 auto;height:5px;border-radius:3px;background:var(--border);cursor:pointer}
+  .pp-audio .pa-track:focus-visible{outline:1px solid var(--gold);outline-offset:4px}
+  .pp-audio .pa-fill{position:absolute;top:0;left:0;height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,var(--copper),var(--gold))}
+  .pp-audio .pa-knob{position:absolute;top:50%;left:0;width:11px;height:11px;border-radius:50%;background:var(--gold-pale);transform:translate(-50%,-50%);box-shadow:0 0 6px var(--glow);opacity:0;transition:opacity .2s}
+  .pp-audio .pa-track:hover .pa-knob,.pp-audio .pa-track:focus-visible .pa-knob{opacity:1}
+  .pp-audio .pa-time{flex:0 0 auto;font-family:var(--fl);font-size:11px;letter-spacing:.07em;color:var(--muted);white-space:nowrap}
+  .pp-audio .pa-time .pa-sep{margin:0 4px;opacity:.5}
+  .pp-audio .pa-lost-note{font-family:var(--fl);font-size:11px;color:var(--coral);margin-top:2px}
+  .pp-audio.is-busy .pa-time{opacity:.45}
 </style>
 </head>
 <body>
@@ -208,6 +209,22 @@ td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weigh
   </section>
   <div class="pp-grid" id="z-grid" style="display:none">
     <div class="pp-col">
+      <section class="pp-card pp-audio" id="z-audio-card" style="display:none">
+        <h2>Session recording</h2>
+        <div class="pa-parts" id="z-audio-parts"></div>
+        <div class="pa-bar" id="z-audio-bar">
+          <button class="pa-play" id="z-audio-toggle" type="button" aria-label="Play recording">
+            <svg class="pa-ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="pa-ic-pause" viewBox="0 0 24 24" aria-hidden="true" style="display:none"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+          </button>
+          <div class="pa-track" id="z-audio-track" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="pa-fill" id="z-audio-fill"></div><div class="pa-knob" id="z-audio-knob"></div>
+          </div>
+          <div class="pa-time"><span id="z-audio-cur">0:00</span><span class="pa-sep">/</span><span id="z-audio-dur">0:00</span></div>
+        </div>
+        <div class="pa-lost-note" id="z-audio-lost" style="display:none"></div>
+        <audio id="z-audio-el" preload="none"></audio>
+      </section>
       <section class="pp-card"><h2>At a glance</h2><dl class="pp-kv" id="z-meta"></dl>
         <div class="pp-lbl" style="margin:14px 0 4px">Party present</div><div class="pp-chips" id="z-party"></div>
         <div class="pp-lbl" id="z-guestnote" style="display:none;font-size:10px;color:var(--muted);margin-top:8px">&#42; guest planeswalker</div></section>
@@ -244,9 +261,53 @@ td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weigh
 var SB='https://vtrtyagltwdrbastpppl.supabase.co';
 var AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0cnR5YWdsdHdkcmJhc3RwcHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTY5NTAsImV4cCI6MjA5MTkzMjk1MH0.hnpwjHGIqiUN_VmmIkOAAFGGCKsyYgl7AO3FW5vDIeM';
 var VR='https://raw.githubusercontent.com/TheLittlestAskew/sitl_vault/main';
+/* ===== Session recording player ===== */
+var RECBASE='https://REPLACE-WITH-YOUR-R2-PUBLIC-DOMAIN';  /* e.g. https://media.rectrixcaedere.com  (NO trailing slash) */
+/* Per-session audio lives in the ARC entry as a `rec` field:
+     single file : rec:'/sitl/s01.mp3'                         (path is resolved against RECBASE)
+     full URL    : rec:'https://host/clip.mp3'                 (used exactly as written)
+     multi-part  : rec:[{lbl:'Pt 1',url:'/sitl/s05_pt1.mp3'},{lbl:'Pt 2',url:'/sitl/s05_pt2.mp3'}]
+     lost part   : rec:[{lbl:'Pt 1',lost:true},{lbl:'Pt 2',url:'/sitl/s16_pt2.mp3'}]
+   No rec field -> the card hides itself. */
+var EL={};
+['card','parts','bar','toggle','track','fill','knob','cur','dur','lost','el'].forEach(function(k){EL[k]=document.getElementById('z-audio-'+k);});
+function paFmt(t){if(!isFinite(t)||t<0)t=0;t=Math.floor(t);var h=Math.floor(t/3600),m=Math.floor((t%3600)/60),s=t%60;var ss=(s<10?'0':'')+s;return h?h+':'+(m<10?'0':'')+m+':'+ss:m+':'+ss;}
+function paUrl(u){return /^https?:|^blob:|^data:/.test(u)?u:(RECBASE+u);}
+function zAudio(rec){
+  var card=EL.card,a=EL.el;
+  if(!card)return;
+  var parts=[];
+  if(rec){ if(typeof rec==='string')parts=[{lbl:'Recording',url:rec}]; else if(Array.isArray(rec))parts=rec.slice(); }
+  var playable=parts.filter(function(p){return p.url && !p.lost;});
+  if(!parts.length || (!playable.length && !parts.some(function(p){return p.lost;}))){card.style.display='none';return;}
+  card.style.display='';
+  var multi=parts.length>1, current=-1;
+  function setToggle(playing){ card.querySelector('.pa-ic-play').style.display=playing?'none':''; card.querySelector('.pa-ic-pause').style.display=playing?'':'none'; EL.toggle.setAttribute('aria-label',playing?'Pause recording':'Play recording'); }
+  function loadPart(i){ current=i; var p=parts[i]; Array.prototype.forEach.call(EL.parts.children,function(ch,ci){ch.classList.toggle('on',ci===i && !parts[ci].lost);}); a.src=paUrl(p.url); setToggle(false); EL.fill.style.width='0%'; EL.knob.style.left='0%'; EL.cur.textContent='0:00'; EL.dur.textContent='0:00'; }
+  EL.parts.innerHTML='';
+  if(multi || parts.some(function(p){return p.lost;})){
+    parts.forEach(function(p,i){ var b=document.createElement(p.lost?'span':'button'); b.className='pa-part'+(p.lost?' lost':''); b.textContent=p.lbl+(p.lost?'  \u00b7 lost':''); if(!p.lost)b.onclick=function(){ if(i!==current)loadPart(i); a.play(); }; EL.parts.appendChild(b); });
+  }
+  var anyPlayable=playable.length>0;
+  EL.bar.style.display=anyPlayable?'':'none';
+  if(!anyPlayable){ EL.lost.style.display=''; EL.lost.textContent='Recording unavailable for this session.'; return; }
+  EL.lost.style.display='none';
+  EL.toggle.onclick=function(){ if(a.paused)a.play(); else a.pause(); };
+  a.onplay=function(){setToggle(true);};
+  a.onpause=function(){setToggle(false);};
+  a.onended=function(){setToggle(false);EL.fill.style.width='0%';EL.knob.style.left='0%';a.currentTime=0;};
+  a.onloadstart=function(){card.classList.add('is-busy');};
+  a.oncanplay=function(){card.classList.remove('is-busy');};
+  a.onloadedmetadata=function(){EL.dur.textContent=paFmt(a.duration);};
+  a.ontimeupdate=function(){var pct=a.duration?(a.currentTime/a.duration*100):0;EL.fill.style.width=pct+'%';EL.knob.style.left=pct+'%';EL.cur.textContent=paFmt(a.currentTime);EL.track.setAttribute('aria-valuenow',Math.round(pct));};
+  function seek(x){var r=EL.track.getBoundingClientRect();var pct=Math.min(1,Math.max(0,(x-r.left)/r.width));if(a.duration)a.currentTime=pct*a.duration;}
+  EL.track.onclick=function(e){seek(e.clientX);};
+  EL.track.onkeydown=function(e){if(!a.duration)return;if(e.key==='ArrowRight'){a.currentTime=Math.min(a.duration,a.currentTime+5);e.preventDefault();}else if(e.key==='ArrowLeft'){a.currentTime=Math.max(0,a.currentTime-5);e.preventDefault();}else if(e.key===' '||e.key==='Enter'){EL.toggle.onclick();e.preventDefault();}};
+  loadPart(parts.indexOf(playable[0]));
+}
 var ARC=[
-  {n:'01',d:'2025-10-12',lbl:'October 12, 2025',f:'01-Sessions/Session%2001%20%E2%80%94%20Prisoners%20of%20the%20Underdark.md',t:'Prisoners of the Underdark'},
-  {n:'02',d:'2025-10-26',lbl:'October 26, 2025',f:'01-Sessions/Session%2002%20%E2%80%94%20Come%20Get%20Your%20Shit.md',t:'Come Get Your Shit'},
+  {n:'01',d:'2025-10-12',lbl:'October 12, 2025',f:'01-Sessions/Session%2001%20%E2%80%94%20Prisoners%20of%20the%20Underdark.md',t:'Prisoners of the Underdark',rec:'/sitl/s01.mp3'},
+  {n:'02',d:'2025-10-26',lbl:'October 26, 2025',f:'01-Sessions/Session%2002%20%E2%80%94%20Come%20Get%20Your%20Shit.md',t:'Come Get Your Shit',rec:'/sitl/s02.mp3'},
   {n:'03',d:'2025-11-09',lbl:'November 9, 2025',f:'01-Sessions/Session%2003%20%E2%80%94%20Into%20the%20Dark.md',t:'Into the Dark'},
   {n:'04',d:'2025-11-23',lbl:'November 23, 2025',f:'01-Sessions/Session%2004%20%E2%80%94%20Life%20Isn%27t%20Faer-zress.md',t:'Life Isn\u2019t Faer-zress'},
   {n:'05',d:'2025-12-07',lbl:'December 7, 2025',f:'01-Sessions/Session%2005%20%E2%80%94%20Silvered.md',t:'Silvered'},
@@ -387,6 +448,7 @@ function renderZones(raw, s){
   function isGuest(nm){return ZGUEST.some(function(x){return nm.toLowerCase().indexOf(x.toLowerCase())===0;});}
   document.getElementById('z-party').innerHTML=party.map(function(nm){var g=isGuest(nm);var c=ZPC[nm]||(g?'#6B8AAD':'#9A9590');return '<span class="pp-chip'+(g?' guest':'')+'" style="border-color:'+c+';color:'+c+'">'+zesc(nm)+(g?' *':'')+'</span>';}).join('');
   if(party.some(isGuest))document.getElementById('z-guestnote').style.display='';
+  zAudio(s&&s.rec);
 
   // quests
   var quests=zblock(body,'Quests',STOP3).split('\n').filter(function(l){return /^\s*[-*]\s/.test(l);});
@@ -453,7 +515,7 @@ async function init(){
   else nextHtml='<a class="disabled"><span class="lbl">Next &rarr;</span><span class="ttl">\u2014</span></a>';
   snav.innerHTML=prevHtml+nextHtml;
   try{
-    var resp=await fetch(VR+'/'+s.f);
+    var resp=await fetch(VR+'/'+s.f+'?t='+Date.now());
     if(!resp.ok) throw new Error('fetch failed');
     var md=await resp.text();
     renderZones(md, s);
