@@ -262,17 +262,20 @@ var SB='https://vtrtyagltwdrbastpppl.supabase.co';
 var AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0cnR5YWdsdHdkcmJhc3RwcHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTY5NTAsImV4cCI6MjA5MTkzMjk1MH0.hnpwjHGIqiUN_VmmIkOAAFGGCKsyYgl7AO3FW5vDIeM';
 var VR='https://raw.githubusercontent.com/TheLittlestAskew/sitl_vault/main';
 /* ===== Session recording player ===== */
-var RECBASE='https://pub-33596be843004e7282ae8a9069ae9b82.r2.dev';  /* e.g. https://media.rectrixcaedere.com  (NO trailing slash) */
-/* Per-session audio lives in the ARC entry as a `rec` field:
-     single file : rec:'/sitl/s01.mp3'                         (path is resolved against RECBASE)
-     full URL    : rec:'https://host/clip.mp3'                 (used exactly as written)
-     multi-part  : rec:[{lbl:'Pt 1',url:'/sitl/s05_pt1.mp3'},{lbl:'Pt 2',url:'/sitl/s05_pt2.mp3'}]
-     lost part   : rec:[{lbl:'Pt 1',lost:true},{lbl:'Pt 2',url:'/sitl/s16_pt2.mp3'}]
+/* RECBASE = your bucket's Public Development URL (Settings tab) + the folder path.
+   Files live at:  recordings (bucket) / Recordings / sitl / <filename>
+   so RECBASE ends with /Recordings/sitl/ and each rec is just the filename. */
+var RECBASE='https://pub-REPLACE-WITH-YOUR-HASH.r2.dev/Recordings/sitl/';
+/* Per-session audio goes in the ARC entry as a `rec` field. Spaces are encoded automatically:
+     single file : rec:'010426 Sky Is The Limit Recording.mp3'
+     full URL    : rec:'https://host/clip.mp3'                     (used exactly as written)
+     multi-part  : rec:[{lbl:'Pt 1',url:'..._pt1.mp3'},{lbl:'Pt 2',url:'..._pt2.mp3'}]
+     lost part   : rec:[{lbl:'Pt 1',lost:true},{lbl:'Pt 2',url:'..._pt2.mp3'}]
    No rec field -> the card hides itself. */
 var EL={};
 ['card','parts','bar','toggle','track','fill','knob','cur','dur','lost','el'].forEach(function(k){EL[k]=document.getElementById('z-audio-'+k);});
 function paFmt(t){if(!isFinite(t)||t<0)t=0;t=Math.floor(t);var h=Math.floor(t/3600),m=Math.floor((t%3600)/60),s=t%60;var ss=(s<10?'0':'')+s;return h?h+':'+(m<10?'0':'')+m+':'+ss:m+':'+ss;}
-function paUrl(u){return /^https?:|^blob:|^data:/.test(u)?u:(RECBASE+u);}
+function paUrl(u){return /^https?:|^blob:|^data:/.test(u)?u:encodeURI(RECBASE+u);}
 function zAudio(rec){
   var card=EL.card,a=EL.el;
   if(!card)return;
@@ -306,21 +309,21 @@ function zAudio(rec){
   loadPart(parts.indexOf(playable[0]));
 }
 var ARC=[
-  {n:'01',d:'2025-10-12',lbl:'October 12, 2025',f:'01-Sessions/Session%2001%20%E2%80%94%20Prisoners%20of%20the%20Underdark.md',t:'Prisoners of the Underdark',rec:'recordings/Recordings/sitl/101225 Sky Is The Limit Recording.mp3'},
-  {n:'02',d:'2025-10-26',lbl:'October 26, 2025',f:'01-Sessions/Session%2002%20%E2%80%94%20Come%20Get%20Your%20Shit.md',t:'Come Get Your Shit',rec:'recordings/Recordings/sitl/102625 Sky Is The Limit Recording.mp3'},
-  {n:'03',d:'2025-11-09',lbl:'November 9, 2025',f:'01-Sessions/Session%2003%20%E2%80%94%20Into%20the%20Dark.md',t:'Into the Dark'},
-  {n:'04',d:'2025-11-23',lbl:'November 23, 2025',f:'01-Sessions/Session%2004%20%E2%80%94%20Life%20Isn%27t%20Faer-zress.md',t:'Life Isn\u2019t Faer-zress'},
-  {n:'05',d:'2025-12-07',lbl:'December 7, 2025',f:'01-Sessions/Session%2005%20%E2%80%94%20Silvered.md',t:'Silvered'},
-  {n:'06',d:'2025-12-21',lbl:'December 21, 2025',f:'01-Sessions/Session%2006%20%E2%80%94%20The%20Long%20Way%20Down.md',t:'The Long Way Down'},
-  {n:'07',d:'2026-01-04',lbl:'January 4, 2026',f:'01-Sessions/Session%2007%20%E2%80%94%20Escape%20from%20the%20Oozing%20Temple.md',t:'Escape from the Oozing Temple'},
-  {n:'08',d:'2026-01-18',lbl:'January 18, 2026',f:'01-Sessions/Session%2008%20%E2%80%94%20The%20Whirlwind%20and%20the%20Depths.md',t:'The Whirlwind and the Depths'},
-  {n:'09',d:'2026-02-01',lbl:'February 1, 2026',f:'01-Sessions/Session%2009%20%E2%80%94%20%20Every%20Party%20Needs%20A%20Little%20Guy.md',t:'Adopt-a-Rothe'},
-  {n:'10',d:'2026-02-15',lbl:'February 15, 2026',f:'01-Sessions/Session%2010%20%E2%80%94%20021526_Echoes_in_the_Feydark.md',t:'Through the Fungal Gate'},
-  {n:'11',d:'2026-03-01',lbl:'March 1, 2026',f:'01-Sessions/Session%2011%20%E2%80%94%20Gifts_of_the_Carrion_King.md',t:'Gifts of the Carrion King'},
-  {n:'12',d:'2026-03-29',lbl:'March 29, 2026',f:'01-Sessions/Session%2012%20%E2%80%94%20Return%20to%20Velkynvelve.md',t:'Return to Velkynvelve'},
-  {n:'13',d:'2026-04-11',lbl:'April 11, 2026',f:'01-Sessions/Session%2013%20%E2%80%94%20Reckoning%20at%20Velkynvelve.md',t:'Reckoning at Velkynvelve'},
-  {n:'14',d:'2026-04-12',lbl:'April 12, 2026',f:'01-Sessions/Session%2014%20%E2%80%94%20Far%20From%20the%20Sun.md',t:'Far From the Sun'},
-  {n:'15',d:'2026-05-03',lbl:'May 3, 2026',f:'01-Sessions/Session%2015%20%E2%80%94%20The%20Long%20Road%20to%20Sloobludop.md',t:'The Long Road to Sloobludop'}
+  {n:'01',d:'2025-10-12',lbl:'October 12, 2025',f:'01-Sessions/Session%2001%20%E2%80%94%20Prisoners%20of%20the%20Underdark.md',t:'Prisoners of the Underdark',rec:'101225 Sky Is The Limit Recording.mp3'},
+  {n:'02',d:'2025-10-26',lbl:'October 26, 2025',f:'01-Sessions/Session%2002%20%E2%80%94%20Come%20Get%20Your%20Shit.md',t:'Come Get Your Shit',rec:'102625 Sky Is The Limit Recording.mp3'},
+  {n:'03',d:'2025-11-09',lbl:'November 9, 2025',f:'01-Sessions/Session%2003%20%E2%80%94%20Into%20the%20Dark.md',t:'Into the Dark',rec:'110925 Sky Is The Limit Recording.mp3'},
+  {n:'04',d:'2025-11-23',lbl:'November 23, 2025',f:'01-Sessions/Session%2004%20%E2%80%94%20Life%20Isn%27t%20Faer-zress.md',t:'Life Isn\u2019t Faer-zress',rec:'112325 Sky Is The Limit Recording.mp3'},
+  {n:'05',d:'2025-12-07',lbl:'December 7, 2025',f:'01-Sessions/Session%2005%20%E2%80%94%20Silvered.md',t:'Silvered',rec:'120725 Sky Is The Limit Recording.mp3'},
+  {n:'06',d:'2025-12-21',lbl:'December 21, 2025',f:'01-Sessions/Session%2006%20%E2%80%94%20The%20Long%20Way%20Down.md',t:'The Long Way Down',rec:'122125 Sky Is The Limit Recording.mp3'},
+  {n:'07',d:'2026-01-04',lbl:'January 4, 2026',f:'01-Sessions/Session%2007%20%E2%80%94%20Escape%20from%20the%20Oozing%20Temple.md',t:'Escape from the Oozing Temple',rec:'010426 Sky Is The Limit Recording.mp3'},
+  {n:'08',d:'2026-01-18',lbl:'January 18, 2026',f:'01-Sessions/Session%2008%20%E2%80%94%20The%20Whirlwind%20and%20the%20Depths.md',t:'The Whirlwind and the Depths',rec:'011826 Sky Is The Limit Recording.mp3'},
+  {n:'09',d:'2026-02-01',lbl:'February 1, 2026',f:'01-Sessions/Session%2009%20%E2%80%94%20%20Every%20Party%20Needs%20A%20Little%20Guy.md',t:'Adopt-a-Rothe',rec:'020126 Sky Is the Limit Recording.mp3'},
+  {n:'10',d:'2026-02-15',lbl:'February 15, 2026',f:'01-Sessions/Session%2010%20%E2%80%94%20021526_Echoes_in_the_Feydark.md',t:'Through the Fungal Gate',rec:'021526 Sky Is The Limit Recording.mp3'},
+  {n:'11',d:'2026-03-01',lbl:'March 1, 2026',f:'01-Sessions/Session%2011%20%E2%80%94%20Gifts_of_the_Carrion_King.md',t:'Gifts of the Carrion King',rec:'030126 Sky Is the Limit Recording.mp3'},
+  {n:'12',d:'2026-03-29',lbl:'March 29, 2026',f:'01-Sessions/Session%2012%20%E2%80%94%20Return%20to%20Velkynvelve.md',t:'Return to Velkynvelve',rec:'032926 Sky Is The Limit Recording.mp3'},
+  {n:'13',d:'2026-04-11',lbl:'April 11, 2026',f:'01-Sessions/Session%2013%20%E2%80%94%20Reckoning%20at%20Velkynvelve.md',t:'Reckoning at Velkynvelve',rec:'041126 Sky Is The Limit Recording.mp3'},
+  {n:'14',d:'2026-04-12',lbl:'April 12, 2026',f:'01-Sessions/Session%2014%20%E2%80%94%20Far%20From%20the%20Sun.md',t:'Far From the Sun',rec:'041226 Sky Is The Limit Recording.mp3'},
+  {n:'15',d:'2026-05-03',lbl:'May 3, 2026',f:'01-Sessions/Session%2015%20%E2%80%94%20The%20Long%20Road%20to%20Sloobludop.md',t:'The Long Road to Sloobludop',rec:'050326 Sky Is The Limit Recording.mp3'}
 ];
 
 function getN(){var m=location.search.match(/[?&]n=([^&]+)/);return m?m[1]:null;}
