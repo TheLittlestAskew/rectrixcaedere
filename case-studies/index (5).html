@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Field Studies — Rectrix Caedere</title>
+<meta name="description" content="Data deep-dives into the Rectrix Caedere roll archive — statistical studies drawn from three years of logged D&amp;D rolls.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cinzel+Decorative:wght@400;700&family=Raleway:wght@300;400;500;600&family=Alegreya+Sans+SC:wght@400;500;700&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rc-starless-navy:#050A0E; --rc-deep-blue-black:#111A24; --rc-midnight-cardstock:#0D141C;
+  --rc-smoked-navy:#162230; --rc-product-gold:#C7A369; --rc-pale-gold-text:#E8C690;
+  --rc-aged-copper-gold:#8C5D3F; --rc-moonlit-apricot:#DA9565;
+  --rc-text-primary:#E8E4DC; --rc-text-secondary:#9A9590; --rc-text-muted:#5E5A55;
+  --rc-text-vellum:#F5EFE2;
+  --rc-border-subtle:rgba(255,255,255,.06); --rc-border-accent:rgba(199,163,105,.25);
+  --rc-border-accent-strong:rgba(199,163,105,.45); --rc-gold-glow:rgba(199,163,105,.30);
+  --rc-success:#4A9E6E; --rc-danger:#B44A4A;
+  --rc-font-display:'Cinzel','EB Garamond',serif; --rc-font-body:'Raleway',system-ui,sans-serif;
+  --rc-font-label:'Alegreya Sans SC','Raleway',sans-serif; --rc-font-serif:'EB Garamond',Georgia,serif;
+  --shadow-lg:0 8px 32px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--rc-font-body);color:var(--rc-text-primary);background:var(--rc-starless-navy);
+  background-image:
+    radial-gradient(120% 80% at 50% -10%, rgba(31,63,91,.30) 0%, rgba(5,10,14,0) 55%),
+    radial-gradient(90% 60% at 85% 8%, rgba(199,163,105,.07) 0%, rgba(5,10,14,0) 50%),
+    linear-gradient(180deg,#070D12 0%,#050A0E 100%);
+  background-attachment:fixed;min-height:100vh;position:relative;-webkit-font-smoothing:antialiased}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:80;opacity:.045;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+a{color:var(--rc-pale-gold-text);text-decoration:none}a:hover{color:var(--rc-moonlit-apricot)}
+.wrap{max-width:920px;margin:0 auto;padding:0 24px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;max-width:920px;margin:0 auto;position:relative;z-index:5}
+.topbar .brand{display:flex;align-items:center;gap:12px}
+.topbar .brand img{height:38px;width:auto;display:block;opacity:.95}
+.topbar .brand .bn{font-family:var(--rc-font-label);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--rc-text-secondary)}
+.topbar nav{font-family:var(--rc-font-label);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.topbar nav a{margin-left:20px;color:var(--rc-text-secondary)}.topbar nav a:hover{color:var(--rc-pale-gold-text)}
+.hero{text-align:center;padding:54px 0 30px}
+.eyebrow{font-family:var(--rc-font-label);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--rc-product-gold);margin-bottom:18px}
+.hero h1{font-family:var(--rc-font-display);font-weight:600;letter-spacing:.03em;font-size:clamp(34px,6vw,56px);line-height:1.05;color:var(--rc-text-vellum)}
+.hero .lede{font-family:var(--rc-font-serif);font-style:italic;font-size:clamp(16px,2.3vw,20px);line-height:1.5;color:var(--rc-text-secondary);max-width:620px;margin:18px auto 0}
+.rule{height:1px;background:linear-gradient(90deg,transparent,var(--rc-border-accent-strong),transparent);max-width:340px;margin:26px auto 0}
+.studies{padding:30px 0 20px;display:grid;gap:22px}
+.study{display:block;background:linear-gradient(180deg,rgba(22,34,48,.55),rgba(13,20,28,.6));
+  border:1px solid var(--rc-border-accent);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-lg);
+  transition:border-color .3s,transform .3s,box-shadow .4s}
+.study:hover{border-color:var(--rc-border-accent-strong);transform:translateY(-2px);box-shadow:var(--shadow-lg),0 0 40px -18px var(--rc-gold-glow)}
+.study .body{padding:26px 30px}
+.study .no{font-family:var(--rc-font-label);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--rc-aged-copper-gold)}
+.study h2{font-family:var(--rc-font-display);font-weight:600;font-size:clamp(22px,3.2vw,30px);letter-spacing:.02em;color:var(--rc-text-vellum);margin:8px 0 10px;line-height:1.15}
+.study p{font-size:15.5px;line-height:1.55;color:var(--rc-text-secondary);max-width:64ch;margin-bottom:16px}
+.metarow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tag{font-family:var(--rc-font-label);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--rc-text-secondary);border:1px solid var(--rc-border-subtle);padding:4px 10px;border-radius:999px}
+.tag.gold{color:var(--rc-pale-gold-text);border-color:var(--rc-border-accent);background:rgba(199,163,105,.05)}
+.readmore{font-family:var(--rc-font-label);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--rc-product-gold);margin-left:auto}
+.soon{background:linear-gradient(180deg,rgba(13,20,28,.4),rgba(13,20,28,.4));border:1px dashed var(--rc-border-subtle);border-radius:16px;padding:26px 30px;text-align:center}
+.soon .no{font-family:var(--rc-font-label);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--rc-text-muted)}
+.soon h2{font-family:var(--rc-font-display);font-weight:500;font-size:20px;color:var(--rc-text-secondary);margin:8px 0 6px}
+.soon p{font-size:14px;color:var(--rc-text-muted);max-width:54ch;margin:0 auto}
+footer.site{text-align:center;padding:42px 24px 50px;border-top:1px solid var(--rc-border-subtle);margin-top:36px;font-family:var(--rc-font-label);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--rc-text-muted)}
+footer.site .dot{color:var(--rc-aged-copper-gold);margin:0 8px}
+footer.site .flinks{margin-top:14px}footer.site .flinks a{color:var(--rc-text-secondary);margin:0 10px}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="/">
+    <img src="/assets/img/logo_only-transparent2.webp" alt="Rectrix Caedere">
+    <span class="bn">Rectrix&nbsp;Caedere</span>
+  </a>
+  <nav><a href="/">Archives</a></nav>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Rectrix Caedere &middot; The Archives</div>
+    <h1>Field Studies</h1>
+    <p class="lede">What three years of logged dice can tell you that no single session ever could. Data deep-dives into the campaign roll archive &mdash; one question, rigorously answered, each time.</p>
+    <div class="rule"></div>
+  </header>
+
+  <main class="studies">
+    <a class="study" href="/case-studies/are-the-dice-fair/">
+      <div class="body">
+        <div class="no">Field Study No. 01 &middot; Roll Data</div>
+        <h2>Do the Dice Hate You?</h2>
+        <p>Every table has a player convinced the dice are cursed. A fairness audit of 3,246 d20 rolls puts the superstition to a chi-square test &mdash; and finds the real bias is human.</p>
+        <div class="metarow">
+          <span class="tag gold">3,246 rolls</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">Significance testing</span>
+          <span class="readmore">Read the study &rarr;</span>
+        </div>
+      </div>
+    </a>
+
+    <div class="soon">
+      <div class="no">In the workshop</div>
+      <h2>More studies coming</h2>
+      <p>Clutch factor under pressure, per-campaign luck arcs, the math of advantage &mdash; the archive has more questions in it than we&rsquo;ve asked yet.</p>
+    </div>
+  </main>
+</div>
+
+<footer class="site">
+  Rectrix Caedere <span class="dot">&#10022;</span> Field Studies <span class="dot">&#10022;</span> rectrixcaedere.com
+  <div class="flinks"><a href="/">&larr; Campaign archives</a></div>
+</footer>
+</body>
+</html>
