@@ -178,6 +178,17 @@ body.crossed .slot{opacity:1;transform:none;
 .slot[data-state="paused"] .card:hover ~ .cap .meta,
 .slot[data-state="active"] .card:focus-within ~ .cap .meta,
 .slot[data-state="paused"] .card:focus-within ~ .cap .meta{color:var(--rc-pale-gold-text)}
+.field-link{display:inline-flex;align-items:center;gap:11px;margin:clamp(30px,4.5vh,50px) auto 0;
+  font-family:var(--rc-font-label);font-weight:500;font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--rc-text-secondary);border:1px solid var(--rc-border-accent);border-radius:999px;
+  padding:9px 22px;background:rgba(199,163,105,.04);z-index:2;
+  transition:color .3s,border-color .3s,background .3s,box-shadow .45s}
+.field-link:hover,.field-link:focus-visible{color:var(--rc-pale-gold-text);
+  border-color:var(--rc-border-accent-strong);background:rgba(199,163,105,.09);
+  box-shadow:0 0 26px -8px var(--rc-gold-glow);outline:none}
+.field-link .flank{color:var(--rc-aged-copper-gold)}
+.field-link .arr{transition:transform .3s ease}
+.field-link:hover .arr,.field-link:focus-visible .arr{transform:translateX(4px)}
 footer{margin-top:auto;padding-top:42px;text-align:center;z-index:2;
   font-family:var(--rc-font-label);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--rc-text-muted)}
 footer .dot{color:var(--rc-aged-copper-gold);margin:0 8px}
@@ -224,6 +235,7 @@ footer .dot{color:var(--rc-aged-copper-gold);margin:0 8px}
       <p class="sub">Four campaigns. One deck. <em>Hover a card to turn it.</em></p>
     </header>
     <main class="deck" id="deck" aria-label="Campaign selection"></main>
+    <a class="field-link" href="./case-studies/"><span class="flank">&#10022;</span>Field Studies &middot; data deep-dives into the archive<span class="arr">&rarr;</span></a>
     <footer>Rectrix Caedere <span class="dot">&#10022;</span> Campaign Archive <span class="dot">&#10022;</span> rectrixcaedere.com</footer>
   </div>
 
