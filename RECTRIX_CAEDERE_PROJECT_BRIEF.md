@@ -56,7 +56,7 @@ Campaign data is currently hardcoded in `app.js` as a JavaScript array. Four cam
 | Sky Is The Limit (SITL) | 1 | active | 946 | 15 |
 | Pacts & Power (P&P) | 2 | active | 2,907 | 72 |
 | Ashfall Britannia (AFB) | 3 | active | 855 | 8 |
-| Where the Flowers Remember (WTFR) | 4 | paused | 0 | 0 |
+| Where the Flowers Forget (WTFF) | 4 | active | 0 | 0 |
 
 ### Future: Live Supabase
 
@@ -176,7 +176,7 @@ The only built page so far. It shows:
 - Two-column row: Roll Type Breakdown (donut chart) + Action Categories (horizontal bar chart)
 - Footer with ornamental divider
 
-Clicking campaign names in the sidebar switches all data. WTFR shows as "paused" and is non-clickable.
+Clicking campaign names in the sidebar switches all data. WTFF (4) is active and clickable; its roll/session counts read 0 until the DDB roll archive is wired (game_id 7853407).
 
 ## Planned Pages (Not Yet Built)
 
