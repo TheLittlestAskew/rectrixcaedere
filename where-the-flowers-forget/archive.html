@@ -31,12 +31,10 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;background:radial-grad
 .petal svg{display:block;width:100%;height:100%;filter:drop-shadow(0 1px 1px rgba(0,0,0,.2))}
 .defs{position:absolute;width:0;height:0;overflow:hidden}
 
-/* ambient page petals (after reveal) */
 .ambient{position:fixed;inset:-6% 0 0 0;z-index:1;pointer-events:none;overflow:hidden}
 @keyframes pdrift{
   0%{opacity:0;transform:translate3d(0,-12vh,0) rotateZ(0deg) rotateX(0deg)}
-  8%{opacity:.66}
-  92%{opacity:.5}
+  8%{opacity:.66}92%{opacity:.5}
   100%{opacity:0;transform:translate3d(var(--fx,34px),112vh,0) rotateZ(var(--rz,400deg)) rotateX(720deg)}
 }
 .ambient .petal{top:-8%;animation:pdrift linear infinite}
@@ -78,15 +76,28 @@ h1{font-family:var(--fd);font-weight:700;color:var(--vellum);font-size:clamp(26p
 .pop a.sess .sd{font-family:var(--fl);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text2);margin-top:3px}
 .pop a.sess .go{float:right;color:var(--gold-pale);font-size:12px}
 
-/* ── reveal: a bed of petals that buries the map, then falls away ── */
-.veil{position:absolute;inset:0;z-index:13;opacity:1;transition:opacity 1.25s ease;
+/* ── intro: blank → buds bloom & cover → all fall, revealing map ── */
+.veil{position:absolute;inset:0;z-index:13;opacity:1;transition:opacity 1.15s ease;
   background:
-    radial-gradient(120% 90% at 50% 18%,rgba(20,30,42,.9),rgba(7,12,18,.97)),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='46' viewBox='0 0 46 46'%3E%3Cpath d='M13 7 C18 12 18 21 13 28 C8 21 8 12 13 7 Z' fill='%23C7A369' opacity='0.16'/%3E%3Cpath d='M33 19 C38 24 38 33 33 40 C28 33 28 24 33 19 Z' fill='%23AF755A' opacity='0.13'/%3E%3Cpath d='M30 4 C33 8 33 14 30 19 C27 14 27 8 30 4 Z' fill='%239B7FD4' opacity='0.10'/%3E%3C/svg%3E");
-  background-size:cover,46px 46px}
+    radial-gradient(120% 95% at 50% 22%,rgba(17,26,37,.96),rgba(6,11,17,.99)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='52' viewBox='0 0 52 52'%3E%3Cpath d='M15 9 C20 14 20 23 15 30 C10 23 10 14 15 9 Z' fill='%23C7A369' opacity='0.10'/%3E%3Cpath d='M37 23 C42 28 42 37 37 44 C32 37 32 28 37 23 Z' fill='%23AF755A' opacity='0.08'/%3E%3C/svg%3E");
+  background-size:cover,52px 52px}
 .veil.go{opacity:0;pointer-events:none}
-.blanket{position:absolute;inset:0;z-index:15;pointer-events:none;overflow:hidden}
+.bloomlayer{position:absolute;inset:0;z-index:15;pointer-events:none;overflow:hidden}
 .rain{position:absolute;inset:0;z-index:16;pointer-events:none;overflow:hidden}
+.flower{position:absolute;transform-origin:center center;opacity:0;will-change:transform,opacity}
+.flower svg{display:block;width:100%;height:100%;filter:drop-shadow(0 2px 4px rgba(0,0,0,.32))}
+.plant{transform-origin:50% 100%}
+@keyframes bloom{
+  0%{opacity:0;transform:scale(0) rotate(calc(var(--rot,0deg) - 44deg))}
+  55%{opacity:1;transform:scale(1.14) rotate(calc(var(--rot,0deg) + 6deg))}
+  100%{opacity:1;transform:scale(1) rotate(var(--rot,0deg))}
+}
+@keyframes flfall{
+  0%{opacity:1;transform:translate(0,0) rotate(var(--rot,0deg)) scale(1)}
+  14%{transform:translate(calc(var(--fx,20px)*.12),calc(var(--fy,820px)*.05)) rotate(calc(var(--rot,0deg) + 8deg)) scale(1.04)}
+  100%{opacity:0;transform:translate(var(--fx,20px),var(--fy,820px)) rotate(var(--rz,420deg)) scale(.8)}
+}
 @keyframes pfall{
   0%{opacity:1;transform:translate(0,0) rotateZ(0deg) rotateX(0deg)}
   100%{opacity:0;transform:translate(var(--fx,30px),var(--fy,820px)) rotateZ(var(--rz,420deg)) rotateX(560deg)}
@@ -98,7 +109,7 @@ h1{font-family:var(--fd);font-weight:700;color:var(--vellum);font-size:clamp(26p
 footer{text-align:center;padding:26px 20px 56px;font-family:var(--fl);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
 footer a{color:var(--gold-pale);text-decoration:none;border-bottom:1px solid var(--border)}
 footer .d{color:var(--copper);margin:0 8px}
-@media(prefers-reduced-motion:reduce){.ambient,.veil,.blanket,.rain{display:none}.markers{opacity:1}.ping .ring,.bud .pulse{animation:none;opacity:0}}
+@media(prefers-reduced-motion:reduce){.ambient,.veil,.bloomlayer,.rain{display:none}.markers{opacity:1}.ping .ring,.bud .pulse{animation:none;opacity:0}}
 </style>
 </head>
 <body>
@@ -106,10 +117,15 @@ footer .d{color:var(--copper);margin:0 8px}
 <nav class="subnav"><a href="/dashboard.html?c=4">Roll Dashboard</a></nav>
 
 <svg class="defs" aria-hidden="true"><defs>
-  <linearGradient id="g0" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F1DDB0"/><stop offset="1" stop-color="#C39A5E"/></linearGradient>
-  <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EBB184"/><stop offset="1" stop-color="#B0744A"/></linearGradient>
-  <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DA8E86"/><stop offset="1" stop-color="#A2554D"/></linearGradient>
-  <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#CDBAEE"/><stop offset="1" stop-color="#7355A6"/></linearGradient>
+  <linearGradient id="g0" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D58A69"/><stop offset="1" stop-color="#B7634D"/></linearGradient>
+  <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DA9565"/><stop offset="1" stop-color="#8C5D3F"/></linearGradient>
+  <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D58A69"/><stop offset="1" stop-color="#8C5D3F"/></linearGradient>
+  <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9B8193"/><stop offset="1" stop-color="#73596B"/></linearGradient>
+  <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3F6488"/><stop offset="1" stop-color="#1F3F5B"/></linearGradient>
+  <linearGradient id="g5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3C6676"/><stop offset="1" stop-color="#24495A"/></linearGradient>
+  <linearGradient id="g6" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F4EBDD"/><stop offset="1" stop-color="#D58A69"/></linearGradient>
+  <linearGradient id="gg0" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6E7C5E"/><stop offset="1" stop-color="#54624A"/></linearGradient>
+  <linearGradient id="gg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4E6E66"/><stop offset="1" stop-color="#2C4F58"/></linearGradient>
 </defs></svg>
 
 <div class="ambient" id="ambient" aria-hidden="true"></div>
@@ -117,7 +133,7 @@ footer .d{color:var(--copper);margin:0 8px}
 <header>
   <div class="eyebrow">The Record</div>
   <h1>The Story Across Artemesia</h1>
-  <p class="sub">The petals fall, the map remembers. Follow the thread of the journey &mdash; and pick a bloom to open what happened there.</p>
+  <p class="sub">The flowers bloom, then forget &mdash; and the map remembers. Pick a bloom to open what happened there.</p>
 </header>
 
 <div class="stage">
@@ -125,7 +141,7 @@ footer .d{color:var(--copper);margin:0 8px}
     <img class="mapimg" src="/assets/img/Artemesia_Map.webp" alt="Map of Artemesia">
     <div class="markers" id="markers"></div>
     <div class="veil" id="veil"></div>
-    <div class="blanket" id="blanket" aria-hidden="true"></div>
+    <div class="bloomlayer" id="bloomlayer" aria-hidden="true"></div>
     <div class="rain" id="rain" aria-hidden="true"></div>
   </div>
   <div class="legend">
@@ -140,10 +156,7 @@ footer .d{color:var(--copper);margin:0 8px}
 <script>
 var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 
-/* ====================== CONFIG ======================
-   Marker coords are % of the map box (0-100), tuned to
-   /assets/img/Artemesia_Map.webp (980x735). Add a session:
-   one entry in events[]; move the party: append to path[]. */
+/* ====================== CONFIG ====================== */
 var CONFIG = {
   party: 'rhusatatiam',
   path: ['rhusatatiam'],
@@ -164,15 +177,63 @@ var CONFIG = {
 
 var mapwrap=document.getElementById('mapwrap');
 var markers=document.getElementById('markers');
+var veil=document.getElementById('veil');
+var bloomlayer=document.getElementById('bloomlayer');
+var rain=document.getElementById('rain');
 var L=CONFIG.locations;
 function place(el,key){var p=L[key];el.style.left=p.x+'%';el.style.top=p.y+'%';}
 
-/* petal element factory */
+/* color pickers — Rectrix Caedere brand palette only */
+var NCOL=7;                                 /* g0..g6 : muted jewel-tone florals */
+function gpick(){return Math.floor(Math.random()*NCOL);}
+var CENTERS=['#DA9565','#8C5D3F','#F4EBDD','#B7634D'];   /* warm copper-gold / cream centers */
+function cpick(){return CENTERS[Math.floor(Math.random()*CENTERS.length)];}
+
+/* petal + flower + plant factories */
 function petal(sizePx){
-  var i = Math.random()<0.80 ? Math.floor(Math.random()*3) : 3;
+  var i=gpick();
   var s=document.createElement('span'); s.className='petal';
   s.style.width=sizePx+'px'; s.style.height=(sizePx*1.34).toFixed(1)+'px';
-  s.innerHTML='<svg viewBox="0 0 20 27" preserveAspectRatio="none"><path d="M10 1 C16 7 16.4 17 10 26 C3.6 17 4 7 10 1 Z" fill="url(#g'+i+')"/><path d="M10 4 C9.2 10 9.2 18 10 23" stroke="rgba(255,255,255,.24)" stroke-width="0.7" fill="none"/></svg>';
+  s.innerHTML='<svg viewBox="0 0 20 27" preserveAspectRatio="none"><path d="M10 1 C16 7 16.4 17 10 26 C3.6 17 4 7 10 1 Z" fill="url(#g'+i+')"/><path d="M10 4 C9.2 10 9.2 18 10 23" stroke="rgba(255,255,255,.20)" stroke-width="0.7" fill="none"/></svg>';
+  return s;
+}
+/* pointed-petal flower */
+function flower(sizePx){
+  var g=gpick(); var cen=cpick();
+  var petals='';
+  for(var a=0;a<360;a+=60){
+    petals+='<g transform="rotate('+a+' 30 30)"><path d="M30 30 C24 20 25 10 30 5 C35 10 36 20 30 30 Z" fill="url(#g'+g+')" stroke="rgba(0,0,0,.12)" stroke-width="0.4"/></g>';
+  }
+  var s=document.createElement('span'); s.className='flower';
+  s.style.width=sizePx+'px'; s.style.height=sizePx+'px';
+  s.innerHTML='<svg viewBox="0 0 60 60">'+petals+'<circle cx="30" cy="30" r="5.4" fill="'+cen+'"/><circle cx="30" cy="30" r="2.3" fill="rgba(60,40,24,.7)"/></svg>';
+  return s;
+}
+/* rounded-petal flower (daisy / cosmos) */
+function flowerRound(sizePx){
+  var g=gpick(); var cen=cpick();
+  var petals='';
+  for(var a=0;a<360;a+=45){
+    petals+='<g transform="rotate('+a+' 30 30)"><ellipse cx="30" cy="16" rx="6.6" ry="11.2" fill="url(#g'+g+')" stroke="rgba(0,0,0,.12)" stroke-width="0.4"/></g>';
+  }
+  var s=document.createElement('span'); s.className='flower';
+  s.style.width=sizePx+'px'; s.style.height=sizePx+'px';
+  s.innerHTML='<svg viewBox="0 0 60 60">'+petals+'<circle cx="30" cy="30" r="6" fill="'+cen+'"/><circle cx="30" cy="30" r="2.6" fill="rgba(60,40,24,.65)"/></svg>';
+  return s;
+}
+/* green foliage sprig — brand sage / blue-green, sprouts up from its base */
+function plant(sizePx){
+  var gi=Math.random()<0.5?'gg0':'gg1';
+  var leaves='', ys=[18,28,38,48];
+  for(var k=0;k<ys.length;k++){
+    var y=ys[k];
+    leaves+='<g transform="translate(22 '+y+') rotate(40)"><path d="M0 0 C5 -4 13 -4 18 0 C13 4 5 4 0 0 Z" fill="url(#'+gi+')"/></g>';
+    leaves+='<g transform="translate(22 '+y+') rotate(-40)"><path d="M0 0 C-5 -4 -13 -4 -18 0 C-13 4 -5 4 0 0 Z" fill="url(#'+gi+')"/></g>';
+  }
+  leaves+='<g transform="translate(22 10)"><path d="M0 0 C5 -7 5 -15 0 -21 C-5 -15 -5 -7 0 0 Z" fill="url(#'+gi+')"/></g>';
+  var s=document.createElement('span'); s.className='flower plant';
+  s.style.width=(sizePx*0.78).toFixed(0)+'px'; s.style.height=sizePx+'px';
+  s.innerHTML='<svg viewBox="0 0 44 60"><path d="M22 58 L22 10" stroke="#3E4A38" stroke-width="1.8" fill="none" stroke-linecap="round"/>'+leaves+'</svg>';
   return s;
 }
 
@@ -222,73 +283,85 @@ CONFIG.events.forEach(function(ev){
 });
 document.addEventListener('click',function(){if(openPop){openPop.pop.classList.remove('open');openPop.btn.setAttribute('aria-expanded','false');openPop=null;}});
 
-/* ── intro reveal ── */
-var veil=document.getElementById('veil');
-var blanket=document.getElementById('blanket');
-var rain=document.getElementById('rain');
-
-function buildBlanket(){
-  var W=mapwrap.clientWidth, H=mapwrap.clientHeight;
-  /* a dense bed of petals covering the map */
-  for(var i=0;i<84;i++){
-    var p=petal(14+Math.random()*16);
-    p.style.left=(Math.random()*100)+'%';
-    p.style.top=(Math.random()*94)+'%';
-    p.style.setProperty('--fx',(Math.random()*120-60).toFixed(0)+'px');
-    p.style.setProperty('--fy',(H*0.7 + Math.random()*H*0.7).toFixed(0)+'px');
-    p.style.setProperty('--rz',(Math.random()*620-160).toFixed(0)+'deg');
-    p._dur=(1.5+Math.random()*1.2).toFixed(2);
-    p._delay=(Math.random()*0.7).toFixed(2);
-    blanket.appendChild(p);
-  }
-}
-function dropBlanket(){
-  [].forEach.call(blanket.children,function(p){
-    p.style.animation='pfall '+p._dur+'s cubic-bezier(.35,.1,.6,1) '+p._delay+'s forwards';
-  });
-}
-function makeRain(){
-  /* extra petals raining from the top, over the whole reveal */
+/* ── intro sequence ── */
+function gentleRain(){
   var H=mapwrap.clientHeight;
-  for(var i=0;i<34;i++){
-    (function(){
-      var p=petal(12+Math.random()*15);
-      p.style.left=(Math.random()*100)+'%';
-      p.style.top=(-12-Math.random()*15)+'%';
-      p.style.setProperty('--fx',(Math.random()*120-50).toFixed(0)+'px');
-      p.style.setProperty('--fy',(H*1.25).toFixed(0)+'px');
-      p.style.setProperty('--rz',(Math.random()*640-160).toFixed(0)+'deg');
-      var dur=(1.8+Math.random()*1.4).toFixed(2), delay=(Math.random()*1.6).toFixed(2);
-      p.style.animation='pfall '+dur+'s linear '+delay+'s forwards';
-      rain.appendChild(p);
-    })();
+  for(var i=0;i<22;i++){
+    var p=petal(11+Math.random()*13);
+    p.style.left=(Math.random()*100)+'%';
+    p.style.top=(-15-Math.random()*22)+'%';
+    p.style.setProperty('--fx',(Math.random()*90-30).toFixed(0)+'px');
+    p.style.setProperty('--fy',(H*1.3).toFixed(0)+'px');
+    p.style.setProperty('--rz',(Math.random()*560-140).toFixed(0)+'deg');
+    p.style.animation='pfall '+(2.0+Math.random()*1.6).toFixed(2)+'s linear '+(Math.random()*1.9).toFixed(2)+'s forwards';
+    rain.appendChild(p);
   }
 }
-
-function runIntro(){
-  if(reduce){ markers.style.opacity='1'; startAmbient(); return; }
-  buildBlanket();
-  // hold the petal bed briefly, then let it cascade away
-  setTimeout(function(){ dropBlanket(); makeRain(); }, 620);
-  setTimeout(function(){ veil.classList.add('go'); }, 1000);          // map emerges as petals fall
-  setTimeout(function(){ markers.style.opacity='1'; }, 2300);          // pins/buds settle in
-  setTimeout(function(){ veil.remove(); blanket.remove(); rain.remove(); startAmbient(); }, 3400);
+function buildBlooms(){
+  var H=mapwrap.clientHeight; var arr=[];
+  function add(count,minS,maxS,maker,grow){
+    for(var i=0;i<count;i++){
+      var f=maker(minS+Math.random()*(maxS-minS));
+      f.style.left=(Math.random()*108-4)+'%';
+      f.style.top=(Math.random()*108-4)+'%';
+      f.style.setProperty('--rot',((grow?Math.random()*16-8:Math.random()*60-30)).toFixed(0)+'deg');
+      f.style.setProperty('--fx',(Math.random()*130-65).toFixed(0)+'px');
+      f.style.setProperty('--fy',(H*0.85+Math.random()*H*0.55).toFixed(0)+'px');
+      f.style.setProperty('--rz',(Math.random()*620-160).toFixed(0)+'deg');
+      var delay=(0.1+Math.random()*1.05).toFixed(2);
+      f.style.animation='bloom '+(0.5+Math.random()*0.26).toFixed(2)+'s cubic-bezier(.34,1.45,.5,1) '+delay+'s both';
+      bloomlayer.appendChild(f); arr.push(f);
+    }
+  }
+  /* pointed-petal flowers */
+  add(54, 60, 116, flower, false);
+  add(36, 34, 62,  flower, false);
+  /* same amount, rounded-petal flowers */
+  add(54, 60, 116, flowerRound, false);
+  add(36, 34, 62,  flowerRound, false);
+  /* some regular green plants, sprouting up among them */
+  add(34, 48, 96,  plant, true);
+  return arr;
 }
-
+function dropAll(flowers){
+  flowers.forEach(function(f){
+    f.style.animation='flfall '+(1.5+Math.random()*0.8).toFixed(2)+'s cubic-bezier(.4,.05,.6,1) '+(Math.random()*0.14).toFixed(2)+'s forwards';
+  });
+  /* a mass of loose petals scattering from the falling blooms */
+  var H=mapwrap.clientHeight;
+  for(var i=0;i<64;i++){
+    var p=petal(12+Math.random()*16);
+    p.style.left=(Math.random()*100)+'%';
+    p.style.top=(Math.random()*72)+'%';
+    p.style.setProperty('--fx',(Math.random()*150-75).toFixed(0)+'px');
+    p.style.setProperty('--fy',(H*0.9+Math.random()*H*0.5).toFixed(0)+'px');
+    p.style.setProperty('--rz',(Math.random()*640-160).toFixed(0)+'deg');
+    p.style.animation='pfall '+(1.4+Math.random()*1.1).toFixed(2)+'s cubic-bezier(.4,.05,.6,1) '+(Math.random()*0.4).toFixed(2)+'s forwards';
+    rain.appendChild(p);
+  }
+}
 function startAmbient(){
   if(reduce)return;var wrap=document.getElementById('ambient');
   for(var i=0;i<16;i++){
     var p=petal(11+Math.random()*12);
     p.style.left=(Math.random()*100)+'%';
     var dur=(10+Math.random()*9);
-    p.style.animationDuration=dur+'s';
-    p.style.animationDelay=(-Math.random()*dur)+'s';
+    p.style.animationDuration=dur+'s';p.style.animationDelay=(-Math.random()*dur)+'s';
     p.style.setProperty('--fx',(Math.random()*70-20).toFixed(0)+'px');
     p.style.setProperty('--rz',(Math.random()*520-120).toFixed(0)+'deg');
     wrap.appendChild(p);
   }
 }
 
+function runIntro(){
+  if(reduce){ markers.style.opacity='1'; startAmbient(); return; }
+  gentleRain();                          // blank screen, petals drifting
+  var flowers=buildBlooms();             // buds pop up & bloom until covered
+  var COVERED=1650;                      // ~ when the last bloom finishes
+  setTimeout(function(){ dropAll(flowers); veil.classList.add('go'); }, COVERED+350); // all fall at once -> reveal
+  setTimeout(function(){ markers.style.opacity='1'; }, COVERED+350+1250);
+  setTimeout(function(){ veil.remove(); bloomlayer.remove(); rain.remove(); startAmbient(); }, COVERED+350+2200);
+}
 window.addEventListener('load',function(){ setTimeout(runIntro,200); });
 </script>
 </body>
