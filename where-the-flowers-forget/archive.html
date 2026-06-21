@@ -175,19 +175,21 @@ function place(el,key){var p=L[key];el.style.left=p.x+'%';el.style.top=p.y+'%';}
 /* ── botanical assets (transparent cutouts, /assets/img/plants) ── */
 var PBASE='/assets/img/plants/';
 function P(list){return list.map(function(n){return PBASE+'botanical_'+n+'.webp';});}
-var FLOWERS=P(['17','27','29','31','34','36','38','39','43','45','46']);  /* whole blooms */
-var PLANTS =P(['03','05','07','08','10','11','13','14','18','28','33','35','40','42','47','51']); /* green foliage */
-var PETALS =P(['09','41','306','02','50','06','04','20','01','35','11']); /* single petals & leaves for the fall */
-function pick(a){return a[Math.floor(Math.random()*a.length)];}
+var FLOWERS=P(['17','27','29','31','34','36','38','39','43','45','46']);                 /* whole blooms */
+var PLANTS =P(['03','05','07','08','10','11','12','13','14','16','18','19','21','22','23','24','25','28','30.','32','33','35','37','40','42','47','48','51']); /* foliage & sprigs — 28 unique */
+var PETALS =P(['09','41','306','02','50','06','04','20','01','21','26','44','49']);       /* single petals & leaves for the fall */
 function imgEl(src,sizePx,cls){
   var im=document.createElement('img');
   im.src=src; im.alt=''; im.className=cls; im.decoding='async'; im.draggable=false;
   im.style.width=sizePx+'px'; im.style.height='auto';
   return im;
 }
-function petal(sizePx){ return imgEl(pick(PETALS),sizePx,'petal'); }
-function flower(sizePx){ return imgEl(pick(FLOWERS),sizePx,'flower'); }
-function plant(sizePx){ return imgEl(pick(PLANTS),sizePx,'flower plant'); }
+/* deal from a shuffled deck so every asset is placed before any repeats (kills clustered duplicates) */
+function deck(list){var d=[];return function(){if(!d.length){d=list.slice();for(var i=d.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=d[i];d[i]=d[j];d[j]=t;}}return d.pop();};}
+var nextFlower=deck(FLOWERS), nextPlant=deck(PLANTS), nextPetal=deck(PETALS);
+function petal(sizePx){ return imgEl(nextPetal(),sizePx,'petal'); }
+function flower(sizePx){ return imgEl(nextFlower(),sizePx,'flower'); }
+function plant(sizePx){ return imgEl(nextPlant(),sizePx,'flower plant'); }
 function preload(){ FLOWERS.concat(PLANTS,PETALS).forEach(function(s){var i=new Image(); i.src=s;}); }
 
 /* path polyline */
@@ -264,8 +266,8 @@ function buildBlooms(){
       bloomlayer.appendChild(f); arr.push(f);
     }
   }
-  add(70, 54, 124, flower, false);   /* realistic blooms cover the map */
-  add(34, 50, 116, plant,  true);    /* green plants, sprouting up among them */
+  add(44, 54, 124, flower, false);   /* realistic blooms */
+  add(56, 46, 120, plant,  true);    /* plants — majority of the cover, 28-asset deck for variety */
   return arr;
 }
 function dropAll(flowers){
