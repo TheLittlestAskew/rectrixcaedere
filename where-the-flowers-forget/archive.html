@@ -39,24 +39,29 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;background:radial-grad
 }
 .ambient .petal{top:-8%}
 
-header{max-width:980px;margin:0 auto;padding:72px 22px 6px;text-align:center}
+header{max-width:1040px;margin:0 auto;padding:44px 22px 4px;text-align:center}
 .eyebrow{font-family:var(--fl);font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
 .eyebrow::before,.eyebrow::after{content:'';display:inline-block;width:28px;height:1px;vertical-align:middle;margin:0 11px;background:linear-gradient(90deg,transparent,var(--copper))}
 h1{font-family:var(--fd);font-weight:700;color:var(--vellum);font-size:clamp(26px,4.6vw,44px);line-height:1.05;margin:0}
 .sub{font-family:var(--fs);font-style:italic;font-size:15px;color:var(--gold-pale);margin:14px auto 0;max-width:540px;line-height:1.55}
 
-.stage{position:relative;max-width:1040px;margin:24px auto 8px;padding:0 16px}
+.stage{position:relative;max-width:1340px;margin:18px auto 8px;padding:0 16px}
 .mapwrap{position:relative;width:100%;aspect-ratio:980/735;border-radius:14px;overflow:hidden;border:1px solid var(--border-strong);background:#0a1019;box-shadow:0 0 70px -26px var(--glow)}
 .mapimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .markers{position:absolute;inset:0;z-index:6;opacity:0;transition:opacity .9s ease}
 .markers .pt{position:absolute;transform:translate(-50%,-50%)}
 
-.ping{width:18px;height:18px}
-.ping .core{position:absolute;left:50%;top:50%;width:12px;height:12px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#fff,var(--gold-bright) 55%,var(--copper));box-shadow:0 0 12px 3px var(--glow);z-index:2}
-.ping .ring{position:absolute;left:50%;top:50%;width:14px;height:14px;border-radius:50%;border:1.5px solid var(--gold-bright);transform:translate(-50%,-50%);opacity:0;animation:ping 2.4s ease-out infinite}
+.ping{position:relative;width:0;height:0}
+.ping .dot{position:absolute;left:0;top:0;width:9px;height:9px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#fff,var(--gold-bright) 60%,var(--copper));box-shadow:0 0 10px 2px var(--glow);z-index:3}
+.ping .ring{position:absolute;left:0;top:0;width:14px;height:14px;border-radius:50%;border:1.5px solid var(--gold-bright);transform:translate(-50%,-50%);opacity:0;animation:ping 2.4s ease-out infinite;z-index:2}
 .ping .ring.r2{animation-delay:1.2s}
-@keyframes ping{0%{opacity:.75;width:14px;height:14px}100%{opacity:0;width:64px;height:64px}}
-.ping .label{position:absolute;left:16px;top:50%;transform:translateY(-50%);white-space:nowrap;font-family:var(--fl);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-pale);background:rgba(7,13,20,.82);border:1px solid var(--border);border-radius:4px;padding:4px 9px}
+@keyframes ping{0%{opacity:.75;width:14px;height:14px}100%{opacity:0;width:74px;height:74px}}
+.ping .shadow{position:absolute;left:0;top:0;width:18px;height:6px;border-radius:50%;background:rgba(0,0,0,.5);transform:translateX(-50%);filter:blur(1px);animation:pinshadow 2.8s ease-in-out infinite;z-index:1}
+.ping .pinwrap{position:absolute;left:0;bottom:7px;transform:translateX(-50%);animation:pinfloat 2.8s ease-in-out infinite;z-index:4}
+.ping .pinwrap svg{display:block;width:36px;height:48px;filter:drop-shadow(0 7px 6px rgba(0,0,0,.55))}
+@keyframes pinfloat{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-9px)}}
+@keyframes pinshadow{0%,100%{transform:translateX(-50%) scaleX(1);opacity:.5}50%{transform:translateX(-50%) scaleX(.7);opacity:.3}}
+.ping .label{position:absolute;left:24px;top:0;transform:translateY(-50%);white-space:nowrap;font-family:var(--fl);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-pale);background:rgba(7,13,20,.82);border:1px solid var(--border);border-radius:4px;padding:5px 10px;z-index:5}
 .ping .label b{display:block;font-size:9px;letter-spacing:.2em;color:var(--copper)}
 
 .bud{position:relative;width:30px;height:30px;cursor:pointer;background:none;border:none;padding:0;display:grid;place-items:center}
@@ -103,7 +108,7 @@ h1{font-family:var(--fd);font-weight:700;color:var(--vellum);font-size:clamp(26p
   100%{opacity:0;transform:translate(var(--fx,30px),var(--fy,820px)) rotateZ(var(--rz,420deg)) rotateX(560deg)}
 }
 
-.legend{max-width:1040px;margin:8px auto 0;padding:0 18px;display:flex;flex-wrap:wrap;gap:14px;justify-content:center;font-family:var(--fl);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text2)}
+.legend{max-width:1340px;margin:8px auto 0;padding:0 18px;display:flex;flex-wrap:wrap;gap:14px;justify-content:center;font-family:var(--fl);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text2)}
 .legend span{display:inline-flex;align-items:center;gap:7px}
 .legend .dot{width:9px;height:9px;border-radius:50%}
 footer{text-align:center;padding:26px 20px 56px;font-family:var(--fl);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
@@ -207,8 +212,14 @@ if(CONFIG.path.length>1){
 
 /* you-are-here ping */
 var ping=document.createElement('div');ping.className='pt';
-ping.innerHTML='<div class="ping"><div class="ring"></div><div class="ring r2"></div><div class="core"></div>'+
-  '<div class="label">'+L[CONFIG.party].name+'<b>You are here</b></div></div>';
+ping.innerHTML='<div class="ping">'
+  +'<div class="ring"></div><div class="ring r2"></div>'
+  +'<div class="shadow"></div><div class="dot"></div>'
+  +'<div class="pinwrap"><svg viewBox="0 0 24 32"><defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E8C690"/><stop offset="0.55" stop-color="#DA9565"/><stop offset="1" stop-color="#8C5D3F"/></linearGradient></defs>'
+  +'<path d="M12 1 C6 1 2.2 5 2.2 10.6 C2.2 17.6 12 31 12 31 C12 31 21.8 17.6 21.8 10.6 C21.8 5 18 1 12 1 Z" fill="url(#pg)" stroke="#5E3E26" stroke-width="1"/>'
+  +'<circle cx="12" cy="10.6" r="4" fill="#0a1019"/><circle cx="12" cy="10.6" r="4" fill="none" stroke="#E8C690" stroke-width="0.7" opacity="0.55"/></svg></div>'
+  +'<div class="label">'+L[CONFIG.party].name+'<b>Party is here</b></div>'
+  +'</div>';
 place(ping,CONFIG.party);markers.appendChild(ping);
 
 /* event buds */
