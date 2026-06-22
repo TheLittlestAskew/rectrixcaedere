@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Character — Sky Is The Limit · Rectrix Caedere</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cinzel+Decorative:wght@400;700&family=Raleway:wght@300;400;500&family=Alegreya+Sans+SC:wght@400;500;700&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked@13.0.3/marked.min.js"></script>
+<style>
+:root{
+  --navy:#050A0E;--card:#0D141C;--smoked:#162230;--gold:#C7A369;--gold-bright:#DA9565;--gold-pale:#E8C690;
+  --amber:#AF755A;--copper:#8C5D3F;--coral:#B7634D;--info:#6B8AAD;--success:#4A9E6E;
+  --text:#E8E4DC;--text2:#9A9590;--muted:#9A9590;--vellum:#F5EFE2;
+  --border:rgba(199,163,105,.25);--border-strong:rgba(199,163,105,.45);--glow:rgba(199,163,105,.30);
+  --fd:'Cinzel Decorative','Cinzel',serif;--fdisp:'Cinzel',serif;
+  --fb:'Raleway',system-ui,sans-serif;--fl:'Alegreya Sans SC','Raleway',sans-serif;--fs:'EB Garamond',serif;
+  --accent:#C7A369;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--navy);color:var(--text);font-family:var(--fb);line-height:1.6;
+  background-image:radial-gradient(1200px 600px at 50% -10%,rgba(199,163,105,.06),transparent 60%);}
+a{color:var(--gold-pale);text-decoration:none}
+.wrap{max-width:920px;margin:0 auto;padding:28px clamp(16px,4vw,40px) 60px}
+.back{display:inline-flex;align-items:center;gap:6px;font-family:var(--fl);letter-spacing:.12em;
+  text-transform:uppercase;font-size:12px;color:var(--text2);margin-bottom:24px}
+.back:hover{color:var(--gold-pale)}
+
+/* HERO */
+.hero{display:flex;gap:clamp(18px,4vw,34px);flex-wrap:wrap;align-items:flex-start;
+  padding-bottom:26px;border-bottom:1px solid var(--border)}
+.portrait{flex:0 0 auto;width:clamp(150px,30vw,212px)}
+.portrait img{width:100%;border-radius:10px;border:1px solid var(--border-strong);
+  box-shadow:0 10px 34px rgba(0,0,0,.5),0 0 0 1px rgba(0,0,0,.4) inset;display:block;background:var(--smoked)}
+.hinfo{flex:1 1 320px;min-width:280px}
+.eyebrow{font-family:var(--fl);letter-spacing:.26em;text-transform:uppercase;font-size:11px;
+  color:var(--accent);margin-bottom:8px}
+.hinfo h1{font-family:var(--fd);font-weight:700;font-size:clamp(30px,5vw,46px);line-height:1.05;
+  margin:0 0 4px;color:var(--vellum)}
+.accentrule{height:2px;width:84px;margin:14px 0 18px;
+  background:linear-gradient(90deg,var(--accent),transparent)}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:5px 16px;font-size:15px;margin:0 0 18px}
+.meta dt{font-family:var(--fl);letter-spacing:.08em;text-transform:uppercase;font-size:11px;
+  color:var(--text2);padding-top:3px}
+.meta dd{margin:0;color:var(--text)}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--fl);letter-spacing:.06em;
+  font-size:12px;text-transform:uppercase;padding:5px 11px;border-radius:999px;
+  border:1px solid var(--border-strong);color:var(--gold-pale);background:rgba(199,163,105,.06)}
+.pill.up{border-color:rgba(74,158,110,.5);color:#7CCF9E;background:rgba(74,158,110,.08)}
+.pill.dn{border-color:rgba(183,99,77,.5);color:#E29A86;background:rgba(183,99,77,.08)}
+
+/* SECTIONS */
+.csec{margin-top:30px;background:linear-gradient(180deg,var(--card),rgba(13,20,28,.6));
+  border:1px solid var(--border);border-radius:12px;padding:clamp(18px,3vw,28px)}
+.csec h2{font-family:var(--fdisp);font-weight:500;font-size:15px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--gold-pale);margin:0 0 4px;display:flex;align-items:center;gap:12px}
+.csec h2::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--accent),transparent);opacity:.6}
+.csec .rule{height:1px;background:var(--border);margin:14px 0 16px}
+.body{font-family:var(--fs);font-size:18px;line-height:1.66;color:var(--text)}
+.body p{margin:0 0 14px}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:4px 0}
+.body strong{color:var(--gold-pale);font-weight:600}
+.body em{color:var(--text);font-style:italic}
+.body h3{font-family:var(--fdisp);font-weight:500;font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--amber);margin:22px 0 8px}
+.body blockquote{margin:0 0 14px;padding:8px 16px;border-left:3px solid var(--accent);
+  background:rgba(199,163,105,.05);color:var(--text);border-radius:0 6px 6px 0}
+.body a{color:var(--gold-pale);border-bottom:1px dotted rgba(232,198,144,.4)}
+.tbl-wrap{overflow-x:auto;margin:0 0 16px;border:1px solid var(--border);border-radius:8px}
+.body table{width:100%;border-collapse:collapse;font-family:var(--fb);font-size:14px}
+.body th,.body td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--border)}
+.body th{font-family:var(--fl);letter-spacing:.08em;text-transform:uppercase;font-size:11px;
+  color:var(--gold-pale);background:rgba(199,163,105,.06)}
+.body tr:last-child td{border-bottom:none}
+
+.err{margin-top:40px;padding:24px;border:1px solid var(--border-strong);border-radius:12px;
+  background:var(--card);text-align:center;font-family:var(--fs);font-size:18px}
+footer{margin-top:54px;padding-top:22px;border-top:1px solid var(--border);text-align:center;
+  font-family:var(--fl);letter-spacing:.14em;text-transform:uppercase;font-size:11px;color:var(--text2)}
+footer .dot{color:var(--accent);margin:0 8px}
+@media(max-width:560px){.hero{justify-content:center}.portrait{width:min(220px,60vw)}.hinfo{text-align:center}
+  .accentrule{margin-left:auto;margin-right:auto}.meta{justify-content:center}.csec h2{justify-content:flex-start}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="/sky-is-the-limit/">&#8592;&nbsp;&nbsp;The Party</a>
+  <div id="content"></div>
+</div>
+
+<script>
+/* ============================================================
+   Rectrix Caedere — SITL character page
+   Renders a PC wiki page live from the sitl_vault 03-Characters
+   markdown, reusing the same render helpers as session.html.
+   ============================================================ */
+
+var SB='https://vtrtyagltwdrbastpppl.supabase.co';
+var AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0cnR5YWdsdHdkcmJhc3RwcHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTY5NTAsImV4cCI6MjA5MTkzMjk1MH0.hnpwjHGIqiUN_VmmIkOAAFGGCKsyYgl7AO3FW5vDIeM';
+var VR='https://raw.githubusercontent.com/TheLittlestAskew/sitl_vault/main/03-Characters/PCs';
+
+/* ---- PC registry: slug -> file / portrait / display name / accent ----
+   All values traced to real vault frontmatter + /assets/img assets. */
+var PCS={
+  'kit-aluri':            {file:'Kit Aluri.md',              name:'Kit Aluri',              img:'Kit-card.webp',    accent:'#B98A56'},
+  'binks-stonevein':      {file:'Binks Stonevein.md',        name:'Binks Stonevein',        img:'Binks-card.webp',  accent:'#7FA6A0'},
+  'aeolus':               {file:'Aeolus.md',                 name:'Aeolus',                 img:'Aeolus-card.webp', accent:'#8B6BB5'},
+  'blarg':                {file:'Blarg.md',                  name:'Blarg',                  img:'Blarg-card.webp',  accent:'#6E8E5A'},
+  'amanita-dechampignon': {file:"Amanita de'Champignon.md",  name:"Amanita de'Champignon",  img:'Amanita-card.webp',accent:'#B56BA0'},
+  'darby-stonefeather':   {file:'Darby Stonefeather.md',     name:'Darby Stonefeather',     img:'Darby-card.webp',  accent:'#AF755A'}
+};
+
+/* ---- SECTION VISIBILITY ----------------------------------------------
+   Every "## " section in the vault page renders, in document order,
+   EXCEPT those matched by DENY below. This keeps the page faithful to
+   the vault (e.g. per-PC sections like "Conditions" surface
+   automatically) while holding back author/GM-only material.
+   Flip a flag to true to surface that section on the public page. */
+var SHOW_INNER_LIFE  = false;   // Kit's "Inner Life & Evolution" (craft notes)
+var SHOW_POV_JOURNAL = false;   // Kit's in-character "POV Journal" section
+
+var DENY=[ /^related\s*$/i ];                       // vault-internal nav links
+if(!SHOW_INNER_LIFE)  DENY.push(/inner life|evolution/i);
+if(!SHOW_POV_JOURNAL) DENY.push(/pov journal/i);
+
+/* ---- render helpers (mirrors session.html) ---- */
+function wrapTables(html){return html.replace(/<table>/g,'<div class="tbl-wrap"><table>').replace(/<\/table>/g,'</table></div>');}
+function zbase(x){x=String(x).split('/').pop();return x.replace(/#.*/,'').trim();}
+function zwl(s){return (s||'')
+  .replace(/!\[\[[^\]]*\]\]/g,'')                                  /* drop Obsidian image embeds */
+  .replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g,function(m,a,b){return b||zbase(a);});}
+function zmd(t){if(!t)return'';return wrapTables(marked.parse(zwl(t)));}
+function zesc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function zsw(s){return (s||'').replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g,'$2').replace(/\[\[([^\]]+)\]\]/g,function(m,a){return zbase(a);});}
+var STOP2=/^## /m;
+function section(body,headingLine){
+  var idx=body.indexOf(headingLine);
+  if(idx===-1)return'';
+  var rest=body.slice(idx+headingLine.length);
+  var n=rest.search(STOP2);
+  return (n===-1?rest:rest.slice(0,n)).trim();
+}
+
+/* ---- per-character roll stats from Supabase ---- */
+async function rollStats(name){
+  try{
+    var url=SB+'/rest/v1/sitl_session_rolls?character=eq.'+encodeURIComponent(name)+
+      '&select=dice_notation,individual_values&limit=6000';
+    var r=await fetch(url,{headers:{apikey:AK,Authorization:'Bearer '+AK}});
+    if(!r.ok)return null;
+    var rows=await r.json();
+    function iv(v){if(v==null)return null;if(typeof v==='string'){try{v=JSON.parse(v);}catch(e){return null;}}return Array.isArray(v)?v:null;}
+    var total=rows.length,n20=0,n1=0;
+    rows.forEach(function(x){
+      if(/d20/.test(x.dice_notation||'')){var a=iv(x.individual_values);
+        if(a){if(a.indexOf(20)>=0)n20++;if(a.indexOf(1)>=0)n1++;}}});
+    return {total:total,n20:n20,n1:n1};
+  }catch(e){return null;}
+}
+
+/* ---- frontmatter reader ---- */
+function makeFm(raw){
+  var fmText=(/^---\n([\s\S]*?)\n---/.exec(raw)||[null,''])[1];
+  return function(k){var m=new RegExp('^'+k+':\\s*(.*)$','mi').exec(fmText);
+    return m?m[1].trim().replace(/^"|"$/g,''):'';};
+}
+
+async function init(){
+  var content=document.getElementById('content');
+  var slug=(new URLSearchParams(location.search).get('pc')||'').toLowerCase().trim();
+  var pc=PCS[slug];
+  if(!pc){
+    content.innerHTML='<div class="err">Unknown character. <a href="/sky-is-the-limit/">Back to The Party</a><div style="margin-top:14px;font-size:14px;color:var(--text2)">Known: '+
+      Object.keys(PCS).join(', ')+'</div></div>';
+    return;
+  }
+  document.documentElement.style.setProperty('--accent',pc.accent);
+  document.title=pc.name+' — Sky Is The Limit · Rectrix Caedere';
+
+  var raw;
+  try{
+    var resp=await fetch(VR+'/'+encodeURIComponent(pc.file)+'?t='+Date.now());
+    if(!resp.ok) throw new Error('fetch failed '+resp.status);
+    raw=await resp.text();
+  }catch(e){
+    content.innerHTML='<div class="err">Failed to load character notes. <a href="/sky-is-the-limit/">Back to The Party</a></div>';
+    return;
+  }
+
+  var fm=makeFm(raw);
+  var body=raw.replace(/^---\s*\n[\s\S]*?\n---\s*\n/,'');
+  /* Level / Background live in the callout block, not frontmatter */
+  var lvl=(/\*\*Level:\*\*\s*(.+)/i.exec(body)||[])[1]||'';
+  var bg =(/\*\*Background:\*\*\s*(.+)/i.exec(body)||[])[1]||'';
+
+  /* ----- hero ----- */
+  function row(lbl,val){val=zsw((val||'').trim());return val?'<dt>'+lbl+'</dt><dd>'+zesc(val)+'</dd>':'';}
+  var meta=
+    row('Race',fm('race'))+
+    row('Class',fm('class'))+
+    (bg?'<dt>Background</dt><dd>'+zesc(bg.replace(/\*+/g,'').trim())+'</dd>':'')+
+    (lvl?'<dt>Level</dt><dd>'+zesc(lvl.replace(/\*+/g,'').trim())+'</dd>':'')+
+    row('Status',fm('status'))+
+    row('Player',fm('player'))+
+    row('Location',fm('location'));
+
+  content.innerHTML=
+    '<div class="hero">'+
+      '<div class="portrait"><img src="/assets/img/'+pc.img+'" alt="'+zesc(pc.name)+'"></div>'+
+      '<div class="hinfo">'+
+        '<div class="eyebrow">Sky Is The Limit &#10022; The Party</div>'+
+        '<h1>'+zesc(pc.name)+'</h1>'+
+        '<div class="accentrule"></div>'+
+        '<dl class="meta">'+meta+'</dl>'+
+        '<div class="pills" id="pills"></div>'+
+      '</div>'+
+    '</div>'+
+    '<div id="sections"></div>';
+
+  /* ----- sections (document order, allowlisted) ----- */
+  var headings=body.match(/^##[^#\n].*$/mg)||[];
+  var html='';
+  headings.forEach(function(h){
+    var title=h.replace(/^##\s*/,'').trim();
+    if(DENY.some(function(re){return re.test(title);}))return;
+    var content2=section(body,h);
+    if(!content2)return;
+    html+='<div class="csec"><h2>'+zesc(zsw(title))+'</h2><div class="rule"></div>'+
+          '<div class="body">'+zmd(content2)+'</div></div>';
+  });
+  document.getElementById('sections').innerHTML=html||
+    '<div class="csec"><div class="body"><p class="pp-muted">No public sections recorded yet.</p></div></div>';
+
+  content.insertAdjacentHTML('beforeend',
+    '<footer>Rectrix Caedere <span class="dot">&#10022;</span> Sky Is The Limit '+
+    '<span class="dot">&#10022;</span> <a href="/sky-is-the-limit/archive.html">The Descent</a></footer>');
+
+  /* ----- roll pills (live) ----- */
+  var st=await rollStats(pc.name);
+  if(st){
+    document.getElementById('pills').innerHTML=
+      '<span class="pill">'+st.total+' D&amp;D Beyond rolls</span>'+
+      '<span class="pill up">nat\u202f20 \u00d7\u202f'+st.n20+'</span>'+
+      '<span class="pill dn">nat\u202f1 \u00d7\u202f'+st.n1+'</span>';
+  }
+}
+
+if(typeof marked!=='undefined'){init();}else{window.addEventListener('load',init);}
+</script>
+</body>
+</html>
