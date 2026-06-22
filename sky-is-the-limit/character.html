@@ -30,7 +30,7 @@ body{background:var(--navy);color:var(--text);font-family:var(--fb);line-height:
     radial-gradient(1px 1px at 35% 75%,rgba(232,198,144,.3),transparent);}
 a{color:var(--gold-pale);text-decoration:none}
 
-.frame{position:relative;max-width:1480px;margin:0 auto;padding:clamp(18px,2.2vw,32px) clamp(12px,2.2vw,30px) 60px}
+.frame{position:relative;max-width:1280px;margin:0 auto;padding:clamp(16px,2.2vw,30px) clamp(14px,2.4vw,32px) 60px}
 .frame::before,.frame::after{content:'';position:absolute;width:34px;height:34px;pointer-events:none}
 .frame::before{top:8px;left:8px;border-top:1px solid var(--border-strong);border-left:1px solid var(--border-strong)}
 .frame::after{bottom:8px;right:8px;border-bottom:1px solid var(--border-strong);border-right:1px solid var(--border-strong)}
@@ -52,7 +52,8 @@ a{color:var(--gold-pale);text-decoration:none}
 
 .ident{min-width:0}
 .eyebrow{font-family:var(--fl);letter-spacing:.26em;text-transform:uppercase;font-size:11px;color:var(--accent);margin-bottom:8px}
-.ident h1{font-family:var(--fd);font-weight:700;font-size:clamp(34px,5.4vw,62px);line-height:1.04;margin:0;color:var(--cream);white-space:nowrap}
+.ident h1{font-family:var(--fd);font-weight:700;font-size:clamp(34px,5vw,60px);line-height:1.0;margin:0;color:var(--cream)}
+.ident h1 .fn,.ident h1 .ln{display:block}
 .subtitle{font-family:var(--fl);font-weight:500;letter-spacing:.08em;font-size:clamp(14px,1.6vw,18px);color:var(--gold);margin:8px 0 0}
 .badges{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0}
 .badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--fl);letter-spacing:.06em;font-size:12px;
@@ -242,13 +243,6 @@ function galleryBoard(body){
 function panel(title,inner,span){return '<div class="pcard'+(span?' span':'')+'"><h2><span class="star">&#10022;</span>'+zesc(title)+'</h2><div class="pbody">'+inner+'</div></div>';}
 function vaultPanel(body,re,title,span){var c=section(body,re);if(!c)return'';return panel(title,zmd(c),!!span);}
 
-function fitName(){
-  var h1=document.querySelector('.ident h1');if(!h1)return;
-  h1.style.fontSize='';
-  var size=parseFloat(getComputedStyle(h1).fontSize),min=26;
-  while(h1.scrollWidth>h1.clientWidth+1 && size>min){size-=1;h1.style.fontSize=size+'px';}
-}
-
 async function init(){
   var content=document.getElementById('content');
   var slug=(new URLSearchParams(location.search).get('pc')||'').toLowerCase().trim();
@@ -270,6 +264,10 @@ async function init(){
 
   var subtitle=[raceF,classF.replace(/\s*multiclass/i,''),bg].filter(Boolean).join(' \u2022 ');
   var lvlNum=(/level\s*(\d+)/i.exec(lvl)||[])[1];
+  var nameParts=pc.name.split(/\s+/);
+  var nameHtml=nameParts.length>1
+    ? '<span class="fn">'+zesc(nameParts[0])+'</span><span class="ln">'+zesc(nameParts.slice(1).join(' '))+'</span>'
+    : '<span class="fn">'+zesc(pc.name)+'</span>';
 
   var badges='';
   if(/party/i.test(fm('affiliation')))badges+='<span class="badge b-active">Active Party</span>';
@@ -291,7 +289,7 @@ async function init(){
       '<div class="portrait"><div class="fr"><img src="/assets/img/'+pc.img+'" alt="'+zesc(pc.name)+'"></div>'+
         '<div class="plate">'+zesc(pc.name)+'</div></div>'+
       '<div class="ident"><div class="eyebrow">Sky Is The Limit &#10022; The Party</div>'+
-        '<h1>'+zesc(pc.name)+'</h1>'+
+        '<h1>'+nameHtml+'</h1>'+
         (subtitle?'<div class="subtitle">'+zesc(zsw(subtitle))+'</div>':'')+
         '<div class="badges">'+badges+'</div>'+epHtml+'</div>'+
       '<div class="aside">'+
@@ -348,11 +346,6 @@ async function init(){
   document.addEventListener('click',function(e){var t=e.target;
     if(t&&t.classList&&t.classList.contains('galimg')){lb.firstChild.src=t.src;lb.firstChild.alt=t.alt||'';lb.classList.add('open');}});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')lb.classList.remove('open');});
-
-  /* keep the name on one line within the center column, any length */
-  fitName();
-  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitName);
-  var _ft;window.addEventListener('resize',function(){clearTimeout(_ft);_ft=setTimeout(fitName,120);});
 
   var st=await rollStats(pc.name);
   if(st){document.getElementById('rollrec').innerHTML=
