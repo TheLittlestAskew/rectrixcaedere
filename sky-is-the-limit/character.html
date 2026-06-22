@@ -218,7 +218,7 @@ function quoteBoard(body){
 }
 
 function panel(title,inner,span){return '<div class="pcard'+(span?' span':'')+'"><h2><span class="star">&#10022;</span>'+zesc(title)+'</h2><div class="pbody">'+inner+'</div></div>';}
-function vaultPanel(body,re,title){var c=section(body,re);if(!c)return'';return panel(title,zmd(c),false);}
+function vaultPanel(body,re,title,span){var c=section(body,re);if(!c)return'';return panel(title,zmd(c),!!span);}
 
 async function init(){
   var content=document.getElementById('content');
@@ -279,11 +279,11 @@ async function init(){
   var overview=
     vaultPanel(body,/description|appearance/i,'Appearance')+
     vaultPanel(body,/backstory/i,'Backstory')+
-    vaultPanel(body,/personality/i,'Personality')+
-    vaultPanel(body,/conditions/i,'Conditions')+
-    vaultPanel(body,/abilities|class features/i,'Features & Traits');
+    vaultPanel(body,/personality/i,'Personality',true)+
+    vaultPanel(body,/conditions/i,'Conditions');
 
-  var sheet='<div class="pcard span"><div class="pending">'+
+  var features=vaultPanel(body,/abilities|class features/i,'Features & Traits',true);
+  var sheet=features+'<div class="pcard span"><div class="pending">'+
     '<div class="mk">&#9876;</div><h2>Character Sheet</h2>'+
     '<p>Live mechanical stats &mdash; ability scores, AC, hit points, saves, skills, and attacks &mdash; sync from D&amp;D Beyond once the sheet is public. Nothing here is placeholder; it stays empty until real data is wired.</p>'+
     '<div class="stub">'+['STR','DEX','CON','INT','WIS','CHA'].map(function(a){return '<div class="s"><div class="lab">'+a+'</div><div class="dash">&mdash;</div></div>';}).join('')+'</div>'+
