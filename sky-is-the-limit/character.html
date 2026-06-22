@@ -119,6 +119,16 @@ a{color:var(--gold-pale);text-decoration:none}
 .t-funny{border-left-color:#C7A369}.t-serious{border-left-color:#8C5D3F}.t-poignant{border-left-color:#9C7FA0}
 .t-defining{border-left-color:#B7634D}.t-banter{border-left-color:#5E9C92}.t-dm{border-left-color:#6B8AAD}
 
+.galgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+.galfig{margin:0}
+.galfig .gw{padding:6px;border:1px solid var(--copperdk);border-radius:8px;background:linear-gradient(180deg,rgba(108,67,34,.12),rgba(108,67,34,.04));cursor:zoom-in;transition:transform .15s,box-shadow .15s}
+.galfig .gw:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.3)}
+.galfig img{width:100%;display:block;border-radius:5px;border:1px solid rgba(108,67,34,.4)}
+.galfig figcaption{font-family:var(--fl);letter-spacing:.06em;text-transform:uppercase;font-size:11px;color:var(--ink2);text-align:center;margin-top:7px}
+.lightbox{position:fixed;inset:0;background:rgba(5,10,14,.93);display:none;align-items:center;justify-content:center;z-index:100;padding:28px;cursor:zoom-out}
+.lightbox.open{display:flex}
+.lightbox img{max-width:92vw;max-height:88vh;border-radius:8px;border:1px solid var(--border-strong);box-shadow:0 24px 70px rgba(0,0,0,.75)}
+
 .pending{text-align:center;padding:40px 24px}
 .pending .mk{font-family:var(--fd);font-size:30px;color:var(--copper);letter-spacing:.1em}
 .pending h2{border:none;background:none;justify-content:center;color:#6B4322;margin:14px 0 8px}
@@ -217,6 +227,16 @@ function quoteBoard(body){
   }).join('')+'</div>';
 }
 
+function galleryBoard(body){
+  var g=section(body,/gallery/i);var imgs=[];
+  if(g){var re=/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g,m;while((m=re.exec(g))){imgs.push({alt:m[1],url:m[2]});}}
+  if(!imgs.length)return '<p style="color:var(--ink2);font-style:italic;margin:0">No gallery art yet. Add a <code>## Gallery</code> section to this character\u2019s vault page with image links &mdash; <code>![Artist credit](image-url)</code> &mdash; and they\u2019ll appear here.</p>';
+  return '<div class="galgrid">'+imgs.map(function(im){
+    return '<figure class="galfig"><div class="gw"><img class="galimg" src="'+encodeURI(im.url)+'" alt="'+zesc(im.alt)+'" loading="lazy"></div>'+
+      (im.alt?'<figcaption>'+zesc(im.alt)+'</figcaption>':'')+'</figure>';
+  }).join('')+'</div>';
+}
+
 function panel(title,inner,span){return '<div class="pcard'+(span?' span':'')+'"><h2><span class="star">&#10022;</span>'+zesc(title)+'</h2><div class="pbody">'+inner+'</div></div>';}
 function vaultPanel(body,re,title,span){var c=section(body,re);if(!c)return'';return panel(title,zmd(c),!!span);}
 
@@ -277,22 +297,23 @@ async function init(){
     '<footer>Rectrix Caedere <span class="dot">&#10022;</span> Sky Is The Limit <span class="dot">&#10022;</span> <a href="/sky-is-the-limit/archive.html">The Descent</a></footer>';
 
   var overview=
-    vaultPanel(body,/description|appearance/i,'Appearance')+
-    vaultPanel(body,/backstory/i,'Backstory')+
+    vaultPanel(body,/description|appearance/i,'Appearance',true)+
+    vaultPanel(body,/backstory/i,'Backstory',true)+
     vaultPanel(body,/personality/i,'Personality',true)+
     vaultPanel(body,/conditions/i,'Conditions');
 
   var features=vaultPanel(body,/abilities|class features/i,'Features & Traits',true);
-  var sheet=features+'<div class="pcard span"><div class="pending">'+
+  var sheet='<div class="pcard span"><div class="pending">'+
     '<div class="mk">&#9876;</div><h2>Character Sheet</h2>'+
     '<p>Live mechanical stats &mdash; ability scores, AC, hit points, saves, skills, and attacks &mdash; sync from D&amp;D Beyond once the sheet is public. Nothing here is placeholder; it stays empty until real data is wired.</p>'+
     '<div class="stub">'+['STR','DEX','CON','INT','WIS','CHA'].map(function(a){return '<div class="s"><div class="lab">'+a+'</div><div class="dash">&mdash;</div></div>';}).join('')+'</div>'+
-    '</div></div>';
+    '</div></div>'+features;
 
   var story=vaultPanel(body,/key events/i,'Key Events')||'<div class="pcard span"><div class="pbody">No events recorded.</div></div>';
   var rel=vaultPanel(body,/relationships/i,'Relationships')||'<div class="pcard span"><div class="pbody">No relationships recorded.</div></div>';
   var inv=vaultPanel(body,/inventory|loot/i,'Inventory & Loot')||'<div class="pcard span"><div class="pbody">No inventory recorded.</div></div>';
   var quotes='<div class="pcard span"><h2><span class="star">&#10022;</span> Quote Board</h2><div class="pbody">'+quoteBoard(body)+'</div></div>';
+  var gallery='<div class="pcard span"><h2><span class="star">&#10022;</span> Gallery</h2><div class="pbody">'+galleryBoard(body)+'</div></div>';
 
   var TABS=[
     {id:'overview',label:'Overview',html:'<div class="pgrid">'+overview+'</div>'},
@@ -300,7 +321,8 @@ async function init(){
     {id:'story',label:'Story',html:'<div class="pgrid">'+story+'</div>'},
     {id:'rel',label:'Relationships',html:'<div class="pgrid">'+rel+'</div>'},
     {id:'inv',label:'Inventory',html:'<div class="pgrid">'+inv+'</div>'},
-    {id:'quotes',label:'Quotes',html:'<div class="pgrid">'+quotes+'</div>'}
+    {id:'quotes',label:'Quotes',html:'<div class="pgrid">'+quotes+'</div>'},
+    {id:'gallery',label:'Gallery',html:'<div class="pgrid">'+gallery+'</div>'}
   ];
   document.getElementById('tabbar').innerHTML=TABS.map(function(t,i){return '<button class="tab'+(i===0?' active':'')+'" data-t="'+t.id+'">'+t.label+'</button>';}).join('');
   document.getElementById('tabpanels').innerHTML=TABS.map(function(t,i){return '<div class="tabpanel'+(i===0?' active':'')+'" id="tp-'+t.id+'">'+t.html+'</div>';}).join('');
@@ -308,6 +330,13 @@ async function init(){
     document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active');});
     document.querySelectorAll('.tabpanel').forEach(function(x){x.classList.remove('active');});
     b.classList.add('active');document.getElementById('tp-'+b.dataset.t).classList.add('active');});});
+
+  /* gallery lightbox */
+  var lb=document.createElement('div');lb.className='lightbox';lb.innerHTML='<img alt="">';document.body.appendChild(lb);
+  lb.addEventListener('click',function(){lb.classList.remove('open');});
+  document.addEventListener('click',function(e){var t=e.target;
+    if(t&&t.classList&&t.classList.contains('galimg')){lb.firstChild.src=t.src;lb.firstChild.alt=t.alt||'';lb.classList.add('open');}});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')lb.classList.remove('open');});
 
   var st=await rollStats(pc.name);
   if(st){document.getElementById('rollrec').innerHTML=
