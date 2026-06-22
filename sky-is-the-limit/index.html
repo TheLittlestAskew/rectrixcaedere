@@ -68,7 +68,7 @@ h1{font-family:var(--fd);font-weight:700;color:var(--vellum);font-size:clamp(30p
   color:var(--gold);text-align:center;margin-bottom:24px;display:flex;align-items:center;gap:14px;justify-content:center}
 .roster h2::before,.roster h2::after{content:'';height:1px;width:60px;background:linear-gradient(90deg,transparent,var(--border-strong),transparent)}
 .party{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}
-.pc{width:128px;text-align:center}
+.pc{width:128px;text-align:center;display:block;text-decoration:none;color:inherit;cursor:pointer}
 .pc .pcimg{width:128px;aspect-ratio:440/703;border-radius:10px;overflow:hidden;outline:1px solid var(--border);
   outline-offset:-1px;box-shadow:0 10px 28px rgba(0,0,0,.5);background:var(--card);transition:transform .4s,box-shadow .4s}
 .pc:hover .pcimg{transform:translateY(-6px);box-shadow:0 18px 36px rgba(0,0,0,.6),0 0 24px -6px var(--glow)}
@@ -104,12 +104,12 @@ footer .dot{color:var(--copper);margin:0 8px}
     <div class="roster">
       <h2>The Party</h2>
       <div class="party">
-        <div class="pc"><div class="pcimg"><img src="/assets/img/Kit-card.webp" alt="Kit Aluri"></div><div class="nm">Kit Aluri</div><div class="rl">192 rolls</div></div>
-        <div class="pc"><div class="pcimg"><img src="/assets/img/Darby-card.webp" alt="Darby Stonefeather"></div><div class="nm">Darby Stonefeather</div><div class="rl">197 rolls</div></div>
-        <div class="pc"><div class="pcimg"><img src="/assets/img/Amanita-card.webp" alt="Amanita de'Champignon"></div><div class="nm">Amanita de'Champignon</div><div class="rl">172 rolls</div></div>
-        <div class="pc"><div class="pcimg"><img src="/assets/img/Blarg-card.webp" alt="Blarg"></div><div class="nm">Blarg</div><div class="rl">167 rolls</div></div>
-        <div class="pc"><div class="pcimg"><img src="/assets/img/Binks-card.webp" alt="Binks Stonevein"></div><div class="nm">Binks Stonevein</div><div class="rl">131 rolls</div></div>
-        <div class="pc"><div class="pcimg"><img src="/assets/img/Aeolus-card.webp" alt="Aeolus"></div><div class="nm">Aeolus</div><div class="rl">81 rolls</div></div>
+        <a class="pc" href="/sky-is-the-limit/character.html?pc=kit-aluri"><div class="pcimg"><img src="/assets/img/Kit-card.webp" alt="Kit Aluri"></div><div class="nm">Kit Aluri</div><div class="rl">192 rolls</div></a>
+        <a class="pc" href="/sky-is-the-limit/character.html?pc=darby-stonefeather"><div class="pcimg"><img src="/assets/img/Darby-card.webp" alt="Darby Stonefeather"></div><div class="nm">Darby Stonefeather</div><div class="rl">197 rolls</div></a>
+        <a class="pc" href="/sky-is-the-limit/character.html?pc=amanita-dechampignon"><div class="pcimg"><img src="/assets/img/Amanita-card.webp" alt="Amanita de'Champignon"></div><div class="nm">Amanita de'Champignon</div><div class="rl">172 rolls</div></a>
+        <a class="pc" href="/sky-is-the-limit/character.html?pc=blarg"><div class="pcimg"><img src="/assets/img/Blarg-card.webp" alt="Blarg"></div><div class="nm">Blarg</div><div class="rl">167 rolls</div></a>
+        <a class="pc" href="/sky-is-the-limit/character.html?pc=binks-stonevein"><div class="pcimg"><img src="/assets/img/Binks-card.webp" alt="Binks Stonevein"></div><div class="nm">Binks Stonevein</div><div class="rl">131 rolls</div></a>
+        <a class="pc" href="/sky-is-the-limit/character.html?pc=aeolus"><div class="pcimg"><img src="/assets/img/Aeolus-card.webp" alt="Aeolus"></div><div class="nm">Aeolus</div><div class="rl">81 rolls</div></a>
       </div>
     </div>
     <footer>Rectrix Caedere <span class="dot">&#10022;</span> Campaign Archive <span class="dot">&#10022;</span> rectrixcaedere.com</footer>
