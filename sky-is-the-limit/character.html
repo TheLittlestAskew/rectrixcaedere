@@ -39,6 +39,21 @@ a{color:var(--gold-pale);text-decoration:none}
 .crumb a{color:var(--text2)}.crumb a:hover{color:var(--gold-pale)}
 .crumb .sep{color:var(--copper);margin:0 8px}
 
+.navwrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:26px}
+.backbtn{font-family:var(--fl);letter-spacing:.1em;text-transform:uppercase;font-size:12px;color:var(--gold-pale);
+  border:1px solid var(--border-strong);border-radius:7px;padding:8px 14px;white-space:nowrap}
+.backbtn:hover{background:rgba(199,163,105,.1)}
+.navchev{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:7px;
+  border:1px solid var(--border);color:var(--gold-pale);font-size:20px;line-height:1;flex:0 0 auto}
+.navchev:hover{background:rgba(199,163,105,.1);border-color:var(--border-strong)}
+.jump{display:flex;align-items:center;gap:8px;overflow-x:auto;flex:1 1 auto;padding:2px;scrollbar-width:thin}
+.pcchip{display:inline-flex;align-items:center;gap:8px;padding:4px 13px 4px 4px;border:1px solid var(--border);
+  border-radius:999px;color:var(--text2);white-space:nowrap;flex:0 0 auto;transition:border-color .15s,color .15s,background .15s}
+.pcchip:hover{border-color:var(--border-strong);color:var(--gold-pale)}
+.pcchip img{width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:50% 18%;border:1px solid var(--copperdk);background:var(--smoked)}
+.pcchip .nm{font-family:var(--fl);letter-spacing:.07em;text-transform:uppercase;font-size:12px}
+.pcchip.cur{border-color:var(--accent);background:rgba(199,163,105,.13);color:var(--gold-pale);box-shadow:0 0 0 1px var(--accent) inset}
+
 .hero{display:grid;grid-template-columns:clamp(190px,22vw,250px) 1fr clamp(270px,26vw,320px);
   gap:clamp(18px,2.6vw,34px);align-items:start}
 .portrait{position:relative}
@@ -284,7 +299,20 @@ async function init(){
     (lvl?'<dt>Level</dt><dd>'+zesc(lvl)+'</dd>':'')+r('Status',statusF)+r('Player',playerF)+
     r('Location',locF)+(firstF?'<dt>First seen</dt><dd>'+zesc(firstF)+'</dd>':'')+'</dl>';
 
+  var slugs=Object.keys(PCS),idx=slugs.indexOf(slug);
+  var prev=slugs[(idx-1+slugs.length)%slugs.length],next=slugs[(idx+1)%slugs.length];
+  var chips=slugs.map(function(s){var p=PCS[s],cur=s===slug;
+    return '<a class="pcchip'+(cur?' cur':'')+'" href="character.html?pc='+s+'"'+(cur?' aria-current="page"':'')+'>'+
+      '<img src="/assets/img/'+p.img+'" alt=""><span class="nm">'+zesc(p.name.split(/\s+/)[0])+'</span></a>';}).join('');
+  var navHtml='<div class="navwrap">'+
+    '<a class="backbtn" href="/sky-is-the-limit/">&#8592; The Party</a>'+
+    '<a class="navchev" href="character.html?pc='+prev+'" title="Previous character" aria-label="Previous character">&#8249;</a>'+
+    '<div class="jump">'+chips+'</div>'+
+    '<a class="navchev" href="character.html?pc='+next+'" title="Next character" aria-label="Next character">&#8250;</a>'+
+  '</div>';
+
   content.innerHTML=
+    navHtml+
     '<div class="hero">'+
       '<div class="portrait"><div class="fr"><img src="/assets/img/'+pc.img+'" alt="'+zesc(pc.name)+'"></div>'+
         '<div class="plate">'+zesc(pc.name)+'</div></div>'+
