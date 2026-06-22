@@ -90,6 +90,8 @@ a{color:var(--gold-pale);text-decoration:none}
 .tabpanel.active{display:block}
 
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;align-items:start}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start;margin-bottom:18px}
+@media(max-width:680px){.row2{grid-template-columns:1fr}}
 .pcard{background:var(--cream);border-radius:10px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.4);border:1px solid var(--copperdk)}
 .pcard.span{grid-column:1/-1}
 .pcard h2{margin:0;font-family:var(--fc);font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:13px;
@@ -296,11 +298,13 @@ async function init(){
     '<div class="tabbar" id="tabbar"></div><div id="tabpanels"></div>'+
     '<footer>Rectrix Caedere <span class="dot">&#10022;</span> Sky Is The Limit <span class="dot">&#10022;</span> <a href="/sky-is-the-limit/archive.html">The Descent</a></footer>';
 
-  var overview=
-    vaultPanel(body,/description|appearance/i,'Appearance',true)+
-    vaultPanel(body,/backstory/i,'Backstory',true)+
-    vaultPanel(body,/personality/i,'Personality',true)+
-    vaultPanel(body,/conditions/i,'Conditions');
+  var overviewHtml='<div class="row2">'+
+      vaultPanel(body,/description|appearance/i,'Appearance')+
+      vaultPanel(body,/backstory/i,'Backstory')+
+    '</div><div class="pgrid">'+
+      vaultPanel(body,/personality/i,'Personality',true)+
+      vaultPanel(body,/conditions/i,'Conditions')+
+    '</div>';
 
   var features=vaultPanel(body,/abilities|class features/i,'Features & Traits',true);
   var sheet='<div class="pcard span"><div class="pending">'+
@@ -316,7 +320,7 @@ async function init(){
   var gallery='<div class="pcard span"><h2><span class="star">&#10022;</span> Gallery</h2><div class="pbody">'+galleryBoard(body)+'</div></div>';
 
   var TABS=[
-    {id:'overview',label:'Overview',html:'<div class="pgrid">'+overview+'</div>'},
+    {id:'overview',label:'Overview',html:overviewHtml},
     {id:'sheet',label:'Character Sheet',html:'<div class="pgrid">'+sheet+'</div>'},
     {id:'story',label:'Story',html:'<div class="pgrid">'+story+'</div>'},
     {id:'rel',label:'Relationships',html:'<div class="pgrid">'+rel+'</div>'},
