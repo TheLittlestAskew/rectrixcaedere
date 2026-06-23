@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cinzel+Decorative:wght@400;700&family=Raleway:wght@300;400;500;600&family=Alegreya+Sans+SC:wght@400;500;700&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
 <style>
+@view-transition{navigation:auto}
 :root{
   --rc-starless-navy:#050A0E; --rc-deep-blue-black:#111A24; --rc-midnight-cardstock:#0D141C;
   --rc-smoked-navy:#162230;
@@ -202,6 +203,10 @@ footer .dot{color:var(--rc-aged-copper-gold);margin:0 8px}
   *{transition-duration:.001ms !important;animation:none !important}
   .veil-inner>*{opacity:1;transform:none} .slot{opacity:1;transform:none} .card{transform:none !important}
 }
+/* ── View Transition card hand-off ── */
+::view-transition-group(hero-card){animation-duration:520ms;animation-timing-function:cubic-bezier(.4,0,.2,1)}
+::view-transition-old(root),::view-transition-new(root){animation-duration:420ms;animation-timing-function:cubic-bezier(.4,0,.2,1)}
+@media(prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none !important}}
 </style>
 <script>
   /* If the veil was already crossed this visit, skip straight to the deck (no re-crossing). */
@@ -269,8 +274,8 @@ const canHover = matchMedia('(hover:hover) and (pointer:fine)').matches;
 
 const deck=document.getElementById('deck'), toast=document.getElementById('toast');
 let toastTimer;
-function go(c){
-  if(LIVE){ window.location.href=c.href; return; }
+function go(c,el){
+  if(LIVE){ if(el&&'startViewTransition' in document) el.style.viewTransitionName='hero-card'; window.location.href=c.href; return; }
   toast.textContent='\u21A6  Entering '+c.name+'   ('+c.href+')';
   toast.classList.add('show'); clearTimeout(toastTimer);
   toastTimer=setTimeout(()=>toast.classList.remove('show'),2200);
@@ -300,12 +305,27 @@ CAMPAIGNS.forEach((c,i)=>{
   if(live){
     card.addEventListener('click',()=>{
       if(!canHover && !card.classList.contains('is-flipped')){ card.classList.add('is-flipped'); return; }
-      go(c);
+      go(c,card);
     });
-    card.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(c); }});
+    card.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(c,card); }});
   }
   deck.appendChild(slot);
 });
+
+/* Reverse hand-off: if we arrived from a campaign page, name its card so it
+   receives the morph back from the campaign hero. */
+try{
+  if(document.referrer){
+    const rp=new URL(document.referrer).pathname;
+    CAMPAIGNS.forEach((c,i)=>{
+      const slug=c.href.replace(/^\.?\//,'').replace(/\/$/,'');
+      if(slug && rp.indexOf(slug)>-1){
+        const rc=deck.children[i] && deck.children[i].querySelector('.card');
+        if(rc) rc.style.viewTransitionName='hero-card';
+      }
+    });
+  }
+}catch(e){}
 
 document.getElementById('cross').addEventListener('click',()=>{
   try{ sessionStorage.setItem('rc_crossed','1'); }catch(e){}
