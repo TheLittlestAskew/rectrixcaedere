@@ -26,18 +26,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;background:radial-grad
 .subnav{position:fixed;top:20px;right:22px;z-index:30}
 .subnav a{font-family:var(--fl);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-pale);text-decoration:none;border:1px solid var(--border);border-radius:3px;padding:9px 14px;background:rgba(13,20,28,.6);backdrop-filter:blur(4px)}
 
-/* petals (shared shape) */
-.petal{position:absolute;display:block;will-change:transform,opacity;pointer-events:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.28));-webkit-user-drag:none;user-select:none}
-
 .defs{position:absolute;width:0;height:0;overflow:hidden}
-
-.ambient{position:fixed;inset:-6% 0 0 0;z-index:1;pointer-events:none;overflow:hidden}
-@keyframes pdrift{
-  0%{opacity:0;transform:translate3d(0,-12vh,0) rotateZ(0deg) rotateX(0deg)}
-  8%{opacity:.66}92%{opacity:.5}
-  100%{opacity:0;transform:translate3d(var(--fx,34px),112vh,0) rotateZ(var(--rz,400deg)) rotateX(720deg)}
-}
-.ambient .petal{top:-8%}
 
 header{max-width:1040px;margin:0 auto;padding:44px 22px 4px;text-align:center}
 .eyebrow{font-family:var(--fl);font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
@@ -81,32 +70,13 @@ h1{font-family:var(--fd);font-weight:700;color:var(--vellum);font-size:clamp(26p
 .pop a.sess .sd{font-family:var(--fl);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text2);margin-top:3px}
 .pop a.sess .go{float:right;color:var(--gold-pale);font-size:12px}
 
-/* ── intro: blank → buds bloom & cover → all fall, revealing map ── */
-.veil{position:absolute;inset:0;z-index:13;opacity:1;transition:opacity 1.15s ease;
-  background:
-    radial-gradient(120% 95% at 50% 22%,rgba(17,26,37,.96),rgba(6,11,17,.99)),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='52' viewBox='0 0 52 52'%3E%3Cpath d='M15 9 C20 14 20 23 15 30 C10 23 10 14 15 9 Z' fill='%23C7A369' opacity='0.10'/%3E%3Cpath d='M37 23 C42 28 42 37 37 44 C32 37 32 28 37 23 Z' fill='%23AF755A' opacity='0.08'/%3E%3C/svg%3E");
-  background-size:cover,52px 52px}
-.veil.go{opacity:0;pointer-events:none}
-.bloomlayer{position:absolute;inset:0;z-index:15;pointer-events:none;overflow:hidden}
-.rain{position:absolute;inset:0;z-index:16;pointer-events:none;overflow:hidden}
-.flower{position:absolute;display:block;transform-origin:center center;opacity:0;will-change:transform,opacity;filter:drop-shadow(0 2px 5px rgba(0,0,0,.4));pointer-events:none;-webkit-user-drag:none}
-
-.plant{transform-origin:50% 100%}
-@keyframes bloom{
-  0%{opacity:0;transform:scale(0) rotate(calc(var(--rot,0deg) - 44deg))}
-  55%{opacity:1;transform:scale(1.14) rotate(calc(var(--rot,0deg) + 6deg))}
-  100%{opacity:1;transform:scale(1) rotate(var(--rot,0deg))}
-}
-@keyframes flfall{
-  0%{opacity:1;transform:translate(0,0) rotate(var(--rot,0deg)) scale(1)}
-  14%{transform:translate(calc(var(--fx,20px)*.12),calc(var(--fy,820px)*.05)) rotate(calc(var(--rot,0deg) + 8deg)) scale(1.04)}
-  100%{opacity:0;transform:translate(var(--fx,20px),var(--fy,820px)) rotate(var(--rz,420deg)) scale(.8)}
-}
-@keyframes pfall{
-  0%{opacity:1;transform:translate(0,0) rotateZ(0deg) rotateX(0deg)}
-  100%{opacity:0;transform:translate(var(--fx,30px),var(--fy,820px)) rotateZ(var(--rz,420deg)) rotateX(560deg)}
-}
+/* ── intro: the tarot card turns on its side, widens to the map, then becomes the map ── */
+.reveal{position:absolute;inset:0;z-index:14;display:grid;place-items:center;overflow:hidden;border-radius:14px;
+  background:radial-gradient(120% 95% at 50% 30%,#111a25,#070d14 72%)}
+.reveal.gone{opacity:0;pointer-events:none;transition:opacity .6s ease}
+.reveal-card{height:82%;width:auto;aspect-ratio:440/703;object-fit:cover;border-radius:12px;
+  box-shadow:0 22px 70px rgba(0,0,0,.7);outline:1px solid var(--border-strong);outline-offset:-1px;
+  transform-origin:center center;will-change:transform;backface-visibility:hidden}
 
 .legend{max-width:1340px;margin:8px auto 0;padding:0 18px;display:flex;flex-wrap:wrap;gap:14px;justify-content:center;font-family:var(--fl);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text2)}
 .legend span{display:inline-flex;align-items:center;gap:7px}
@@ -114,15 +84,12 @@ h1{font-family:var(--fd);font-weight:700;color:var(--vellum);font-size:clamp(26p
 footer{text-align:center;padding:26px 20px 56px;font-family:var(--fl);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
 footer a{color:var(--gold-pale);text-decoration:none;border-bottom:1px solid var(--border)}
 footer .d{color:var(--copper);margin:0 8px}
-@media(prefers-reduced-motion:reduce){.ambient,.veil,.bloomlayer,.rain{display:none}.markers{opacity:1}.ping .ring,.bud .pulse{animation:none;opacity:0}}
+@media(prefers-reduced-motion:reduce){.reveal{display:none}.markers{opacity:1}.ping .ring,.bud .pulse{animation:none;opacity:0}}
 </style>
 </head>
 <body>
 <a class="back" href="/where-the-flowers-forget/">&#8592;&nbsp;&nbsp;Where the Flowers Forget</a>
 <nav class="subnav"><a href="/dashboard.html?c=4">Roll Dashboard</a></nav>
-
-
-<div class="ambient" id="ambient" aria-hidden="true"></div>
 
 <header>
   <div class="eyebrow">The Record</div>
@@ -134,9 +101,9 @@ footer .d{color:var(--copper);margin:0 8px}
   <div class="mapwrap" id="mapwrap">
     <img class="mapimg" src="/assets/img/Artemesia_Map.webp" alt="Map of Artemesia">
     <div class="markers" id="markers"></div>
-    <div class="veil" id="veil"></div>
-    <div class="bloomlayer" id="bloomlayer" aria-hidden="true"></div>
-    <div class="rain" id="rain" aria-hidden="true"></div>
+    <div class="reveal" id="reveal" aria-hidden="true">
+      <img class="reveal-card" id="revealCard" src="/assets/img/wtff_tarot_face.webp" alt="" decoding="async" draggable="false">
+    </div>
   </div>
   <div class="legend">
     <span><span class="dot" style="background:var(--gold-bright)"></span> You are here</span>
@@ -171,31 +138,10 @@ var CONFIG = {
 
 var mapwrap=document.getElementById('mapwrap');
 var markers=document.getElementById('markers');
-var veil=document.getElementById('veil');
-var bloomlayer=document.getElementById('bloomlayer');
-var rain=document.getElementById('rain');
+var reveal=document.getElementById('reveal');
+var revealCard=document.getElementById('revealCard');
 var L=CONFIG.locations;
 function place(el,key){var p=L[key];el.style.left=p.x+'%';el.style.top=p.y+'%';}
-
-/* ── botanical assets (transparent cutouts, /assets/img/plants) ── */
-var PBASE='/assets/img/plants/';
-function P(list){return list.map(function(n){return PBASE+'botanical_'+n+'.webp';});}
-var FLOWERS=P(['17','27','29','31','34','36','38','39','43','45','46']);                 /* whole blooms */
-var PLANTS =P(['03','05','07','08','10','11','12','13','14','16','18','19','21','22','23','24','25','28','30.','32','33','35','37','40','42','47','48','51']); /* foliage & sprigs — 28 unique */
-var PETALS =P(['09','41','306','02','50','06','04','20','01','21','26','44','49']);       /* single petals & leaves for the fall */
-function imgEl(src,sizePx,cls){
-  var im=document.createElement('img');
-  im.src=src; im.alt=''; im.className=cls; im.decoding='async'; im.draggable=false;
-  im.style.width=sizePx+'px'; im.style.height='auto';
-  return im;
-}
-/* deal from a shuffled deck so every asset is placed before any repeats (kills clustered duplicates) */
-function deck(list){var d=[];return function(){if(!d.length){d=list.slice();for(var i=d.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=d[i];d[i]=d[j];d[j]=t;}}return d.pop();};}
-var nextFlower=deck(FLOWERS), nextPlant=deck(PLANTS), nextPetal=deck(PETALS);
-function petal(sizePx){ return imgEl(nextPetal(),sizePx,'petal'); }
-function flower(sizePx){ return imgEl(nextFlower(),sizePx,'flower'); }
-function plant(sizePx){ return imgEl(nextPlant(),sizePx,'flower plant'); }
-function preload(){ FLOWERS.concat(PLANTS,PETALS).forEach(function(s){var i=new Image(); i.src=s;}); }
 
 /* path polyline */
 if(CONFIG.path.length>1){
@@ -249,74 +195,25 @@ CONFIG.events.forEach(function(ev){
 });
 document.addEventListener('click',function(){if(openPop){openPop.pop.classList.remove('open');openPop.btn.setAttribute('aria-expanded','false');openPop=null;}});
 
-/* ── intro sequence ── */
-function gentleRain(){
-  var H=mapwrap.clientHeight;
-  for(var i=0;i<20;i++){
-    var p=petal(26+Math.random()*30);
-    p.style.left=(Math.random()*100)+'%'; p.style.top=(-16-Math.random()*22)+'%';
-    p.style.setProperty('--fx',(Math.random()*100-30).toFixed(0)+'px');
-    p.style.setProperty('--fy',(H*1.3).toFixed(0)+'px');
-    p.style.setProperty('--rz',(Math.random()*560-140).toFixed(0)+'deg');
-    p.style.animation='pfall '+(2.2+Math.random()*1.6).toFixed(2)+'s linear '+(Math.random()*2.0).toFixed(2)+'s forwards';
-    rain.appendChild(p);
-  }
+/* ── intro: card turns on its side → widens to map size → dissolves into the map ── */
+function runReveal(){
+  if(reduce){ if(reveal){ reveal.remove(); } markers.style.opacity='1'; return; }
+  var Wm=mapwrap.clientWidth, Hm=mapwrap.clientHeight;
+  var cardH=0.82*Hm;            /* displayed height of the upright card */
+  var turnedW=cardH;            /* after a 90° turn the card's height becomes its width */
+  var grow=(Wm/turnedW)*1.04;   /* widen until the turned card spans the map (slight overshoot = clean fill) */
+  var anim=revealCard.animate([
+    { transform:'rotate(0deg) scale(1)' },
+    { transform:'rotate(90deg) scale(1)', offset:0.5 },
+    { transform:'rotate(90deg) scale('+grow.toFixed(3)+')' }
+  ], { duration:1250, easing:'cubic-bezier(.4,0,.2,1)', fill:'forwards' });
+  anim.onfinish=function(){
+    reveal.classList.add('gone');                       /* card + backdrop dissolve, revealing the map beneath */
+    setTimeout(function(){ markers.style.opacity='1'; }, 300);
+    setTimeout(function(){ if(reveal){ reveal.remove(); } }, 700);
+  };
 }
-function buildBlooms(){
-  var H=mapwrap.clientHeight; var arr=[];
-  function add(count,minS,maxS,maker,grow){
-    for(var i=0;i<count;i++){
-      var f=maker(minS+Math.random()*(maxS-minS));
-      f.style.left=(Math.random()*112-6)+'%'; f.style.top=(Math.random()*112-6)+'%';
-      f.style.setProperty('--rot',((grow?Math.random()*18-9:Math.random()*44-22)).toFixed(0)+'deg');
-      f.style.setProperty('--fx',(Math.random()*140-70).toFixed(0)+'px');
-      f.style.setProperty('--fy',(H*0.85+Math.random()*H*0.6).toFixed(0)+'px');
-      f.style.setProperty('--rz',(Math.random()*560-150).toFixed(0)+'deg');
-      var delay=(0.1+Math.random()*1.05).toFixed(2);
-      f.style.animation='bloom '+(0.5+Math.random()*0.28).toFixed(2)+'s cubic-bezier(.34,1.4,.5,1) '+delay+'s both';
-      bloomlayer.appendChild(f); arr.push(f);
-    }
-  }
-  add(44, 54, 124, flower, false);   /* realistic blooms */
-  add(56, 46, 120, plant,  true);    /* plants — majority of the cover, 28-asset deck for variety */
-  return arr;
-}
-function dropAll(flowers){
-  flowers.forEach(function(f){ f.style.animation='flfall '+(1.5+Math.random()*0.85).toFixed(2)+'s cubic-bezier(.4,.05,.6,1) '+(Math.random()*0.16).toFixed(2)+'s forwards'; });
-  var H=mapwrap.clientHeight;
-  for(var i=0;i<66;i++){
-    var p=petal(24+Math.random()*34);
-    p.style.left=(Math.random()*100)+'%'; p.style.top=(Math.random()*72)+'%';
-    p.style.setProperty('--fx',(Math.random()*160-80).toFixed(0)+'px');
-    p.style.setProperty('--fy',(H*0.9+Math.random()*H*0.55).toFixed(0)+'px');
-    p.style.setProperty('--rz',(Math.random()*640-160).toFixed(0)+'deg');
-    p.style.animation='pfall '+(1.4+Math.random()*1.15).toFixed(2)+'s cubic-bezier(.4,.05,.6,1) '+(Math.random()*0.4).toFixed(2)+'s forwards';
-    rain.appendChild(p);
-  }
-}
-function startAmbient(){
-  if(reduce)return;var wrap=document.getElementById('ambient');
-  for(var i=0;i<14;i++){
-    var p=petal(22+Math.random()*22);
-    p.style.left=(Math.random()*100)+'%';
-    var dur=(11+Math.random()*9);
-    p.style.animation='pdrift '+dur+'s linear '+(-Math.random()*dur).toFixed(1)+'s infinite';
-    p.style.setProperty('--fx',(Math.random()*80-20).toFixed(0)+'px');
-    p.style.setProperty('--rz',(Math.random()*520-120).toFixed(0)+'deg');
-    wrap.appendChild(p);
-  }
-}
-function runIntro(){
-  if(reduce){ markers.style.opacity='1'; startAmbient(); return; }
-  gentleRain();
-  var flowers=buildBlooms();
-  var COVERED=1650;
-  setTimeout(function(){ dropAll(flowers); veil.classList.add('go'); }, COVERED+350);
-  setTimeout(function(){ markers.style.opacity='1'; }, COVERED+350+1250);
-  setTimeout(function(){ veil.remove(); bloomlayer.remove(); rain.remove(); startAmbient(); }, COVERED+350+2200);
-}
-preload();
-window.addEventListener('load',function(){ setTimeout(runIntro,260); });
+window.addEventListener('load',function(){ setTimeout(runReveal,200); });
 </script>
 </body>
 </html>
