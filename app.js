@@ -1,7 +1,7 @@
 var T={bgVoid:'#050A0E',bgCard:'#0E1820',bgCardInner:'#0B1219',goldDark:'#68442F',goldMid:'#8C5D3F',gold:'#C7A369',goldBright:'#DA9565',goldPale:'#E8C690',text1:'#E8E4DC',text2:'#9A9590',text3:'#9A9590',success:'#6E7C5A',danger:'#B7634D',info:'#4A7387',mystic:'#8A6B82',warn:'#AF755A',fLabel:"'Alegreya Sans SC',sans-serif",text2xs:9,textXs:10,goldAlpha5:'rgba(199,163,105,0.05)',goldAlpha8:'rgba(199,163,105,0.08)',goldAlpha10:'rgba(199,163,105,0.10)',goldAlpha30:'rgba(199,163,105,0.30)'};
-var h=React.createElement,us=React.useState;
+var h=React.createElement,us=React.useState,ue=React.useEffect;
 var AC=Recharts.AreaChart,A=Recharts.Area,PC=Recharts.PieChart,Pi=Recharts.Pie,Ce=Recharts.Cell,XA=Recharts.XAxis,YA=Recharts.YAxis,CG=Recharts.CartesianGrid,Tt=Recharts.Tooltip,RC=Recharts.ResponsiveContainer,Lg=Recharts.Legend,BC=Recharts.BarChart,Bar=Recharts.Bar,RL=Recharts.ReferenceLine;
-var D=[{id:1,nm:'Sky Is The Limit',sn:'SITL',st:'a',tr:946,ch:6,se:15,n20:44,n1:41,fr:'2025-10-12',lr:'2026-05-03',sd:[{d:'S01',r:67},{d:'S02',r:81},{d:'S03',r:99},{d:'S04',r:88},{d:'S05',r:66},{d:'S06',r:160},{d:'S07',r:22},{d:'S08',r:59},{d:'S09',r:22},{d:'S10',r:70},{d:'S11',r:13},{d:'S12',r:36},{d:'S13',r:63},{d:'S14',r:20},{d:'S15',r:28}],rt:[{n:'Check',v:534,c:T.gold},{n:'Roll',v:142,c:T.mystic},{n:'Damage',v:99,c:T.danger},{n:'Save',v:83,c:T.success},{n:'To Hit',v:74,c:T.info},{n:'Heal',v:14,c:T.warn}],ac:[{n:'Skill',v:461,c:T.gold},{n:'Attack',v:186,c:T.danger},{n:'Custom',v:103,c:T.goldMid}],pf:[{d:'S01',n:3},{d:'S02',n:2},{d:'S03',n:2},{d:'S04',n:1},{d:'S05',n:2},{d:'S06',n:1},{d:'S07',n:1},{d:'S08',n:2},{d:'S09',n:2},{d:'S10',n:5},{d:'S11',n:7},{d:'S12',n:7},{d:'S13',n:12},{d:'S14',n:12},{d:'S15',n:4}],pfTop:'Kit \u00b7 33',oq:47,chars:[{n:'Darby Stonefeather',r:197,avg:11.5,tr:-0.9},{n:'Kit Aluri',r:192,avg:10.8,tr:-0.2},{n:"Amanita de'Champignon",r:172,avg:10.7,tr:-1.5},{n:'Blarg',r:167,avg:11.6,tr:0.2},{n:'Binks Stonevein',r:131,avg:10.1,tr:-1.8},{n:'Aeolus',r:81,avg:10.8,tr:0}]},{id:2,nm:'Pacts & Power',sn:'P&P',st:'a',tr:2907,ch:5,se:72,n20:109,n1:117,fr:'2023-01-29',lr:'2026-04-21',sd:[{d:"Q1'23",r:149},{d:"Q2'23",r:288},{d:"Q3'23",r:234},{d:"Q4'23",r:206},{d:"Q1'24",r:164},{d:"Q2'24",r:103},{d:"Q3'24",r:81},{d:"Q4'24",r:123},{d:"Q1'25",r:110},{d:"Q2'25",r:78},{d:"Q3'25",r:199},{d:"Q4'25",r:189},{d:"Q1'26",r:188},{d:"Q2'26",r:191}],rt:[{n:'Check',v:1117,c:T.gold},{n:'Damage',v:509,c:T.danger},{n:'Roll',v:492,c:T.mystic},{n:'To Hit',v:459,c:T.info},{n:'Save',v:294,c:T.success},{n:'Heal',v:35,c:T.warn}],ac:[{n:'Skill',v:934,c:T.gold},{n:'Attack',v:664,c:T.danger},{n:'Custom',v:352,c:T.goldMid}],pf:[],oq:null,chars:[{n:'Orphie Levistus',r:1172,avg:10.6,tr:0.1},{n:'Varis Aestra',r:817,avg:10.2,tr:1.0},{n:'Sanis Reylana',r:458,avg:9.8,tr:-1.2},{n:'Rinestra Genleth',r:128,avg:10.5,tr:0},{n:'Braun',r:54,avg:10.2,tr:0}]},{id:3,nm:'Ashfall Britannia',sn:'AFB',st:'a',tr:855,ch:7,se:8,n20:29,n1:22,fr:'2025-11-08',lr:'2026-05-04',sd:[{d:'S01',r:196},{d:'S02',r:93},{d:'S03',r:125},{d:'S04',r:163},{d:'S05',r:81},{d:'S06',r:51},{d:'S07',r:47},{d:'S08',r:44}],rt:[{n:'Check',v:273,c:T.gold},{n:'Damage',v:192,c:T.danger},{n:'Roll',v:172,c:T.mystic},{n:'To Hit',v:163,c:T.info},{n:'Save',v:47,c:T.success},{n:'Heal',v:8,c:T.warn}],ac:[{n:'Skill',v:235,c:T.gold},{n:'Attack',v:261,c:T.danger}],pf:[],oq:null,chars:[{n:'Flux',r:145,avg:11.4,tr:-0.2},{n:'Barrett Grimmskar',r:137,avg:10.4,tr:0.3},{n:'Samothy Smith-Wesson',r:118,avg:10.1,tr:-0.3},{n:'Deanna Smith-Wesson',r:117,avg:10.4,tr:0.1},{n:'Vega Bloodroot',r:117,avg:10.8,tr:0.1},{n:'Zelda \"Z\" Whipper',r:101,avg:11.1,tr:-0.3},{n:'Valerian Hellebore',r:93,avg:10.1,tr:1.0}]},{id:4,nm:'Where the Flowers Forget',sn:'WTFF',st:'a',tr:20,ch:6,se:1,n20:0,n1:1,fr:'2026-06-14',lr:'2026-06-14',sd:[{d:'S01',r:20}],rt:[{n:'Check',v:20,c:T.gold}],ac:[{n:'Skill',v:20,c:T.gold}],pf:[],oq:null,chars:[{n:'Tobias Wolfe',r:5,avg:'--',tr:0},{n:'Eliza Duskbloom',r:4,avg:'--',tr:0},{n:'Isla "Bruin" Kaplan',r:3,avg:'--',tr:0},{n:'Zarna Morganach',r:3,avg:'--',tr:0},{n:'BE-BO',r:2,avg:'--',tr:0},{n:'Artie Veyr',r:1,avg:'--',tr:0}]}];
+var D=[{id:1,nm:'Sky Is The Limit',sn:'SITL',st:'a',vault:'sitl_vault',tr:946,ch:6,se:15,n20:44,n1:41,fr:'2025-10-12',lr:'2026-05-03',sd:[{d:'S01',r:67},{d:'S02',r:81},{d:'S03',r:99},{d:'S04',r:88},{d:'S05',r:66},{d:'S06',r:160},{d:'S07',r:22},{d:'S08',r:59},{d:'S09',r:22},{d:'S10',r:70},{d:'S11',r:13},{d:'S12',r:36},{d:'S13',r:63},{d:'S14',r:20},{d:'S15',r:28}],rt:[{n:'Check',v:534,c:T.gold},{n:'Roll',v:142,c:T.mystic},{n:'Damage',v:99,c:T.danger},{n:'Save',v:83,c:T.success},{n:'To Hit',v:74,c:T.info},{n:'Heal',v:14,c:T.warn}],ac:[{n:'Skill',v:461,c:T.gold},{n:'Attack',v:186,c:T.danger},{n:'Custom',v:103,c:T.goldMid}],pf:[{d:'S01',n:3},{d:'S02',n:2},{d:'S03',n:2},{d:'S04',n:1},{d:'S05',n:2},{d:'S06',n:1},{d:'S07',n:1},{d:'S08',n:2},{d:'S09',n:2},{d:'S10',n:5},{d:'S11',n:7},{d:'S12',n:7},{d:'S13',n:12},{d:'S14',n:12},{d:'S15',n:4}],pfTop:'Kit \u00b7 33',oq:47,chars:[{n:'Darby Stonefeather',r:197,avg:11.5,tr:-0.9},{n:'Kit Aluri',r:192,avg:10.8,tr:-0.2},{n:"Amanita de'Champignon",r:172,avg:10.7,tr:-1.5},{n:'Blarg',r:167,avg:11.6,tr:0.2},{n:'Binks Stonevein',r:131,avg:10.1,tr:-1.8},{n:'Aeolus',r:81,avg:10.8,tr:0}]},{id:2,nm:'Pacts & Power',sn:'P&P',st:'a',vault:'pacts_power_vault',tr:2907,ch:5,se:72,n20:109,n1:117,fr:'2023-01-29',lr:'2026-04-21',sd:[{d:"Q1'23",r:149},{d:"Q2'23",r:288},{d:"Q3'23",r:234},{d:"Q4'23",r:206},{d:"Q1'24",r:164},{d:"Q2'24",r:103},{d:"Q3'24",r:81},{d:"Q4'24",r:123},{d:"Q1'25",r:110},{d:"Q2'25",r:78},{d:"Q3'25",r:199},{d:"Q4'25",r:189},{d:"Q1'26",r:188},{d:"Q2'26",r:191}],rt:[{n:'Check',v:1117,c:T.gold},{n:'Damage',v:509,c:T.danger},{n:'Roll',v:492,c:T.mystic},{n:'To Hit',v:459,c:T.info},{n:'Save',v:294,c:T.success},{n:'Heal',v:35,c:T.warn}],ac:[{n:'Skill',v:934,c:T.gold},{n:'Attack',v:664,c:T.danger},{n:'Custom',v:352,c:T.goldMid}],pf:[],oq:null,chars:[{n:'Orphie Levistus',r:1172,avg:10.6,tr:0.1},{n:'Varis Aestra',r:817,avg:10.2,tr:1.0},{n:'Sanis Reylana',r:458,avg:9.8,tr:-1.2},{n:'Rinestra Genleth',r:128,avg:10.5,tr:0},{n:'Braun',r:54,avg:10.2,tr:0}]},{id:3,nm:'Ashfall Britannia',sn:'AFB',st:'a',vault:'ashfall_vault',tr:855,ch:7,se:8,n20:29,n1:22,fr:'2025-11-08',lr:'2026-05-04',sd:[{d:'S01',r:196},{d:'S02',r:93},{d:'S03',r:125},{d:'S04',r:163},{d:'S05',r:81},{d:'S06',r:51},{d:'S07',r:47},{d:'S08',r:44}],rt:[{n:'Check',v:273,c:T.gold},{n:'Damage',v:192,c:T.danger},{n:'Roll',v:172,c:T.mystic},{n:'To Hit',v:163,c:T.info},{n:'Save',v:47,c:T.success},{n:'Heal',v:8,c:T.warn}],ac:[{n:'Skill',v:235,c:T.gold},{n:'Attack',v:261,c:T.danger}],pf:[],oq:null,chars:[{n:'Flux',r:145,avg:11.4,tr:-0.2},{n:'Barrett Grimmskar',r:137,avg:10.4,tr:0.3},{n:'Samothy Smith-Wesson',r:118,avg:10.1,tr:-0.3},{n:'Deanna Smith-Wesson',r:117,avg:10.4,tr:0.1},{n:'Vega Bloodroot',r:117,avg:10.8,tr:0.1},{n:'Zelda \"Z\" Whipper',r:101,avg:11.1,tr:-0.3},{n:'Valerian Hellebore',r:93,avg:10.1,tr:1.0}]},{id:4,nm:'Where the Flowers Forget',sn:'WTFF',st:'a',vault:'wtff_vault',tr:20,ch:6,se:1,n20:0,n1:1,fr:'2026-06-14',lr:'2026-06-14',sd:[{d:'S01',r:20}],rt:[{n:'Check',v:20,c:T.gold}],ac:[{n:'Skill',v:20,c:T.gold}],pf:[],oq:null,chars:[{n:'Tobias Wolfe',r:5,avg:'--',tr:0},{n:'Eliza Duskbloom',r:4,avg:'--',tr:0},{n:'Isla "Bruin" Kaplan',r:3,avg:'--',tr:0},{n:'Zarna Morganach',r:3,avg:'--',tr:0},{n:'BE-BO',r:2,avg:'--',tr:0},{n:'Artie Veyr',r:1,avg:'--',tr:0}]}];
 
 function BL(){return h('svg',{viewBox:'0 0 60 60',fill:'none',width:44,height:44},h('defs',null,h('linearGradient',{id:'blg',x1:0,y1:0,x2:0,y2:1},h('stop',{offset:'0%',stopColor:T.goldBright}),h('stop',{offset:'50%',stopColor:T.gold}),h('stop',{offset:'100%',stopColor:T.goldMid}))),h('path',{d:'M30 4 L37 28 L34 31 L30 56 L26 31 L23 28 Z',fill:'url(#blg)',opacity:.9}),h('line',{x1:30,y1:6,x2:30,y2:54,stroke:T.bgCardInner,strokeWidth:'.7',opacity:.4}),h('path',{d:'M20 29 L30 33 L40 29 L30 25 Z',fill:'url(#blg)',opacity:.6}),h('path',{d:'M30 1 L31 3.5 L30 2.8 L29 3.5 Z',fill:T.goldBright,opacity:.5}))}
 
@@ -230,7 +230,96 @@ var SESS=[{d:'May 25',n:'87. The Weeping Fen',loc:'Valewatch Marshes',r:'win'},{
 var RLAB={win:'Victory',part:'Partial',fail:'Failure'};
 function SessList(){return h('ul',{className:'sess-list'},SESS.map(function(s,i){return h('li',{key:i},h('span',{className:'sd'},s.d),h('div',null,h('div',{className:'sn'},s.n),h('div',{className:'sl'},s.loc)),h('span',{className:'sr '+s.r},RLAB[s.r]))}))}
 
-function QuoteBoard(){return h('div',{className:'quote-wrap'},h('div',{className:'quote-body'},'"We do not fear the dark. We are the dark. We shape what others fear."'),h('div',{className:'quote-attr'},'-- Thorne Blackwell -- Session 87'))}
+/* ── Quote board: random quote from the active campaign's vault, fetched live on each load ── */
+var QUOTE_CACHE={};
+function qbName(s){
+  s=s.replace(/\*\*/g,'').trim();
+  s=s.split(/\s\u00b7\s/)[0].trim();
+  s=s.replace(/\[\[([^\]]*?)\]\]/g,function(_,i){var p=i.split(/\\?\|/);return p[p.length-1];});
+  s=s.replace(/[\[\]]/g,'').replace(/\\+$/,'').trim();
+  return s;
+}
+function qbQuote(q){
+  q=q.replace(/^>\s*/,'').trim();
+  q=q.replace(/^[\u201c"']+|[\u201d"']+$/g,'').trim();
+  return q;
+}
+var QB_PLACE=/\[(Verbatim quote|Tag|##|Title|MM\/DD\/YYYY|CHARACTER NAME)\]/i;
+function qbParse(md){
+  md=md.replace(/^---\n[\s\S]*?\n---\n/,'').replace(/```[\s\S]*?```/g,'');
+  var lines=md.split(/\r?\n/),out=[],cur='';
+  for(var i=0;i<lines.length;i++){
+    var ln=lines[i];
+    var hm=/^##\s+(?:Session|Transcript)\s+0*([0-9]+)/i.exec(ln);
+    if(hm){var nn=hm[1];cur='S'+(nn.length<2?'0'+nn:nn);continue;}
+    if(/^\|/.test(ln)){                                  /* table row (P&P) */
+      var c=ln.replace(/\\\|/g,'\u0001').split('|').map(function(x){return x.replace(/\u0001/g,'|').trim();});
+      if(c.length>=4){
+        var spk=c[1],qt=c[2];
+        if(/^:?-+:?$/.test(spk)||/^speaker$/i.test(spk)||!qt)continue;
+        var q=qbQuote(qt);
+        if(q&&!QB_PLACE.test(q))out.push({q:q,a:qbName(spk)+(cur?' \u00b7 '+cur:'')});
+      }
+      continue;
+    }
+    var bm=/^\*\*(.+?)\*\*\s*$/.exec(ln);                 /* bold header (SITL/Ashfall/WTFF) */
+    if(bm){
+      if(QB_PLACE.test(bm[1]))continue;
+      var j=i+1;while(j<lines.length&&!lines[j].trim())j++;
+      if(j<lines.length){
+        var ql=lines[j].trim();
+        if(/^[>"\u201c']/.test(ql)){
+          var q2=qbQuote(ql);
+          if(q2&&!QB_PLACE.test(q2))out.push({q:q2,a:qbName(bm[1])+(cur?' \u00b7 '+cur:'')});
+        }
+      }
+    }
+  }
+  return out;
+}
+function qbBatchLinks(md){
+  var re=/\[\[(Quote Board [^\]\|]+?)(?:\\?\|[^\]]*)?\]\]/g,m,seen={},out=[];
+  while((m=re.exec(md))){var k=m[1].trim();if(!seen[k]){seen[k]=1;out.push(k);}}
+  return out;
+}
+function qbLoad(vault){
+  if(QUOTE_CACHE[vault])return Promise.resolve(QUOTE_CACHE[vault]);
+  var base='https://raw.githubusercontent.com/TheLittlestAskew/'+vault+'/main/00-Campaign-Hub/';
+  return fetch(base+encodeURIComponent('Quote Board Master')+'.md').then(function(r){return r.ok?r.text():'';}).then(function(master){
+    var all=qbParse(master),links=qbBatchLinks(master);
+    return Promise.all(links.map(function(link){
+      return fetch(base+'Trackers/'+encodeURIComponent(link)+'.md').then(function(r){return r.ok?r.text():'';}).then(qbParse).catch(function(){return [];});
+    })).then(function(batches){
+      batches.forEach(function(b){all=all.concat(b);});
+      var seen={},out=[];
+      all.forEach(function(x){if(x.q&&x.q.length>=2&&!seen[x.q]){seen[x.q]=1;out.push(x);}});
+      QUOTE_CACHE[vault]=out;return out;
+    });
+  }).catch(function(){QUOTE_CACHE[vault]=[];return [];});
+}
+function QuoteBoard(p){
+  var c=p&&p.c;
+  var _=us({s:'load',q:null}),state=_[0],setState=_[1];
+  ue(function(){
+    var live=true;
+    if(!c||!c.vault){setState({s:'empty',q:null});return;}
+    setState({s:'load',q:null});
+    qbLoad(c.vault).then(function(qs){
+      if(!live)return;
+      if(qs&&qs.length)setState({s:'ok',q:qs[(Math.random()*qs.length)|0]});
+      else setState({s:'empty',q:null});
+    });
+    return function(){live=false;};
+  },[c?c.id:0]);
+  var body,attr=null;
+  if(state.s==='ok'){body='\u201c'+state.q.q+'\u201d';attr=state.q.a;}
+  else if(state.s==='empty'){body='No quotes recorded for this campaign yet.';}
+  else body='\u2026';
+  return h('div',{className:'quote-wrap'},
+    h('div',{className:'quote-body'},body),
+    attr?h('div',{className:'quote-attr'},attr):null
+  );
+}
 
 function RIcon(p){
   var icons={
@@ -369,7 +458,7 @@ function App(){
           h(SessList)
         ),
         h('div',{className:'panel cp ai d8'},
-          h(QuoteBoard)
+          h(QuoteBoard,{c:c})
         ),
         h('div',{className:'panel cp ai d8'},
           h(PH,{title:'Quick Access',sub:'resource links'}),
