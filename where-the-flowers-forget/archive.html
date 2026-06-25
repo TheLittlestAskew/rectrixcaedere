@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;500&family=Lora:ital@0;1&family=Raleway:wght@400;500;600&family=Alegreya+Sans+SC:wght@400;500&display=swap" rel="stylesheet">
 <style>
+@view-transition{navigation:auto}
 :root{
   --navy:#050A0E;--card:#0D141C;--smoked:#162230;
   --gold:#C7A369;--gold-bright:#DA9565;--gold-pale:#E8C690;
@@ -70,13 +71,26 @@ h1{font-family:var(--fd);font-weight:700;color:var(--vellum);font-size:clamp(26p
 .pop a.sess .sd{font-family:var(--fl);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text2);margin-top:3px}
 .pop a.sess .go{float:right;color:var(--gold-pale);font-size:12px}
 
-/* ── intro: the tarot card turns on its side, widens to the map, then becomes the map ── */
+/* ── intro: card flies in (cross-page), turns horizontal, flips over to the map, then enlarges & un-crops ── */
 .reveal{position:absolute;inset:0;z-index:14;display:grid;place-items:center;overflow:hidden;border-radius:14px;
   background:radial-gradient(120% 95% at 50% 30%,#111a25,#070d14 72%)}
-.reveal.gone{opacity:0;pointer-events:none;transition:opacity .6s ease}
-.reveal-card{height:82%;width:auto;aspect-ratio:440/703;object-fit:cover;border-radius:12px;
+.reveal.gone{opacity:0;pointer-events:none;transition:opacity .55s ease}
+/* the flip card — portrait at first paint so the cross-page hand-off lands cleanly */
+.flip{position:absolute;left:50%;top:50%;height:82%;aspect-ratio:440/703;
+  transform:translate(-50%,-50%);transform-origin:center center;
+  view-transition-name:hero-card;will-change:transform,opacity}
+.flipInner{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+.side{position:absolute;inset:0;overflow:hidden;border-radius:12px;backface-visibility:hidden;
+  box-shadow:0 22px 70px rgba(0,0,0,.7);outline:1px solid var(--border-strong);outline-offset:-1px;background:#0a1019}
+.side>img{position:absolute;left:50%;top:50%;display:block}
+.side.front>img{width:100%;height:100%;object-fit:cover;transform:translate(-50%,-50%)}
+.side.back{transform:rotateY(180deg)}
+.side.back>img{object-fit:cover}            /* sized + oriented by JS so the map lands upright */
+/* plain upright box for the enlarge / un-crop phase — no 3D, so orientation is trivially correct */
+.grow{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);overflow:hidden;border-radius:12px;
   box-shadow:0 22px 70px rgba(0,0,0,.7);outline:1px solid var(--border-strong);outline-offset:-1px;
-  transform-origin:center center;will-change:transform;backface-visibility:hidden}
+  display:none;opacity:0;will-change:width,height,opacity}
+.grow>img{width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block}
 
 .legend{max-width:1340px;margin:8px auto 0;padding:0 18px;display:flex;flex-wrap:wrap;gap:14px;justify-content:center;font-family:var(--fl);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text2)}
 .legend span{display:inline-flex;align-items:center;gap:7px}
@@ -102,7 +116,13 @@ footer .d{color:var(--copper);margin:0 8px}
     <img class="mapimg" src="/assets/img/Artemesia_Map.webp" alt="Map of Artemesia">
     <div class="markers" id="markers"></div>
     <div class="reveal" id="reveal" aria-hidden="true">
-      <img class="reveal-card" id="revealCard" src="/assets/img/wtff_tarot_face.webp" alt="" decoding="async" draggable="false">
+      <div class="flip" id="flip">
+        <div class="flipInner" id="flipInner">
+          <div class="side front"><img src="https://raw.githubusercontent.com/TheLittlestAskew/rectrixcaedere/main/assets/img/wtff_tarot_face.webp" alt="" decoding="async" draggable="false"></div>
+          <div class="side back"><img id="backMap" src="/assets/img/Artemesia_Map.webp" alt="" decoding="async" draggable="false"></div>
+        </div>
+      </div>
+      <div class="grow" id="grow"><img src="/assets/img/Artemesia_Map.webp" alt="" decoding="async" draggable="false"></div>
     </div>
   </div>
   <div class="legend">
@@ -139,7 +159,6 @@ var CONFIG = {
 var mapwrap=document.getElementById('mapwrap');
 var markers=document.getElementById('markers');
 var reveal=document.getElementById('reveal');
-var revealCard=document.getElementById('revealCard');
 var L=CONFIG.locations;
 function place(el,key){var p=L[key];el.style.left=p.x+'%';el.style.top=p.y+'%';}
 
@@ -195,25 +214,66 @@ CONFIG.events.forEach(function(ev){
 });
 document.addEventListener('click',function(){if(openPop){openPop.pop.classList.remove('open');openPop.btn.setAttribute('aria-expanded','false');openPop=null;}});
 
-/* ── intro: card turns on its side → widens to map size → dissolves into the map ── */
+/* ── intro: fly-in (cross-page) → turn horizontal → flip to the map → enlarge & un-crop ── */
+var revealRan=false;
 function runReveal(){
+  if(revealRan) return; revealRan=true;
   if(reduce){ if(reveal){ reveal.remove(); } markers.style.opacity='1'; return; }
+  var flip=document.getElementById('flip');
+  var flipInner=document.getElementById('flipInner');
+  var backMap=document.getElementById('backMap');
+  var grow=document.getElementById('grow');
+  if(!flip){ markers.style.opacity='1'; return; }
+
   var Wm=mapwrap.clientWidth, Hm=mapwrap.clientHeight;
-  var cardH=0.82*Hm;            /* displayed height of the upright card */
-  var turnedW=cardH;            /* after a 90° turn the card's height becomes its width */
-  var grow=(Wm/turnedW)*1.04;   /* widen until the turned card spans the map (slight overshoot = clean fill) */
-  var anim=revealCard.animate([
-    { transform:'rotate(0deg) scale(1)' },
-    { transform:'rotate(90deg) scale(1)', offset:0.5 },
-    { transform:'rotate(90deg) scale('+grow.toFixed(3)+')' }
-  ], { duration:1250, easing:'cubic-bezier(.4,0,.2,1)', fill:'forwards' });
-  anim.onfinish=function(){
-    reveal.classList.add('gone');                       /* card + backdrop dissolve, revealing the map beneath */
-    setTimeout(function(){ markers.style.opacity='1'; }, 300);
-    setTimeout(function(){ if(reveal){ reveal.remove(); } }, 700);
-  };
+  var r=flip.getBoundingClientRect();
+  var w0=r.width, h0=r.height;                 /* upright portrait-card size on screen */
+  var EASE='cubic-bezier(.4,0,.2,1)';
+
+  /* orient the map on the back: landscape box (h0 x w0), spun -90° to sit upright after the
+     parent's +90° turn and the face's 180° flip — verified to land north-up, un-mirrored. */
+  backMap.style.width=h0+'px';
+  backMap.style.height=w0+'px';
+  backMap.style.transform='translate(-50%,-50%) rotate(-90deg)';
+
+  /* 1) turn the card horizontal */
+  flip.animate([{transform:'translate(-50%,-50%) rotate(0deg)'},
+                {transform:'translate(-50%,-50%) rotate(90deg)'}],
+               {duration:620,easing:EASE,fill:'forwards'}).finished.then(function(){
+    /* 2) flip it over — the map is on the back */
+    return flipInner.animate([{transform:'rotateY(0deg)'},
+                              {transform:'rotateY(180deg)'}],
+                             {duration:680,easing:EASE,fill:'forwards'}).finished;
+  }).then(function(){
+    /* 3) hand off to a plain upright box at the turned card's footprint, then grow to the full map
+          while object-fit:cover reveals the parts that didn't fit on the card */
+    var gw=h0, gh=w0;                          /* turned-card footprint (landscape) */
+    grow.style.width=gw+'px'; grow.style.height=gh+'px';
+    grow.style.display='block'; grow.getBoundingClientRect();
+    grow.style.transition='opacity .14s ease'; grow.style.opacity='1';
+    flip.style.transition='opacity .14s ease'; flip.style.opacity='0';
+    return grow.animate([{width:gw+'px',height:gh+'px'},
+                         {width:Wm+'px',height:Hm+'px'}],
+                        {duration:820,easing:EASE,fill:'forwards'}).finished;
+  }).then(function(){
+    reveal.classList.add('gone');              /* dissolve into the real map beneath */
+    setTimeout(function(){ markers.style.opacity='1'; }, 240);
+    setTimeout(function(){ if(reveal){ reveal.remove(); } }, 640);
+  });
 }
-window.addEventListener('load',function(){ setTimeout(runReveal,200); });
+
+/* run after the cross-page card hand-off finishes; fall back to load for direct visits / no-VT browsers */
+if(reduce){
+  window.addEventListener('load',runReveal);
+}else if('onpagereveal' in window){
+  window.addEventListener('pagereveal',function(e){
+    if(e.viewTransition){ e.viewTransition.finished.then(function(){setTimeout(runReveal,80);},function(){setTimeout(runReveal,80);}); }
+    else setTimeout(runReveal,120);
+  });
+  window.addEventListener('load',function(){ setTimeout(runReveal,1400); }); /* safety net */
+}else{
+  window.addEventListener('load',function(){ setTimeout(runReveal,200); });
+}
 </script>
 </body>
 </html>
