@@ -3,27 +3,18 @@
 > Public D&D roll-statistics dashboard + campaign archive (GitHub Pages + Supabase) at rectrixcaedere.com.
 > Handoff is **enabled** for this repo. Every change updates the DO NEXT block below and prepends a log entry.
 
-
----
-
-## Log
-<!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
-
-# HANDOFF — rectrixcaedere
-
-> Public D&D roll-statistics dashboard + campaign archive (GitHub Pages + Supabase) at rectrixcaedere.com.
-> Handoff is **enabled** for this repo. Every change updates the DO NEXT block below and prepends a log entry.
-
 ## ▶ DO NEXT
-Push `app.js` — the dashboard quote box now pulls a random quote from the active campaign's vault, live, on each load (all 4 campaigns).
-- ~50KB → deploy via local Git + blob-SHA verify; do **not** commit any local `vendor/` test scaffolding
-- Sandbox couldn't render-test (the React CDN is blocked there): after pushing, eyeball `dashboard.html?c=1` … `c=4` and confirm a quote + attribution shows and re-rolls on reload
-- After that: build the live roll-stats pipeline (Phase 1) — spec is kept locally (`dashboard-live-spec.md`), not in this repo
+— No pending tasks. WtFF Session 02 wiring is live; eyeball `dashboard.html?c=1` … `c=4` to confirm quote box is working after the app.js push.
 
 ---
 
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
+
+### 2026-06-29 · Claude chat
+- **Changed:** Wired WtFF Session 02 "Something's Changing" (2026-06-28) into the session reader (`ARC` array in `session.html`) and the archive map (`CONFIG.events[0].sessions` in `archive.html`, Rhusatatiam node). Prev/next nav, tags (⚑ Crossover, ● Roleplay), and popover link all wired. Session 00 intentionally excluded.
+- **Commit:** `WtFF: wire Session 02 (Something's Changing) into session reader + map`
+- **Next:** Add Session 03 the same way when notes are ready.
 
 ### 2026-06-25 ET · Claude chat
 - **Changed:** `app.js` — replaced the single hardcoded `QuoteBoard` with a live, per-campaign random-quote loader. Added a `vault` field to each campaign in `D`; fetches `00-Campaign-Hub/Quote Board Master.md`, follows the `[[Quote Board …]]` batch-file links (SITL & Ashfall masters are stubs), parses three formats (bold-header, blockquote, P&P table), dedupes, and random-picks on mount + on campaign switch.
@@ -37,10 +28,6 @@ Push `app.js` — the dashboard quote box now pulls a random quote from the acti
 - **Next:** superseded by the live-quotes task above.
 - **Watch out:** the combined fly+turn needs a Chromium browser; it degrades gracefully (no fly/turn, still flip→grow) elsewhere.
 
-### 2026-06-23 09:21 ET · Claude chat
-- **Changed:** Enabled repo handoff — added this `HANDOFF.md` at root.
-- **Commit:** `docs: enable repo handoff`
-- **Next:** Set by the next real change to the repo.
 ### 2026-06-23 09:21 ET · Claude chat
 - **Changed:** Enabled repo handoff — added this `HANDOFF.md` at root.
 - **Commit:** `docs: enable repo handoff`
