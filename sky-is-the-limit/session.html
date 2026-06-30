@@ -132,6 +132,10 @@ footer .dot{color:var(--copper);margin:0 8px}
 .pp-read .pp-prev::after{content:"";position:absolute;left:0;right:0;bottom:0;height:50px;background:linear-gradient(180deg,rgba(13,20,28,0),var(--card))}
 .pp-more{margin-top:12px;background:none;border:none;cursor:pointer;font-family:var(--fl);text-transform:uppercase;letter-spacing:.12em;font-size:11.5px;color:var(--gold-pale);padding:0}
 .pp-more:hover{color:var(--text)}
+.collapsible .logbody{display:none}
+.collapsible.open .logbody{display:block}
+.ctoggle{cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;user-select:none}
+.ctoggle .caret{font-size:11px;color:var(--gold-pale);flex:0 0 auto}
 .pp-legend{display:flex;gap:13px;margin-bottom:12px;font-family:var(--fl);text-transform:uppercase;font-size:10px;letter-spacing:.06em;color:var(--muted)}
 .pp-legend span{display:inline-flex;align-items:center;gap:5px}
 .pp-dot{display:inline-block;width:7px;height:7px;border-radius:50%}
@@ -228,11 +232,11 @@ td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weigh
       <section class="pp-card"><h2>At a glance</h2><dl class="pp-kv" id="z-meta"></dl>
         <div class="pp-lbl" style="margin:14px 0 4px">Party present</div><div class="pp-chips" id="z-party"></div>
         <div class="pp-lbl" id="z-guestnote" style="display:none;font-size:10px;color:var(--muted);margin-top:8px">&#42; guest planeswalker</div></section>
-      <section class="pp-card"><h2>Quests &amp; objectives</h2><div id="z-quests"></div></section>
       <section class="pp-card" id="z-prof-card"><h2>Profanity record</h2><div id="z-prof"></div></section>
     </div>
     <div class="pp-col">
       <section class="pp-card pp-read"><h2>Narrative summary</h2><div class="pp-prev" id="z-narr"></div><button class="pp-more" onclick="ppModal('narr')">Read more</button></section>
+      <section class="pp-card"><h2>Quests &amp; objectives</h2><div id="z-quests"></div></section>
       <section class="pp-card pp-read" id="z-scene-card"><h2>Scene / timeline</h2><div class="pp-prev" id="z-scene"></div><button class="pp-more" onclick="ppModal('scene')">See all</button></section>
       <section class="pp-card pp-read"><h2>Themes &amp; beats</h2><div class="pp-prev" id="z-themes"></div><button class="pp-more" onclick="ppModal('themes')">Read more</button></section>
       <section class="pp-card" id="z-quotes-card"><h2>Quote board</h2><div id="z-quotes"></div></section>
@@ -244,10 +248,12 @@ td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weigh
     </div>
   </div>
   <div class="pp-fullrule" id="z-logrule" style="display:none">&#10022;&nbsp;&nbsp;Logs&nbsp;&nbsp;&#10022;</div>
-  <section class="pp-card" id="z-logs-card" style="display:none"><h2>Full roll log <span class="pp-lbl" style="font-weight:400">&middot; live from D&amp;D Beyond</span></h2>
+  <section class="pp-card collapsible" id="z-logs-card" style="display:none"><h2 class="ctoggle" onclick="togglelog()" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();togglelog();}">Full roll log <span class="pp-lbl" style="font-weight:400">&middot; live from D&amp;D Beyond</span><span class="caret" id="z-logcaret">&#9656;</span></h2>
+    <div class="logbody" id="z-logbody">
     <div class="tbl-wrap"><table><thead><tr><th>Character</th><th>Action</th><th>Type</th><th>Result</th></tr></thead><tbody id="z-rolllog"></tbody></table></div>
     <div class="pp-mini"><div><div class="pp-lbl" style="margin-bottom:6px">Encounters</div><div id="z-enc"></div></div><div id="z-init-wrap"><div class="pp-lbl" style="margin-bottom:6px">Initiative</div><div id="z-init"></div></div></div>
     <div style="margin-top:16px" id="z-encsum-wrap"><div class="pp-lbl" style="margin-bottom:6px">Encounter summary</div><div id="z-encsum"></div></div>
+    </div>
   </section>
   <div class="pp-fnotes" id="z-fnotes" style="display:none">
     <section class="pp-card"><h2>Patterns &amp; implications</h2><div id="z-patterns"></div></section>
@@ -389,6 +395,7 @@ var ZDISP={'Ilvara':'enemy','Ilvara Mizzrym':'enemy','Shoor':'enemy','Shoor Vand
 function zdispo(n){return ZDISP[n]||'neutral';}
 var ZMOD={};
 function ppModal(k){var m=ZMOD[k];if(!m)return;document.getElementById('z-meyebrow').textContent=m.eb||'';document.getElementById('z-mtitle').textContent=m.t||'';var b=document.getElementById('z-mbody');b.className=(k==='pov'?'pov':'');b.innerHTML=m.h||'';b.scrollTop=0;document.getElementById('z-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function togglelog(){var c=document.getElementById('z-logs-card');if(!c)return;var open=c.classList.toggle('open');var h=c.querySelector('h2');if(h)h.setAttribute('aria-expanded',open?'true':'false');var car=document.getElementById('z-logcaret');if(car)car.innerHTML=open?'▾':'▸';}
 function ppClose(){document.getElementById('z-overlay').classList.remove('open');document.body.style.overflow='';}
 document.addEventListener('keydown',function(e){if(e.key==='Escape')ppClose();});
 

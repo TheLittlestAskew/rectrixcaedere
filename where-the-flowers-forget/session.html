@@ -91,6 +91,10 @@ h1.title.sun{color:var(--ember);text-shadow:0 0 30px rgba(232,162,74,.4)}
 .read .prev::after{content:"";position:absolute;left:0;right:0;bottom:0;height:54px;background:linear-gradient(180deg,rgba(12,17,24,0),var(--card))}
 .more{margin-top:10px;background:none;border:none;cursor:pointer;font-family:var(--fl);text-transform:uppercase;letter-spacing:.12em;font-size:11.5px;color:var(--gold-pale);padding:0}
 .more:hover{color:var(--text)}
+.collapsible .logbody{display:none}
+.collapsible.open .logbody{display:block}
+.ctoggle{cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;user-select:none}
+.ctoggle .caret{font-size:11px;color:var(--gold-pale);flex:0 0 auto}
 .npc{display:flex;align-items:flex-start;gap:8px;font-size:13px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05)}
 .npc:last-child{border-bottom:none}.npc .nm{color:var(--text);font-weight:500}.npc .m{display:block;color:var(--muted);font-size:12px;margin-top:2px;line-height:1.45}
 .loot{font-size:13px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05)}.loot:last-child{border-bottom:none}
@@ -161,11 +165,13 @@ footer a{color:var(--gold-pale);text-decoration:none;border-bottom:1px solid var
     <div class="col">
       <section class="cardz"><h2>At a glance</h2><dl class="kv" id="z-meta"></dl>
         <div class="lbl" style="margin:14px 0 6px">Party present</div><div class="chips" id="z-party"></div></section>
-      <section class="cardz" id="z-quests-card"><h2>Open threads</h2><div id="z-quests"></div></section>
       <section class="cardz" id="z-prof-card"><h2>Profanity record</h2><div id="z-prof"></div></section>
     </div>
     <div class="col">
       <section class="cardz read"><h2>Narrative summary</h2><div class="prev" id="z-narr"></div><button class="more" onclick="modal('narr')">Read more</button></section>
+      <section class="cardz" id="z-quests-card"><h2>Open threads</h2><div id="z-quests"></div></section>
+      <section class="cardz read" id="z-scene-card"><h2>Scene / timeline</h2><div class="prev" id="z-scene"></div><button class="more" onclick="modal('scene')">See all</button></section>
+      <section class="cardz read" id="z-themes-card"><h2>Themes &amp; beats</h2><div class="prev" id="z-themes"></div><button class="more" onclick="modal('themes')">Read more</button></section>
       <section class="cardz" id="z-quotes-card"><h2>Quote board</h2><div id="z-quotes"></div></section>
     </div>
     <div class="col">
@@ -175,10 +181,12 @@ footer a{color:var(--gold-pale);text-decoration:none;border-bottom:1px solid var
     </div>
   </div>
   <div class="fullrule">&#10022;&nbsp;&nbsp;Logs&nbsp;&nbsp;&#10022;</div>
-  <section class="cardz"><h2>Full roll log <span class="lbl" style="font-weight:400">&middot; live from D&amp;D Beyond</span></h2>
+  <section class="cardz collapsible" id="z-logs-card"><h2 class="ctoggle" onclick="togglelog()" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();togglelog();}">Full roll log <span class="lbl" style="font-weight:400">&middot; live from D&amp;D Beyond</span><span class="caret" id="z-logcaret">&#9656;</span></h2>
+    <div class="logbody" id="z-logbody">
     <div id="z-encsum" class="encsum" style="margin-bottom:16px"></div>
     <div class="tbl-wrap"><table class="logtbl"><thead><tr><th>Character</th><th>Action</th><th>Type</th><th>Result</th></tr></thead><tbody id="z-rolllog"></tbody></table></div>
     <div class="mini"><div><div class="lbl" style="margin-bottom:6px">Initiative</div><div id="z-init"></div></div><div><div class="lbl" style="margin-bottom:6px">Heaviest hits</div><div id="z-hits"></div></div></div>
+    </div>
   </section>
   <div class="fnotes">
     <section class="cardz" id="z-arch-card"><h2>Archivist notes</h2><div id="z-arch"></div></section>
@@ -261,6 +269,19 @@ function renderNarr(b){
   document.getElementById('z-narr').innerHTML=md2(sum)||'<p class="muted">&mdash;</p>';
   MOD.narr={eb:'The record',t:'Narrative summary',h:md2(sum)};
 }
+function renderScene(b){
+  var t=section(b,'Scene / Timeline Breakdown');
+  if(!t){hide('z-scene-card');return;}
+  document.getElementById('z-scene').innerHTML=md2(t);
+  MOD.scene={eb:'The record',t:'Scene / timeline',h:md2(t)};
+}
+function renderThemes(b){
+  var t=section(b,'Themes & Emotional Beats');
+  if(!t){hide('z-themes-card');return;}
+  document.getElementById('z-themes').innerHTML=md2(t);
+  MOD.themes={eb:'The record',t:'Themes & beats',h:md2(t)};
+}
+function togglelog(){var c=document.getElementById('z-logs-card');if(!c)return;var open=c.classList.toggle('open');var h=c.querySelector('h2');if(h)h.setAttribute('aria-expanded',open?'true':'false');var car=document.getElementById('z-logcaret');if(car)car.innerHTML=open?'▾':'▸';}
 function renderNpcs(b){
   var rows=tableRows(section(b,'NPCs'));
   if(!rows.length){hide('z-npcs-card');return;}
@@ -360,7 +381,7 @@ function init(){
   fetchT(VR+'/'+s.f).then(function(md){
     if(!md){document.getElementById('body').innerHTML='<div class="err">Failed to load this session\u2019s notes. <a href="'+ARCHIVE+'">Back to the map</a></div>';return;}
     var bodyMd=md.replace(/^---\s*\n[\s\S]*?\n---\s*\n/,'');
-    renderHero(bodyMd,s);renderMeta(bodyMd,s);renderQuests(bodyMd);renderNarr(bodyMd);
+    renderHero(bodyMd,s);renderMeta(bodyMd,s);renderQuests(bodyMd);renderNarr(bodyMd);renderScene(bodyMd);renderThemes(bodyMd);
     renderNpcs(bodyMd);renderLocs(bodyMd);renderLoot(bodyMd);renderQuotes(bodyMd);
     renderProf(bodyMd);renderArch(bodyMd);
   });
