@@ -132,8 +132,8 @@ footer .dot{color:var(--copper);margin:0 8px}
 .pp-read .pp-prev::after{content:"";position:absolute;left:0;right:0;bottom:0;height:50px;background:linear-gradient(180deg,rgba(13,20,28,0),var(--card))}
 .pp-more{margin-top:12px;background:none;border:none;cursor:pointer;font-family:var(--fl);text-transform:uppercase;letter-spacing:.12em;font-size:11.5px;color:var(--gold-pale);padding:0}
 .pp-more:hover{color:var(--text)}
-.collapsible .logbody{display:none}
-.collapsible.open .logbody{display:block}
+.collapsible .cbody{display:none}
+.collapsible.open .cbody{display:block}
 .ctoggle{cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;user-select:none}
 .ctoggle .caret{font-size:11px;color:var(--gold-pale);flex:0 0 auto}
 .pp-legend{display:flex;gap:13px;margin-bottom:12px;font-family:var(--fl);text-transform:uppercase;font-size:10px;letter-spacing:.06em;color:var(--muted)}
@@ -236,7 +236,7 @@ td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weigh
     </div>
     <div class="pp-col">
       <section class="pp-card pp-read"><h2>Narrative summary</h2><div class="pp-prev" id="z-narr"></div><button class="pp-more" onclick="ppModal('narr')">Read more</button></section>
-      <section class="pp-card"><h2>Quests &amp; objectives</h2><div id="z-quests"></div></section>
+      <section class="pp-card collapsible"><h2 class="ctoggle" onclick="toggsec(this)" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggsec(this);}">Quests &amp; objectives<span class="caret">▸</span></h2><div class="cbody"><div id="z-quests"></div></div></section>
       <section class="pp-card pp-read" id="z-scene-card"><h2>Scene / timeline</h2><div class="pp-prev" id="z-scene"></div><button class="pp-more" onclick="ppModal('scene')">See all</button></section>
       <section class="pp-card pp-read"><h2>Themes &amp; beats</h2><div class="pp-prev" id="z-themes"></div><button class="pp-more" onclick="ppModal('themes')">Read more</button></section>
       <section class="pp-card" id="z-quotes-card"><h2>Quote board</h2><div id="z-quotes"></div></section>
@@ -248,8 +248,8 @@ td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weigh
     </div>
   </div>
   <div class="pp-fullrule" id="z-logrule" style="display:none">&#10022;&nbsp;&nbsp;Logs&nbsp;&nbsp;&#10022;</div>
-  <section class="pp-card collapsible" id="z-logs-card" style="display:none"><h2 class="ctoggle" onclick="togglelog()" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();togglelog();}">Full roll log <span class="pp-lbl" style="font-weight:400">&middot; live from D&amp;D Beyond</span><span class="caret" id="z-logcaret">&#9656;</span></h2>
-    <div class="logbody" id="z-logbody">
+  <section class="pp-card collapsible" id="z-logs-card" style="display:none"><h2 class="ctoggle" onclick="toggsec(this)" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggsec(this);}">Full roll log <span class="pp-lbl" style="font-weight:400">&middot; live from D&amp;D Beyond</span><span class="caret">▸</span></h2>
+    <div class="cbody">
     <div class="tbl-wrap"><table><thead><tr><th>Character</th><th>Action</th><th>Type</th><th>Result</th></tr></thead><tbody id="z-rolllog"></tbody></table></div>
     <div class="pp-mini"><div><div class="pp-lbl" style="margin-bottom:6px">Encounters</div><div id="z-enc"></div></div><div id="z-init-wrap"><div class="pp-lbl" style="margin-bottom:6px">Initiative</div><div id="z-init"></div></div></div>
     <div style="margin-top:16px" id="z-encsum-wrap"><div class="pp-lbl" style="margin-bottom:6px">Encounter summary</div><div id="z-encsum"></div></div>
@@ -331,7 +331,8 @@ var ARC=[
   {n:'14',d:'2026-04-12',lbl:'April 12, 2026',f:'01-Sessions/Session%2014%20%E2%80%94%20Far%20From%20the%20Sun.md',t:'Far From the Sun',rec:'041226 Sky Is The Limit Recording.mp3'},
   {n:'15',d:'2026-05-03',lbl:'May 3, 2026',f:'01-Sessions/Session%2015%20%E2%80%94%20The%20Long%20Road%20to%20Sloobludop.md',t:'The Long Road to Sloobludop',rec:'050326 Sky Is The Limit Recording.mp3'},
   {n:'16',d:'2026-05-24',lbl:'May 24, 2026',f:'01-Sessions/Session%2016%20%E2%80%94%20Zone%20of%20Truth.md',t:'Zone of Truth'},
-  {n:'17',d:'2026-06-07',lbl:'June 7, 2026',f:'01-Sessions/Session%2017%20%E2%80%94%20The%20Big%20Fish%20Eat%20the%20Little%20Fish.md',t:'The Big Fish Eat the Little Fish'}
+  {n:'17',d:'2026-06-07',lbl:'June 7, 2026',f:'01-Sessions/Session%2017%20%E2%80%94%20The%20Big%20Fish%20Eat%20the%20Little%20Fish.md',t:'The Big Fish Eat the Little Fish'},
+  {n:'18',d:'2026-06-14',lbl:'June 14, 2026',f:'01-Sessions/Session%2018%20%E2%80%94%20Trust%20the%20Whirlpool.md',t:'Trust the Whirlpool'}
 ];
 
 function getN(){var m=location.search.match(/[?&]n=([^&]+)/);return m?m[1]:null;}
@@ -395,7 +396,7 @@ var ZDISP={'Ilvara':'enemy','Ilvara Mizzrym':'enemy','Shoor':'enemy','Shoor Vand
 function zdispo(n){return ZDISP[n]||'neutral';}
 var ZMOD={};
 function ppModal(k){var m=ZMOD[k];if(!m)return;document.getElementById('z-meyebrow').textContent=m.eb||'';document.getElementById('z-mtitle').textContent=m.t||'';var b=document.getElementById('z-mbody');b.className=(k==='pov'?'pov':'');b.innerHTML=m.h||'';b.scrollTop=0;document.getElementById('z-overlay').classList.add('open');document.body.style.overflow='hidden';}
-function togglelog(){var c=document.getElementById('z-logs-card');if(!c)return;var open=c.classList.toggle('open');var h=c.querySelector('h2');if(h)h.setAttribute('aria-expanded',open?'true':'false');var car=document.getElementById('z-logcaret');if(car)car.innerHTML=open?'▾':'▸';}
+function toggsec(h){var c=h.closest('section');if(!c)return;var o=c.classList.toggle('open');h.setAttribute('aria-expanded',o?'true':'false');var car=h.querySelector('.caret');if(car)car.innerHTML=o?'\u25be':'\u25b8';}
 function ppClose(){document.getElementById('z-overlay').classList.remove('open');document.body.style.overflow='';}
 document.addEventListener('keydown',function(e){if(e.key==='Escape')ppClose();});
 
