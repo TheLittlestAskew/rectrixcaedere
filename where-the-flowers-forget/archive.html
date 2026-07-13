@@ -141,19 +141,23 @@ var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 
 /* ====================== CONFIG ====================== */
 var CONFIG = {
-  party: 'rhusatatiam',
-  path: ['rhusatatiam'],
+  party: 'sunrootcrossing',
+  path: ['rhusatatiam', 'sunrootcrossing'],
   locations: {
     zelkova:     { x:42, y:71, name:'Zelkova City',      region:'The Burn' },
     mouthfeeds:  { x:86, y:53, name:'Mouth that Feeds',  region:'Liriope River Net' },
     rhusatatiam: { x:33, y:50, name:'Rhusatatiam',       region:'Rhus Valley' },
     galiummajor: { x:77, y:33, name:'Galium Major',      region:'The Bloom' },
-    willowhaven: { x:54, y:26, name:'Willow Haven',      region:'Salvia Forest' }
+    willowhaven: { x:54, y:26, name:'Willow Haven',      region:'Salvia Forest' },
+    sunrootcrossing: { x:50, y:57, name:'Sunroot Crossing', region:'Rhus Valley' },
   },
   events: [
     { at:'rhusatatiam', sessions:[
       { n:'01', title:'Winds in the East', date:'06/14/2026', href:'/where-the-flowers-forget/session.html?n=01' },
-      { n:'02', title:'Something\'s Changing', date:'06/28/2026', href:'/where-the-flowers-forget/session.html?n=02' }
+      { n:'02', title:'It Follows Me So I Followed It', date:'06/28/2026', href:'/where-the-flowers-forget/session.html?n=02' }
+]},
+    { at:'sunrootcrossing', sessions:[
+      { n:'03', title:'Raise A Glass To Provisional Trust', date:'07/12/2026', href:'/where-the-flowers-forget/session.html?n=03' }
     ]}
   ]
 };

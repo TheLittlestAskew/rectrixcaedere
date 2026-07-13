@@ -55,6 +55,7 @@ h1.title.sun{color:var(--ember);text-shadow:0 0 30px rgba(232,162,74,.4)}
 .tag.cliff{border-color:rgba(183,99,77,.55);color:#e0a08c;background:rgba(183,99,77,.14)}
 .tag.subdm{border-color:rgba(139,107,181,.5);color:#b59cd0;background:rgba(139,107,181,.1)}
 .tag.rp{border-color:rgba(125,135,148,.5);color:#aeb6bf;background:rgba(125,135,148,.1)}
+.tag.travel { border-color: rgba(79,160,116,.45); color:#7fc59c; background:rgba(79,160,116,.1); }
 .divider{margin:26px 0 6px;text-align:center;font-family:var(--fd);color:var(--copper);font-size:18px;opacity:.7}
 .divider::before,.divider::after{content:'';display:inline-block;width:90px;height:1px;background:linear-gradient(90deg,transparent,var(--copper),transparent);vertical-align:middle;margin:0 14px}
 
@@ -205,7 +206,8 @@ var ARCHIVE='/where-the-flowers-forget/archive.html';
 var ROSTER=['Isla \'Bruin\' Kaplan','Artie (Art) Veyr','BE-BO (Botanical Energy Balance Operator)','Eliza Duskbloom','Tobias Wolfe','Zarna Morganach'];
 var ARC=[
  {n:'01',d:'2026-06-14',lbl:'June 14, 2026',t:'Winds in the East',f:SS+'/Session%2001%20%E2%80%94%20Winds%20in%20the%20East.md',tags:[{l:'\u2691 Crossover launch',c:'subdm'},{l:'\u25cf Roleplay',c:'rp'}]},
- {n:'02',d:'2026-06-28',lbl:'June 28, 2026',t:'Something\'s Changing',f:SS+'/Session%2002%20%E2%80%94%20It%20follows%20me%2C%20so%20I%20followed%20it.md',tags:[{l:'\u2691 Crossover',c:'subdm'},{l:'\u25cf Roleplay',c:'rp'}]}
+ {n:'02',d:'2026-06-28',lbl:'June 28, 2026',t:'It Follows Me, So I Followed It',f:SS+'/Session%2002%20%E2%80%94%20It%20Follows%20Me%2C%20So%20I%20Followed%20It.md',tags:[{l:'\u2691 Crossover',c:'subdm'},{l:'\u25cf Roleplay',c:'rp'}]},
+ {n:'03',d:'2026-07-12',lbl:'July 12, 2026',t:'Raise a Glass to Provisional Trust',f:SS+'/Session%2003%20%E2%80%94%20Raise%20a%20Glass%20to%20Provisional%20Trust.md',tags:[{l:'\u2691 Travel',c:'travel'},{l:'\u25cf Roleplay',c:'rp'}]}
 ];
 
 function getN(){var m=location.search.match(/[?&]n=([^&]+)/);return m?decodeURIComponent(m[1]):null;}
