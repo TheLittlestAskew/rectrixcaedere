@@ -5,7 +5,7 @@
 
 ## ▶ DO NEXT
 1. **SITL recordings S16–S19 not on the site:** the mp3s exist in the vault (`Session_Sources/Recordings/`: 052426 pt2, 060726, 061426, 070526) but were never uploaded to the R2 bucket (`recordings` bucket → `Recordings/sitl/`). Upload them, then add `rec:` fields to ARC entries 16–19 in `sky-is-the-limit/session.html`.
-2. **S19 roll data not in Supabase:** the S19 archivist pass was denied Supabase access, so `ddb_sessions` registration and the `sitl_session_rolls` cross-reference for 2026-07-05 are both pending — the S19 reader page will show no roll log until that's done (vault pipeline task, not a site bug).
+2. ✅ **DONE 2026-07-16 — S19 roll data repaired:** root cause was the extension's migration to Aftermath Meridian (nothing wrote to this project's `ddb_rolls` after 2026-06-14). All 82 missing SITL rolls backfilled (S19 = 56, checksum-verified), S19 registered in `ddb_sessions` (id 20), anon REST confirmed serving them. Recurring per-session copy runbook: `sitl_vault/Workflows/scripts/Sync-Rolls-To-RC.md`. Note: `sitl_session_rolls` is a VIEW over `ddb_rolls` (ET session dates).
 
 ---
 
