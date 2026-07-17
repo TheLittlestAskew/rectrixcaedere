@@ -4,12 +4,18 @@
 > Handoff is **enabled** for this repo. Every change updates the DO NEXT block below and prepends a log entry.
 
 ## ▶ DO NEXT
-— No pending tasks. Eyeball all three session readers to confirm quests card position and log toggle.
+1. **SITL recordings S16–S19 not on the site:** the mp3s exist in the vault (`Session_Sources/Recordings/`: 052426 pt2, 060726, 061426, 070526) but were never uploaded to the R2 bucket (`recordings` bucket → `Recordings/sitl/`). Upload them, then add `rec:` fields to ARC entries 16–19 in `sky-is-the-limit/session.html`.
+2. **S19 roll data not in Supabase:** the S19 archivist pass was denied Supabase access, so `ddb_sessions` registration and the `sitl_session_rolls` cross-reference for 2026-07-05 are both pending — the S19 reader page will show no roll log until that's done (vault pipeline task, not a site bug).
 
 ---
 
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
+
+### 2026-07-16 · Claude Code
+- **Changed:** Wired SITL Session 19 "We Are Split in Two" (2026-07-05) into `sky-is-the-limit/session.html` (ARC entry, note fetched from sitl_vault main — URL verified 200) and `sky-is-the-limit/archive.html` (ARC card with 4 event beats + session count 18→19). No `rec:` field, matching S16–18 (recordings not yet on R2 — see DO NEXT). No new map waypoint; the party is still in Sloobludop (wp set at S18). Both ARC arrays syntax-validated (19 contiguous entries).
+- **Commit:** `SITL: wire Session 19 (We Are Split in Two) into archive + session reader`
+- **Next:** DO NEXT items 1–2 above (R2 recording uploads; S19 Supabase roll registration in the vault pipeline).
 
 ### 2026-06-29 · Claude chat
 - **Changed:** All three session readers (WtFF, Ashfall, SITL): moved "Open threads"/"Quests & objectives" card into the center column directly below "Narrative summary"; made "Full roll log" section collapsible, default collapsed, with clickable header toggle and ▸/▾ caret. WtFF only: added "Scene / timeline" and "Themes & beats" cards in center column (wired to `renderScene`/`renderThemes`, hidden if section absent). Ashfall's collapsible log + quests position were already correct from a prior edit — only the column re-order was applied. pacts-and-power untouched.
