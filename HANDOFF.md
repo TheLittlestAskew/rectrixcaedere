@@ -1,11 +1,20 @@
 # HANDOFF — rectrixcaedere
 
 > Public D&D roll-statistics dashboard + campaign archive (GitHub Pages + Supabase) at rectrixcaedere.com.
-> Handoff is **enabled** for this repo. Every change updates the DO NEXT block below and prepends a log entry.
+> Handoff is **enabled** for this repo. Every change updates the Status/Next Steps below and prepends a log entry.
 
-## ▶ DO NEXT
-1. **SITL recordings S16–S19 not on the site:** the mp3s exist in the vault (`Session_Sources/Recordings/`: 052426 pt2, 060726, 061426, 070526) but were never uploaded to the R2 bucket (`recordings` bucket → `Recordings/sitl/`). Upload them, then add `rec:` fields to ARC entries 16–19 in `sky-is-the-limit/session.html`.
-2. ✅ **DONE 2026-07-16 — S19 roll data repaired:** root cause was the extension's migration to Aftermath Meridian (nothing wrote to this project's `ddb_rolls` after 2026-06-14). All 82 missing SITL rolls backfilled (S19 = 56, checksum-verified), S19 registered in `ddb_sessions` (id 20), anon REST confirmed serving them. Recurring per-session copy runbook: `sitl_vault/Workflows/scripts/Sync-Rolls-To-RC.md`. Note: `sitl_session_rolls` is a VIEW over `ddb_rolls` (ET session dates).
+## Status
+
+SITL Session 19 is wired into the site and its roll data is repaired end-to-end; S16–S19 recordings still need uploading to R2.
+
+## Next Steps
+
+- [ ] Upload SITL S16–19 recordings (`052426 pt2`, `060726`, `061426`, `070526` from `Session_Sources/Recordings/`) to the R2 `recordings` bucket → `Recordings/sitl/`
+- [ ] Add `rec:` fields to ARC entries 16–19 in `sky-is-the-limit/session.html` once those recordings are uploaded
+
+## Context
+
+**DONE 2026-07-16 — S19 roll data repaired:** root cause was the extension's migration to Aftermath Meridian (nothing wrote to this project's `ddb_rolls` after 2026-06-14). All 82 missing SITL rolls backfilled (S19 = 56, checksum-verified), S19 registered in `ddb_sessions` (id 20), anon REST confirmed serving them. Recurring per-session copy runbook: `sitl_vault/Workflows/scripts/Sync-Rolls-To-RC.md`. Note: `sitl_session_rolls` is a VIEW over `ddb_rolls` (ET session dates).
 
 ---
 
