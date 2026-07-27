@@ -21,6 +21,12 @@ SITL Session 19 is wired into the site and its roll data is repaired end-to-end;
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
 
+### 2026-07-27 17:52 ET · Claude Code
+- **Changed:** Ran a REAL full-site design audit (all 19 HTML pages, not just the dashboard) after Taylor flagged the earlier "sweep" only looked at the dashboard deeply. Method: 4 parallel code-audit subagents (all pages read in full) + a rendered visual pass on every template type. Wrote consolidated scored findings to `.design/rc/AUDIT.md`.
+- **Commit:** `79f135c`
+- **Next:** DECISION NEEDED from Taylor — the font-weight-700 question (Cinzel Decorative only ships 400/700, conflicts with the 300/400/500 brand rule). Then fix-order in AUDIT.md §5, starting with routing every page through `tokens.css` (root cause of most findings). Also 4 real bugs to fix: P0 case-study files swapped (dead links); orphaned `pacts/session-v2.html` duplicate; WTFF landing's fragile raw.githubusercontent image URLs; Ashfall archive jump-scare.
+- **Watch out:** Biggest systemic finding — NO page imports `tokens.css`; every page hand-rolls `:root` and values have drifted (`--muted` has 3 different values). Fixing that collapses most of the audit. Dashboard sweep items 4-6 (empty states, campaign stat row, deck/veil stagger) still pending underneath the audit.
+
 ### 2026-07-27 17:18 ET · Claude Code
 - **Changed:** Taste-lens sweep continued. **Item 2:** Quick Access resource tiles rebuilt from 4 flat identical rounded rectangles into brand cathedral arch-top niche tiles (`--r-arch`), inner arched rule, gold halo ring behind each icon, hover lift; mobile now 2-col arch tiles (CSS-only, `dashboard.html`). **Item 3:** fixed the roll-activity chart x-axis (was 15 tiny 9px rotated low-contrast labels) to horizontal 11px lighter every-other ticks, session + quarterly both legible (`AreaC` in `app.js`).
 - **Commit:** `628d032` (quick access) · `324a9f8` (chart axis)
