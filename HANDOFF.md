@@ -21,6 +21,12 @@ SITL Session 19 is wired into the site and its roll data is repaired end-to-end;
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
 
+### 2026-07-27 16:24 ET · Claude Code
+- **Changed:** `$impeccable bolder` on the dashboard stat cards. Amplified the five KPI cards from "frameless" to on-brand oracle framing toward `mockup-target.png`: Art Nouveau double-line corner brackets on all four corners, a gold top accent line, warm-gold labels (fixes the low-contrast grey), and a faint per-card sigil (d20 / moon / star / laurel / key) so the identical clones differentiate. Nat 20 card uses the green `--success` accent. New `KCorner` + `KSigil` components in `app.js`; extended the `.kpi` CSS block in `dashboard.html`. Also banked untracked `supabase/` CLI scaffolding (`config.toml`) in a separate commit.
+- **Commit:** `d674c49` (stat cards) · `4396193` (supabase scaffolding)
+- **Next:** Roll the corner-flourish + accent framing to the Quick Access cards and the Records & Reckonings tiles (the next identical-clone rows), then push live and eyeball on rectrixcaedere.com.
+- **Watch out:** Status / Next Steps blocks above are the standing R2-recordings work order (separate track), left untouched on purpose. Verified rendering clean via local server (`python -m http.server`), no console errors; not yet deployed to the live GitHub Pages site.
+
 ### 2026-07-26 11:44 ET · Claude Code
 - **Changed:** Added the Handoff Contract to `AGENTS.md` so Codex follows it. Codex reads `AGENTS.md`, never `~/.claude/skills/`, so it had no handoff instructions at all before this.
 - **Commit:** `3a02611`
