@@ -8,6 +8,8 @@
 
 ## 0 · The one decision only you can make
 
+> ✅ **DECIDED 2026-07-27 (Taylor): Option A.** Cinzel Decorative **700 is ratified for DISPLAY headings only**; **600 stays banned everywhere else** (body, labels, sans). The remaining weight sweep removes all non-display 600/700, not the display 700.
+
 **Font weight 700.** Your brand rule is "300 / 400 / 500, never 600+." But **Cinzel Decorative ships only 400 and 700**, and nearly every page loads and uses 700 for display headings (and some use 600 elsewhere). So the rule as written is broken almost everywhere by necessity.
 
 Pick one, and I'll apply it site-wide:

@@ -373,7 +373,7 @@ function transformMd(md){
 
 function wrapTables(html){return html.replace(/<table>/g,'<div class="tbl-wrap"><table>').replace(/<\/table>/g,'</table></div>');}
 
-var SELF=location.pathname.split('/').pop()||'session-v2.html';
+var SELF=location.pathname.split('/').pop()||'session.html';
 var STOP3=/^#{2,3} /m, STOP2=/^## /m;
 function zblock(md,h,stop){var re=new RegExp('^#{2,3}[^\n]*'+h.replace(/[.*+?^${}()|[\]\\\/]/g,'\\$&')+'[^\n]*$','mi');var m=re.exec(md);if(!m)return'';var rest=md.slice(m.index+m[0].length);var n=rest.search(stop);return (n===-1?rest:rest.slice(0,n)).trim();}
 function zparas(t){return t.split(/\n\s*\n/).map(function(x){return x.trim();}).filter(Boolean);}

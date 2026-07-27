@@ -179,6 +179,8 @@ footer .swear{color:var(--gold-pale)}
   if(!s) return;
   // honor reduced-motion: no sudden full-screen flash for those users
   if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){ s.parentNode.removeChild(s); return; }
+  // fire at most once ever: no repeated startle on return visits
+  try{ if(localStorage.getItem('afb_scare_seen')){ s.parentNode.removeChild(s); return; } localStorage.setItem('afb_scare_seen','1'); }catch(e){}
   var img=s.querySelector('img');
   var HOLD=190, FADE=180, MAXWAIT=700;   // tweak HOLD for a longer/shorter scare
   function vanish(){ s.classList.add('gone'); setTimeout(function(){ if(s.parentNode) s.parentNode.removeChild(s); }, FADE+60); }

@@ -3,113 +3,449 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Field Studies — Rectrix Caedere</title>
-<meta name="description" content="Data deep-dives into the Rectrix Caedere roll archive — statistical studies drawn from three years of logged D&amp;D rolls.">
+<title>Do the Dice Hate You? — Rectrix Caedere Field Studies</title>
+<meta name="description" content="A statistical fairness audit of 3,246 d20 rolls across three years and three D&amp;D campaigns. Data pipeline, methodology, and significance testing.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cinzel+Decorative:wght@400;700&family=Raleway:wght@300;400;500;600&family=Alegreya+Sans+SC:wght@400;500;700&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
 <style>
 :root{
   --rc-starless-navy:#050A0E; --rc-deep-blue-black:#111A24; --rc-midnight-cardstock:#0D141C;
-  --rc-smoked-navy:#162230; --rc-product-gold:#C7A369; --rc-pale-gold-text:#E8C690;
-  --rc-aged-copper-gold:#8C5D3F; --rc-moonlit-apricot:#DA9565;
+  --rc-smoked-navy:#162230; --rc-deep-botanical-blue:#1A2D40;
+  --rc-aged-copper-gold:#8C5D3F; --rc-warm-amber:#AF755A; --rc-moonlit-apricot:#DA9565;
+  --rc-pale-gold-text:#E8C690; --rc-product-gold:#C7A369; --rc-burnt-coral:#B7634D;
   --rc-text-primary:#E8E4DC; --rc-text-secondary:#9A9590; --rc-text-muted:#5E5A55;
   --rc-text-vellum:#F5EFE2;
   --rc-border-subtle:rgba(255,255,255,.06); --rc-border-accent:rgba(199,163,105,.25);
-  --rc-border-accent-strong:rgba(199,163,105,.45); --rc-gold-glow:rgba(199,163,105,.30);
-  --rc-success:#4A9E6E; --rc-danger:#B44A4A;
-  --rc-font-display:'Cinzel','EB Garamond',serif; --rc-font-body:'Raleway',system-ui,sans-serif;
-  --rc-font-label:'Alegreya Sans SC','Raleway',sans-serif; --rc-font-serif:'EB Garamond',Georgia,serif;
+  --rc-border-accent-strong:rgba(199,163,105,.45); --rc-gold-dim:rgba(199,163,105,.15);
+  --rc-gold-glow:rgba(199,163,105,.30);
+  --rc-success:#4A9E6E; --rc-danger:#B44A4A; --rc-info:#6B8AAD; --rc-mystic:#8B6BB5; --rc-warning:#D4943A;
+  --rc-success-dim:rgba(74,158,110,.15); --rc-danger-dim:rgba(180,74,74,.15);
+  --rc-font-display:'Cinzel','EB Garamond',serif;
+  --rc-font-deco:'Cinzel Decorative','Cinzel',serif;
+  --rc-font-body:'Raleway',system-ui,sans-serif;
+  --rc-font-label:'Alegreya Sans SC','Raleway',sans-serif;
+  --rc-font-serif:'EB Garamond',Georgia,serif;
+  --rc-mono:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;
   --shadow-lg:0 8px 32px rgba(0,0,0,.55);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:var(--rc-font-body);color:var(--rc-text-primary);background:var(--rc-starless-navy);
+body{
+  font-family:var(--rc-font-body); color:var(--rc-text-primary);
+  background:var(--rc-starless-navy);
   background-image:
     radial-gradient(120% 80% at 50% -10%, rgba(31,63,91,.30) 0%, rgba(5,10,14,0) 55%),
     radial-gradient(90% 60% at 85% 8%, rgba(199,163,105,.07) 0%, rgba(5,10,14,0) 50%),
-    linear-gradient(180deg,#070D12 0%,#050A0E 100%);
-  background-attachment:fixed;min-height:100vh;position:relative;-webkit-font-smoothing:antialiased}
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:80;opacity:.045;mix-blend-mode:overlay;
+    linear-gradient(180deg, #070D12 0%, #050A0E 100%);
+  background-attachment:fixed; min-height:100vh; position:relative;
+  line-height:1.55; -webkit-font-smoothing:antialiased;
+}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:80;opacity:.045;
+  mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
-a{color:var(--rc-pale-gold-text);text-decoration:none}a:hover{color:var(--rc-moonlit-apricot)}
+
+a{color:var(--rc-pale-gold-text);text-decoration:none}
+a:hover{color:var(--rc-moonlit-apricot)}
+
 .wrap{max-width:920px;margin:0 auto;padding:0 24px}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;max-width:920px;margin:0 auto;position:relative;z-index:5}
+
+/* ---- top bar ---- */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:20px 24px;max-width:920px;margin:0 auto;position:relative;z-index:5}
 .topbar .brand{display:flex;align-items:center;gap:12px}
 .topbar .brand img{height:38px;width:auto;display:block;opacity:.95}
-.topbar .brand .bn{font-family:var(--rc-font-label);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--rc-text-secondary)}
+.topbar .brand .bn{font-family:var(--rc-font-label);font-size:12px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--rc-text-secondary)}
 .topbar nav{font-family:var(--rc-font-label);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
-.topbar nav a{margin-left:20px;color:var(--rc-text-secondary)}.topbar nav a:hover{color:var(--rc-pale-gold-text)}
-.hero{text-align:center;padding:54px 0 30px}
-.eyebrow{font-family:var(--rc-font-label);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--rc-product-gold);margin-bottom:18px}
-.hero h1{font-family:var(--rc-font-display);font-weight:600;letter-spacing:.03em;font-size:clamp(34px,6vw,56px);line-height:1.05;color:var(--rc-text-vellum)}
-.hero .lede{font-family:var(--rc-font-serif);font-style:italic;font-size:clamp(16px,2.3vw,20px);line-height:1.5;color:var(--rc-text-secondary);max-width:620px;margin:18px auto 0}
-.rule{height:1px;background:linear-gradient(90deg,transparent,var(--rc-border-accent-strong),transparent);max-width:340px;margin:26px auto 0}
-.studies{padding:30px 0 20px;display:grid;gap:22px}
-.study{display:block;background:linear-gradient(180deg,rgba(22,34,48,.55),rgba(13,20,28,.6));
-  border:1px solid var(--rc-border-accent);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-lg);
-  transition:border-color .3s,transform .3s,box-shadow .4s}
-.study:hover{border-color:var(--rc-border-accent-strong);transform:translateY(-2px);box-shadow:var(--shadow-lg),0 0 40px -18px var(--rc-gold-glow)}
-.study .body{padding:26px 30px}
-.study .no{font-family:var(--rc-font-label);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--rc-aged-copper-gold)}
-.study h2{font-family:var(--rc-font-display);font-weight:600;font-size:clamp(22px,3.2vw,30px);letter-spacing:.02em;color:var(--rc-text-vellum);margin:8px 0 10px;line-height:1.15}
-.study p{font-size:15.5px;line-height:1.55;color:var(--rc-text-secondary);max-width:64ch;margin-bottom:16px}
-.metarow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.tag{font-family:var(--rc-font-label);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--rc-text-secondary);border:1px solid var(--rc-border-subtle);padding:4px 10px;border-radius:999px}
-.tag.gold{color:var(--rc-pale-gold-text);border-color:var(--rc-border-accent);background:rgba(199,163,105,.05)}
-.readmore{font-family:var(--rc-font-label);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--rc-product-gold);margin-left:auto}
-.soon{background:linear-gradient(180deg,rgba(13,20,28,.4),rgba(13,20,28,.4));border:1px dashed var(--rc-border-subtle);border-radius:16px;padding:26px 30px;text-align:center}
-.soon .no{font-family:var(--rc-font-label);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--rc-text-muted)}
-.soon h2{font-family:var(--rc-font-display);font-weight:500;font-size:20px;color:var(--rc-text-secondary);margin:8px 0 6px}
-.soon p{font-size:14px;color:var(--rc-text-muted);max-width:54ch;margin:0 auto}
-footer.site{text-align:center;padding:42px 24px 50px;border-top:1px solid var(--rc-border-subtle);margin-top:36px;font-family:var(--rc-font-label);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--rc-text-muted)}
+.topbar nav a{margin-left:20px;color:var(--rc-text-secondary)}
+.topbar nav a:hover{color:var(--rc-pale-gold-text)}
+
+/* ---- hero ---- */
+.hero{text-align:center;padding:48px 0 36px}
+.eyebrow{font-family:var(--rc-font-label);font-size:11px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--rc-product-gold);margin-bottom:18px}
+.hero h1{font-family:var(--rc-font-display);font-weight:600;letter-spacing:.02em;
+  font-size:clamp(34px,6vw,58px);line-height:1.05;color:var(--rc-text-vellum);
+  text-shadow:0 2px 30px rgba(0,0,0,.6)}
+.hero .lede{font-family:var(--rc-font-serif);font-size:clamp(17px,2.4vw,21px);
+  line-height:1.5;color:var(--rc-text-secondary);max-width:640px;margin:20px auto 0;font-style:italic}
+.byline{margin-top:26px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.tag{font-family:var(--rc-font-label);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--rc-pale-gold-text);border:1px solid var(--rc-border-accent);
+  padding:5px 11px;border-radius:999px;background:rgba(199,163,105,.05)}
+.rule{height:1px;background:linear-gradient(90deg,transparent,var(--rc-border-accent-strong),transparent);
+  margin:8px 0 0;max-width:340px;margin-left:auto;margin-right:auto}
+
+/* ---- stat band ---- */
+.statband{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:var(--rc-border-subtle);border:1px solid var(--rc-border-accent);
+  border-radius:12px;overflow:hidden;margin:40px 0 8px;box-shadow:var(--shadow-lg)}
+.stat{background:linear-gradient(180deg,var(--rc-deep-blue-black),var(--rc-midnight-cardstock));
+  padding:22px 14px;text-align:center}
+.stat .v{font-family:var(--rc-font-display);font-weight:600;font-size:30px;line-height:1;
+  color:var(--rc-product-gold);font-variant-numeric:lining-nums}
+.stat .v.good{color:var(--rc-success)} .stat .v.bad{color:var(--rc-danger)}
+.stat .k{font-family:var(--rc-font-label);font-size:10.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--rc-text-secondary);margin-top:8px}
+@media(max-width:640px){.statband{grid-template-columns:repeat(2,1fr)}}
+
+/* ---- sections ---- */
+section{padding:44px 0}
+.sec-no{font-family:var(--rc-font-label);font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--rc-aged-copper-gold);margin-bottom:10px}
+h2{font-family:var(--rc-font-display);font-weight:600;font-size:clamp(24px,3.6vw,32px);
+  letter-spacing:.02em;color:var(--rc-text-vellum);line-height:1.18;margin-bottom:18px}
+h3{font-family:var(--rc-font-label);font-weight:700;font-size:15px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--rc-pale-gold-text);margin:26px 0 12px}
+p{font-size:16.5px;line-height:1.62;color:var(--rc-text-primary);margin-bottom:16px;
+  max-width:68ch}
+p.muted{color:var(--rc-text-secondary)}
+strong{color:var(--rc-text-vellum);font-weight:600}
+em.gold{color:var(--rc-pale-gold-text);font-style:normal;font-weight:600}
+
+/* ---- panels / callouts ---- */
+.panel{background:linear-gradient(180deg,rgba(22,34,48,.55),rgba(13,20,28,.55));
+  border:1px solid var(--rc-border-accent);border-radius:14px;padding:26px 28px;
+  margin:22px 0;box-shadow:var(--shadow-lg);position:relative}
+.panel.verdict{border-color:var(--rc-border-accent-strong);
+  box-shadow:var(--shadow-lg),0 0 40px -20px var(--rc-gold-glow)}
+.callout{border-left:2px solid var(--rc-product-gold);background:rgba(199,163,105,.05);
+  padding:14px 20px;border-radius:0 8px 8px 0;margin:20px 0}
+.callout .lab{font-family:var(--rc-font-label);font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--rc-product-gold);margin-bottom:6px}
+.callout p{margin:0;font-size:15.5px;color:var(--rc-text-secondary)}
+
+/* ---- code ---- */
+pre{background:#070C11;border:1px solid var(--rc-border-subtle);border-radius:10px;
+  padding:18px 20px;overflow-x:auto;margin:18px 0;font-family:var(--rc-mono);
+  font-size:13px;line-height:1.65;color:#cdd6df}
+pre .kw{color:#C7A369}.pre .st{color:#9bb39b}
+code.inl{font-family:var(--rc-mono);font-size:13.5px;background:rgba(199,163,105,.08);
+  border:1px solid var(--rc-border-subtle);border-radius:4px;padding:1px 6px;color:var(--rc-pale-gold-text)}
+
+/* ---- pipeline diagram ---- */
+.pipe{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin:24px 0 6px}
+.pnode{flex:1;min-width:120px;background:linear-gradient(180deg,var(--rc-deep-blue-black),var(--rc-midnight-cardstock));
+  border:1px solid var(--rc-border-accent);border-radius:10px;padding:16px 12px;text-align:center;position:relative}
+.pnode .pt{font-family:var(--rc-font-label);font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--rc-pale-gold-text);font-weight:700;margin-bottom:4px}
+.pnode .pd{font-size:12px;color:var(--rc-text-secondary);line-height:1.4}
+.parrow{display:flex;align-items:center;justify-content:center;color:var(--rc-aged-copper-gold);
+  font-size:20px;padding:0 6px;flex:0 0 auto}
+@media(max-width:680px){.pipe{flex-direction:column}.parrow{transform:rotate(90deg);padding:6px 0}}
+
+/* ---- charts ---- */
+.chart-card{background:linear-gradient(180deg,rgba(17,26,36,.6),rgba(13,20,28,.6));
+  border:1px solid var(--rc-border-accent);border-radius:14px;padding:24px 24px 18px;
+  margin:24px 0;box-shadow:var(--shadow-lg)}
+.chart-card .ctitle{font-family:var(--rc-font-label);font-size:12px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--rc-pale-gold-text);font-weight:700;margin-bottom:4px}
+.chart-card .csub{font-size:13px;color:var(--rc-text-secondary);margin-bottom:18px}
+.chart-card svg{display:block;width:100%;height:auto;overflow:visible}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-size:12px;color:var(--rc-text-secondary)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:11px;height:11px;border-radius:2px;display:inline-block}
+.cap{font-size:12.5px;color:var(--rc-text-muted);font-style:italic;margin-top:12px;line-height:1.5}
+
+/* ---- table ---- */
+.tbl{width:100%;border-collapse:collapse;margin:18px 0;font-size:14px}
+.tbl th{font-family:var(--rc-font-label);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--rc-text-secondary);text-align:left;padding:10px 12px;border-bottom:1px solid var(--rc-border-accent)}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--rc-border-subtle);color:var(--rc-text-primary)}
+.tbl td.num{font-family:var(--rc-font-display);font-variant-numeric:lining-nums;text-align:right}
+.tbl tr.flag td{background:rgba(180,74,74,.06)}
+.tbl tr.flag2 td{background:rgba(74,158,110,.06)}
+.pill{font-family:var(--rc-font-label);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  padding:2px 8px;border-radius:999px;border:1px solid currentColor}
+.pill.bad{color:var(--rc-danger)} .pill.good{color:var(--rc-success)} .pill.ok{color:var(--rc-text-muted)}
+
+/* ---- limitations list ---- */
+ul.lim{list-style:none;margin:8px 0;padding:0}
+ul.lim li{padding:12px 0 12px 30px;border-bottom:1px solid var(--rc-border-subtle);
+  position:relative;color:var(--rc-text-secondary);font-size:15.5px;line-height:1.55;max-width:70ch}
+ul.lim li::before{content:'\273A';position:absolute;left:4px;top:12px;color:var(--rc-aged-copper-gold)}
+ul.lim li strong{color:var(--rc-text-vellum)}
+
+/* ---- closing ---- */
+.closing{text-align:center;padding:56px 0 36px}
+.closing .big{font-family:var(--rc-font-display);font-weight:500;font-size:clamp(22px,3.4vw,30px);
+  line-height:1.35;color:var(--rc-text-vellum);max-width:640px;margin:0 auto;letter-spacing:.01em}
+.closing .big em{color:var(--rc-product-gold);font-style:italic}
+
+/* ---- footer ---- */
+footer.site{text-align:center;padding:38px 24px 48px;border-top:1px solid var(--rc-border-subtle);
+  margin-top:30px;font-family:var(--rc-font-label);font-size:12px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--rc-text-muted)}
 footer.site .dot{color:var(--rc-aged-copper-gold);margin:0 8px}
-footer.site .flinks{margin-top:14px}footer.site .flinks a{color:var(--rc-text-secondary);margin:0 10px}
+footer.site .flinks{margin-top:14px;letter-spacing:.08em}
+footer.site .flinks a{color:var(--rc-text-secondary);margin:0 10px}
 </style>
 </head>
 <body>
+
 <div class="topbar">
   <a class="brand" href="/">
     <img src="/assets/img/logo_only-transparent2.webp" alt="Rectrix Caedere">
     <span class="bn">Rectrix&nbsp;Caedere</span>
   </a>
-  <nav><a href="/">Archives</a></nav>
+  <nav>
+    <a href="/case-studies/">Field Studies</a>
+    <a href="/">Archives</a>
+  </nav>
 </div>
 
 <div class="wrap">
+
   <header class="hero">
-    <div class="eyebrow">Rectrix Caedere &middot; The Archives</div>
-    <h1>Field Studies</h1>
-    <p class="lede">What three years of logged dice can tell you that no single session ever could. Data deep-dives into the campaign roll archive &mdash; one question, rigorously answered, each time.</p>
+    <div class="eyebrow">Field Study No. 01 &middot; Roll Data</div>
+    <h1>Do the Dice Hate You?</h1>
+    <p class="lede">Every table has a player who swears the dice are out to get them. Three years of logged rolls let us actually check.</p>
+    <div class="byline">
+      <span class="tag">3,246 d20 rolls</span>
+      <span class="tag">3 campaigns</span>
+      <span class="tag">2023&ndash;2026</span>
+    </div>
+    <div class="byline" style="margin-top:10px">
+      <span class="tag" style="color:var(--rc-text-secondary);border-color:var(--rc-border-subtle);background:none">PostgreSQL</span>
+      <span class="tag" style="color:var(--rc-text-secondary);border-color:var(--rc-border-subtle);background:none">Supabase</span>
+      <span class="tag" style="color:var(--rc-text-secondary);border-color:var(--rc-border-subtle);background:none">SQL</span>
+      <span class="tag" style="color:var(--rc-text-secondary);border-color:var(--rc-border-subtle);background:none">Python / SciPy</span>
+      <span class="tag" style="color:var(--rc-text-secondary);border-color:var(--rc-border-subtle);background:none">D&amp;D&nbsp;Beyond&nbsp;API</span>
+    </div>
     <div class="rule"></div>
   </header>
 
-  <main class="studies">
-    <a class="study" href="/case-studies/are-the-dice-fair/">
-      <div class="body">
-        <div class="no">Field Study No. 01 &middot; Roll Data</div>
-        <h2>Do the Dice Hate You?</h2>
-        <p>Every table has a player convinced the dice are cursed. A fairness audit of 3,246 d20 rolls puts the superstition to a chi-square test &mdash; and finds the real bias is human.</p>
-        <div class="metarow">
-          <span class="tag gold">3,246 rolls</span>
-          <span class="tag">PostgreSQL</span>
-          <span class="tag">Significance testing</span>
-          <span class="readmore">Read the study &rarr;</span>
-        </div>
-      </div>
-    </a>
+  <!-- punchline up top -->
+  <div class="statband">
+    <div class="stat"><div class="v">3,246</div><div class="k">Rolls audited</div></div>
+    <div class="stat"><div class="v">p&nbsp;=&nbsp;0.996</div><div class="k">&chi;&sup2; fairness test</div></div>
+    <div class="stat"><div class="v good">4.90%</div><div class="k">Nat&nbsp;20 (exp. 5%)</div></div>
+    <div class="stat"><div class="v bad">4.96%</div><div class="k">Nat&nbsp;1 (exp. 5%)</div></div>
+  </div>
+  <p class="cap" style="text-align:center;max-width:560px;margin:6px auto 0">The short version: the dice are fair to three decimal places. The long version is more interesting.</p>
 
-    <div class="soon">
-      <div class="no">In the workshop</div>
-      <h2>More studies coming</h2>
-      <p>Clutch factor under pressure, per-campaign luck arcs, the math of advantage &mdash; the archive has more questions in it than we&rsquo;ve asked yet.</p>
+  <section>
+    <div class="sec-no">01 &middot; The Question</div>
+    <h2>&ldquo;I never roll above a 7.&rdquo;</h2>
+    <p>It is the most common complaint at any D&amp;D table, and it always <em class="gold">feels</em> true. Someone fumbles a critical save, drops to the floor, and declares the dice cursed. The table nods. A legend is born.</p>
+    <p>But a feeling is not evidence. Across three active campaigns, every digital roll has been logged to a database since 2023 &mdash; over five thousand of them. That turns an article of faith into a testable hypothesis: <strong>are the dice actually unfair to anyone, or does it just feel that way?</strong></p>
+  </section>
+
+  <section>
+    <div class="sec-no">02 &middot; The Dataset</div>
+    <h2>Where the numbers come from</h2>
+    <p>Every roll made on D&amp;D Beyond is captured by its game-log API, pulled with a lightweight sync script, and upserted into a Postgres database on Supabase. One in-game attack often becomes two rows &mdash; a <em class="gold">to-hit</em> and a <em class="gold">damage</em> roll &mdash; linked by a shared roll ID. The raw die faces are preserved in a JSON column, which is what makes a fairness audit possible at all.</p>
+
+    <div class="pipe">
+      <div class="pnode"><div class="pt">D&amp;D Beyond</div><div class="pd">Game-log API, per campaign</div></div>
+      <div class="parrow">&#10230;</div>
+      <div class="pnode"><div class="pt">Sync Script</div><div class="pd">Token auth, paginate, de-dupe</div></div>
+      <div class="parrow">&#10230;</div>
+      <div class="pnode"><div class="pt">Supabase</div><div class="pd">Postgres, one row per roll</div></div>
+      <div class="parrow">&#10230;</div>
+      <div class="pnode"><div class="pt">SQL + Python</div><div class="pd">Extract, test, visualize</div></div>
     </div>
-  </main>
+
+    <table class="tbl">
+      <thead><tr><th>Campaign</th><th>Span</th><th style="text-align:right">Total rolls</th></tr></thead>
+      <tbody>
+        <tr><td>Pacts &amp; Power</td><td>Jan 2023 &ndash; Jun 2026</td><td class="num">3,108</td></tr>
+        <tr><td>Ashfall Britannia</td><td>Nov 2025 &ndash; Jun 2026</td><td class="num">1,129</td></tr>
+        <tr><td>Sky Is The Limit</td><td>Aug 2025 &ndash; Jun 2026</td><td class="num">1,108</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <div class="sec-no">03 &middot; Methodology</div>
+    <h2>Cleaning a messy real-world log</h2>
+    <p>A roll archive is not a tidy dataset. Three decisions did most of the work, and each one matters for the result.</p>
+
+    <h3>1 &middot; Only true 1d20 rolls count</h3>
+    <p>The fairness question is about a single fair die. So the analysis keeps only <em class="gold">single-d20</em> rolls used for attacks, checks, saves, and raw d20s &mdash; the rolls that should follow a clean uniform distribution.</p>
+
+    <h3>2 &middot; Advantage and disadvantage are excluded &mdash; deliberately</h3>
+    <p>Rolling two d20s and keeping the higher (advantage) or lower (disadvantage) is <strong>not</strong> a uniform distribution. Advantage skews high; disadvantage skews low. Folding those rolls into the base rate would manufacture a bias that the die itself never had. Excluding them is the difference between measuring the dice and measuring the rules.</p>
+
+    <h3>3 &middot; Known data quirks, handled</h3>
+    <p class="muted">A handful of legacy rows stored the die values as a double-encoded JSON string rather than an array; DM-controlled monsters appear in the log as their own &ldquo;characters&rdquo;; and a few early rows have no recorded values at all. Each was filtered explicitly rather than silently averaged over.</p>
+
+    <pre><span class="kw">WITH</span> d20 <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> (individual_values-&gt;&gt;0)::<span class="kw">int</span> <span class="kw">AS</span> face
+  <span class="kw">FROM</span> ddb_rolls
+  <span class="kw">WHERE</span> dice_notation <span class="kw">LIKE</span> '1d20%'        <span class="kw">-- single die only</span>
+    <span class="kw">AND</span> jsonb_typeof(individual_values) = 'array'  <span class="kw">-- skip legacy/null</span>
+    <span class="kw">AND</span> jsonb_array_length(individual_values) = 1   <span class="kw">-- no adv/disadv</span>
+    <span class="kw">AND</span> roll_type <span class="kw">IN</span> ('to hit','check','save','roll')
+)
+<span class="kw">SELECT</span> face, <span class="kw">COUNT</span>(*) <span class="kw">FROM</span> d20 <span class="kw">GROUP BY</span> face <span class="kw">ORDER BY</span> face;</pre>
+    <p class="cap">The full extraction query. After filtering, 3,246 clean single-d20 rolls remained for analysis.</p>
+  </section>
+
+  <section>
+    <div class="sec-no">04 &middot; The Verdict</div>
+    <h2>The dice are fair. Boringly fair.</h2>
+    <p>If a d20 is fair, all twenty faces should land roughly equally often &mdash; about 162 times each across 3,246 rolls. Here is what actually happened.</p>
+
+    <div class="chart-card">
+      <div class="ctitle">d20 Face Distribution</div>
+      <div class="csub">Observed count per face vs. the expected value for a fair die (162.3)</div>
+      <svg id="histo" viewBox="0 0 880 320" role="img" aria-label="Bar chart of d20 face frequencies, all near the expected line"></svg>
+      <div class="legend">
+        <span><i style="background:var(--rc-product-gold)"></i> Observed rolls</span>
+        <span><i style="background:var(--rc-success)"></i> Natural 20</span>
+        <span><i style="background:var(--rc-danger)"></i> Natural 1</span>
+        <span><i style="background:var(--rc-info);height:2px;width:16px;border-radius:0"></i> Expected (fair die)</span>
+      </div>
+      <p class="cap">Every bar hugs the expected line. There is no slope, no dead zone, no favored face.</p>
+    </div>
+
+    <div class="panel verdict">
+      <h3 style="margin-top:0">The numbers behind the flat line</h3>
+      <p style="margin-bottom:10px"><strong>Chi-square goodness-of-fit:</strong> &chi;&sup2; = 6.69 on 19 degrees of freedom, <strong>p = 0.996</strong>. A value that high means the observed spread is indistinguishable from pure chance &mdash; we cannot reject the hypothesis that the die is fair.</p>
+      <p style="margin-bottom:10px"><strong>Mean face:</strong> 10.566 (a fair d20 expects 10.5). <strong>Standard deviation:</strong> 5.767, against a theoretical 5.766 &mdash; a match to the third decimal.</p>
+      <p style="margin-bottom:0"><strong>The headline crits:</strong> natural 20s landed 4.90% of the time, natural 1s 4.96% &mdash; both within a whisker of the expected 5%.</p>
+    </div>
+    <p class="muted">So at the level of the whole table, there is no curse and no blessing. The random number generator is doing its job. Which raises the obvious objection&hellip;</p>
+  </section>
+
+  <section>
+    <div class="sec-no">05 &middot; The Rebuttal</div>
+    <h2>&ldquo;Fine &mdash; but <em style="font-style:italic;color:var(--rc-product-gold)">I&rsquo;m</em> still cursed.&rdquo;</h2>
+    <p>Fair overall doesn&rsquo;t mean fair for everyone. So we split the rolls by character &mdash; every player and DM-run creature with at least 30 single-d20 rolls &mdash; and looked at how often each one fumbled a natural 1.</p>
+
+    <div class="chart-card">
+      <div class="ctitle">Natural 1 Rate by Character</div>
+      <div class="csub">Share of rolls that came up a 1, sorted high to low. Expected: 5%.</div>
+      <svg id="nat1" viewBox="0 0 880 520" role="img" aria-label="Bar chart of natural-1 rate per character"></svg>
+      <p class="cap">Two characters clear a naive significance test &mdash; one suspiciously unlucky, one suspiciously lucky. Hold that thought.</p>
+    </div>
+
+    <p>Run a binomial test on each character and two names cross the usual <code class="inl">p &lt; 0.05</code> line:</p>
+    <table class="tbl">
+      <thead><tr><th>Character</th><th style="text-align:right">Rolls</th><th style="text-align:right">Nat 1s</th><th style="text-align:right">Rate</th><th style="text-align:right">p-value</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr class="flag"><td>Sanis Reylana</td><td class="num">297</td><td class="num">26</td><td class="num">8.8%</td><td class="num">0.007</td><td><span class="pill bad">looks cursed</span></td></tr>
+        <tr class="flag2"><td>Ogre</td><td class="num">178</td><td class="num">2</td><td class="num">1.1%</td><td class="num">0.014</td><td><span class="pill good">looks blessed</span></td></tr>
+        <tr><td>Everyone else (17)</td><td class="num">&mdash;</td><td class="num">&mdash;</td><td class="num">&mdash;</td><td class="num">&gt;0.10</td><td><span class="pill ok">unremarkable</span></td></tr>
+      </tbody>
+    </table>
+
+    <p>Case closed? Not quite. There&rsquo;s a trap in testing nineteen characters two ways each &mdash; that&rsquo;s <strong>38 separate significance tests</strong>. At a 5% threshold, you <em class="gold">expect</em> about 1.9 of them to flag by pure luck, even if nothing is wrong. We found exactly two. That is the number randomness predicts.</p>
+
+    <div class="callout">
+      <div class="lab">The multiple-comparisons correction</div>
+      <p>Adjust the threshold for 38 tests (Bonferroni: p &lt; 0.0013) and <strong style="color:var(--rc-text-vellum)">neither result survives.</strong> Sanis&rsquo; bad luck and the Ogre&rsquo;s good luck are exactly the kind of noise you get for free when you look at enough dice. Nobody is statistically cursed.</p>
+    </div>
+
+    <p>This is the quiet lesson hiding in a joke dataset: search hard enough through random data and you will always find something that looks significant. The discipline is knowing it isn&rsquo;t.</p>
+  </section>
+
+  <section>
+    <div class="sec-no">06 &middot; Limitations</div>
+    <h2>What this can&rsquo;t see</h2>
+    <ul class="lim">
+      <li><strong>Physical dice are invisible.</strong> Some players roll real dice that never touch D&amp;D Beyond. Their rolls aren&rsquo;t in the archive &mdash; an expected gap, not a sync failure, but it means &ldquo;every roll&rdquo; really means every <em>digital</em> roll.</li>
+      <li><strong>Advantage and disadvantage sit out.</strong> They&rsquo;re excluded from the base-rate test on purpose. A separate analysis could measure how much the rules &mdash; not the dice &mdash; bend the odds.</li>
+      <li><strong>DM-run creatures share the character list.</strong> Monsters Addison rolls for appear alongside player characters. For a fairness audit every fair-die roll counts equally, but they aren&rsquo;t all &ldquo;players.&rdquo;</li>
+      <li><strong>Memory isn&rsquo;t in the data.</strong> The archive records outcomes, not how they <em>felt</em>. The gap between the two is the whole story &mdash; and it&rsquo;s the one thing the numbers can&rsquo;t measure.</li>
+    </ul>
+  </section>
+
+  <div class="closing">
+    <p class="big">The dice are fair. The bias is human.<br>We remember the natural 1 that dropped us at 1 HP and forget the forty quiet sevens &mdash; and <em>that</em> is the curse worth believing in.</p>
+  </div>
+
 </div>
 
 <footer class="site">
   Rectrix Caedere <span class="dot">&#10022;</span> Field Studies <span class="dot">&#10022;</span> rectrixcaedere.com
-  <div class="flinks"><a href="/">&larr; Campaign archives</a></div>
+  <div class="flinks">
+    <a href="/case-studies/">&larr; All field studies</a>
+    <a href="/">Campaign archives</a>
+  </div>
 </footer>
+
+<script>
+/* ---------- data ---------- */
+const FACE = [161,168,155,156,157,152,171,154,164,169,170,159,154,176,155,168,158,164,176,159];
+const EXP  = 3246/20; // 162.3
+const NAT1 = [
+  {n:'Sanis Reylana',r:8.8,sig:'bad'},
+  {n:'Rinestra Genleth',r:8.8,sig:null},
+  {n:"Amanita de'Champignon",r:7.7,sig:null},
+  {n:'Binks Stonevein',r:7.4,sig:null},
+  {n:'Valerian Hellebore',r:6.0,sig:null},
+  {n:'Braun',r:5.1,sig:null},
+  {n:'Flux',r:5.1,sig:null},
+  {n:'Barrett Grimmskar',r:5.0,sig:null},
+  {n:'Varis Aestra',r:5.0,sig:null},
+  {n:'Orphie Levistus',r:4.6,sig:null},
+  {n:'Samothy Smith-Wesson',r:4.6,sig:null},
+  {n:'Darby Stonefeather',r:4.5,sig:null},
+  {n:'Vega Bloodroot',r:4.3,sig:null},
+  {n:'Kit Aluri',r:3.4,sig:null},
+  {n:'Deanna Smith-Wesson',r:3.2,sig:null},
+  {n:'Blarg',r:3.2,sig:null},
+  {n:'Aeolus',r:2.7,sig:null},
+  {n:'Zelda "Z" Whipper',r:2.2,sig:null},
+  {n:'Ogre',r:1.1,sig:'good'}
+];
+const GOLD='#C7A369',GREEN='#4A9E6E',RED='#B44A4A',BLUE='#6B8AAD',MUT='#5E5A55',TXT='#9A9590';
+const NS='http://www.w3.org/2000/svg';
+function el(t,a){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
+
+/* ---------- histogram ---------- */
+(function(){
+  const svg=document.getElementById('histo');
+  const W=880,H=320,padL=40,padR=14,padT=18,padB=34;
+  const cw=W-padL-padR, ch=H-padT-padB;
+  const maxV=190;
+  const y=v=>padT+ch-(v/maxV)*ch;
+  // gridlines
+  [0,50,100,150].forEach(g=>{
+    svg.appendChild(el('line',{x1:padL,x2:W-padR,y1:y(g),y2:y(g),stroke:'rgba(255,255,255,.05)','stroke-width':1}));
+    const t=el('text',{x:padL-8,y:y(g)+4,fill:MUT,'font-size':10,'text-anchor':'end','font-family':'Raleway'});t.textContent=g;svg.appendChild(t);
+  });
+  const bw=cw/20*0.74, gap=cw/20;
+  FACE.forEach((v,i)=>{
+    const x=padL+i*gap+(gap-bw)/2;
+    const col=i===19?GREEN:(i===0?RED:GOLD);
+    const op=(i===0||i===19)?1:0.82;
+    const r=el('rect',{x:x.toFixed(1),y:y(v).toFixed(1),width:bw.toFixed(1),height:(padT+ch-y(v)).toFixed(1),fill:col,opacity:op,rx:1.5});
+    svg.appendChild(r);
+    const lt=el('text',{x:(x+bw/2).toFixed(1),y:H-padB+16,fill:TXT,'font-size':10,'text-anchor':'middle','font-family':'Raleway'});
+    lt.textContent=i+1;svg.appendChild(lt);
+  });
+  // expected line
+  svg.appendChild(el('line',{x1:padL,x2:W-padR,y1:y(EXP),y2:y(EXP),stroke:BLUE,'stroke-width':1.5,'stroke-dasharray':'5 4'}));
+  const et=el('text',{x:W-padR,y:y(EXP)-7,fill:BLUE,'font-size':10.5,'text-anchor':'end','font-family':'Alegreya Sans SC','letter-spacing':'.08em'});
+  et.textContent='EXPECTED 162.3';svg.appendChild(et);
+})();
+
+/* ---------- nat1 by character ---------- */
+(function(){
+  const svg=document.getElementById('nat1');
+  const W=880,H=520,padL=170,padR=54,padT=8,padB=20;
+  const cw=W-padL-padR, n=NAT1.length, rh=(H-padT-padB)/n;
+  const maxR=10;
+  const x=v=>padL+(v/maxR)*cw;
+  // expected 5% line
+  svg.appendChild(el('line',{x1:x(5),x2:x(5),y1:padT,y2:H-padB,stroke:BLUE,'stroke-width':1.5,'stroke-dasharray':'5 4'}));
+  const et=el('text',{x:x(5),y:padT-(-0)+0,fill:BLUE,'font-size':10.5,'text-anchor':'middle','font-family':'Alegreya Sans SC','letter-spacing':'.06em'});
+  et.setAttribute('y',H-padB+16);et.textContent='5% EXPECTED';svg.appendChild(et);
+  NAT1.forEach((d,i)=>{
+    const yc=padT+i*rh+rh/2, bh=Math.min(rh*0.62,17);
+    const col=d.sig==='bad'?RED:(d.sig==='good'?GREEN:GOLD);
+    const op=d.sig?1:0.6;
+    svg.appendChild(el('rect',{x:padL,y:(yc-bh/2).toFixed(1),width:(x(d.r)-padL).toFixed(1),height:bh.toFixed(1),fill:col,opacity:op,rx:2}));
+    const nm=el('text',{x:padL-12,y:yc+4,fill:d.sig?'#E8E4DC':TXT,'font-size':12.5,'text-anchor':'end','font-family':'Raleway','font-weight':d.sig?600:400});
+    nm.textContent=d.n;svg.appendChild(nm);
+    const vt=el('text',{x:x(d.r)+8,y:yc+4,fill:col,'font-size':12,'text-anchor':'start','font-family':'Cinzel'});
+    vt.textContent=d.r.toFixed(1)+'%';svg.appendChild(vt);
+  });
+})();
+</script>
 </body>
 </html>
