@@ -21,6 +21,12 @@ SITL Session 19 is wired into the site and its roll data is repaired end-to-end;
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
 
+### 2026-07-27 16:52 ET · Claude Code
+- **Changed:** Whole-site "taste-lens" sweep (from `/design-taste-frontend-v1`, applied as brand-agnostic principles inside RC constraints, not the skill's literal light/sans aesthetic). **Item 1 of 6 done:** rebuilt Records & Reckonings from a 7-identical-clone tile grid into one editorial hero record (`The Workhorse`) + a divided ledger (asymmetric columns, hairline gold rules, right-aligned values, faint semantic tints on lucky/cursed). New `recVal` helper + rewritten `RecordsGrid` in `app.js`; replaced `.rec-grid`/`.rec-card` CSS with `.rec-wrap`/`.rec-hero`/`.rec-ledger`/`.rec-row` in `dashboard.html` (+ mobile stack).
+- **Commit:** `028bea0`
+- **Next:** Sweep items 2–6: (2) Quick Access → cathedral arch-top tiles, break 4-clone row; (3) add mandatory paper grain + fix chart axis legibility; (4) composed empty/loading states (WTFF); (5) campaign-page stat row asymmetry; (6) staggered fade-up on deck/veil.
+- **Watch out:** Two open brand deltas — (a) `bolder` stat cards use SVG-drawn corners; brand guide says corner flourishes should be `elements\*.png` (not in repo). (b) Motion stays RC-restrained (`cubic-bezier(.4,0,.2,1)`, no spring/bounce/parallax), overriding the skill's spring mandate. Status/Next Steps blocks above are the separate R2-recordings work order, untouched.
+
 ### 2026-07-27 16:24 ET · Claude Code
 - **Changed:** `$impeccable bolder` on the dashboard stat cards. Amplified the five KPI cards from "frameless" to on-brand oracle framing toward `mockup-target.png`: Art Nouveau double-line corner brackets on all four corners, a gold top accent line, warm-gold labels (fixes the low-contrast grey), and a faint per-card sigil (d20 / moon / star / laurel / key) so the identical clones differentiate. Nat 20 card uses the green `--success` accent. New `KCorner` + `KSigil` components in `app.js`; extended the `.kpi` CSS block in `dashboard.html`. Also banked untracked `supabase/` CLI scaffolding (`config.toml`) in a separate commit.
 - **Commit:** `d674c49` (stat cards) · `4396193` (supabase scaffolding)
