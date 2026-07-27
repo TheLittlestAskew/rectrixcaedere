@@ -164,12 +164,17 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 .quote-attr{font-family:var(--f-label);font-size:var(--text-xs);letter-spacing:2px;text-transform:uppercase;color:var(--gold-mid);text-align:center;margin-top:10px}
 
 /* ── Resource cards ── */
-.res-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.res-card{background:var(--bg-card-inner);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;transition:all var(--dur-hover) var(--ease);cursor:pointer}
-.res-card:hover{border-color:var(--border-strong);background:var(--gold-alpha-5)}
+/* Quick Access — cathedral arch-top niche tiles (per brand --r-arch + halo) */
+.res-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.res-card{position:relative;background:linear-gradient(180deg,var(--gold-alpha-4),transparent 55%),var(--bg-card-inner);border:1px solid var(--border);border-radius:var(--r-arch);padding:24px 10px 15px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;gap:8px;transition:all var(--dur-hover) var(--ease);cursor:pointer;overflow:hidden}
+.res-card::before{content:'';position:absolute;top:6px;left:6px;right:6px;bottom:6px;border:1px solid var(--gold-alpha-8);border-radius:74px 74px 3px 3px;pointer-events:none}
+.res-card:hover{border-color:var(--border-strong);background:linear-gradient(180deg,var(--gold-alpha-10),transparent 55%),var(--gold-alpha-5);transform:translateY(-2px)}
+.res-card:hover .ri{color:var(--gold-bright)}
+.res-card:hover .ri::before{border-color:var(--gold-alpha-30)}
+.res-card .ri{position:relative;display:flex;align-items:center;justify-content:center;width:40px;height:40px;color:var(--gold-mid);opacity:.9;margin-bottom:1px;transition:color var(--dur-hover) var(--ease)}
+.res-card .ri::before{content:'';position:absolute;top:50%;left:50%;width:44px;height:44px;transform:translate(-50%,-50%);border:1px solid var(--gold-alpha-15);border-radius:50%;transition:border-color var(--dur-hover) var(--ease)}
 .res-card .rn{font-family:var(--f-label);font-size:var(--text-xs);letter-spacing:1.5px;text-transform:uppercase;color:var(--text-1)}
 .res-card .rs{font-family:var(--f-body);font-size:var(--text-2xs);color:var(--text-3)}
-.res-card .ri{color:var(--gold-mid);opacity:.8;margin-bottom:2px}
 
 /* ── Recharts overrides ── */
 .recharts-cartesian-axis-tick-value{fill:var(--text-3)!important;font-family:var(--f-label)!important;font-size:var(--text-2xs)!important}
@@ -264,8 +269,7 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
   .row-mid,.row-bot{grid-template-columns:1fr}
 
   /* Quick links become a vertical list of full-width buttons */
-  .res-grid{grid-template-columns:1fr}
-  .res-card{flex-direction:row;justify-content:flex-start;gap:12px;padding:14px 16px;text-align:left}
+  .res-grid{grid-template-columns:repeat(2,1fr)}
 }
 
 /* ===== Header back-link ===== */
