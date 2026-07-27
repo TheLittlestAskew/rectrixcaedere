@@ -21,6 +21,12 @@ SITL Session 19 is wired into the site and its roll data is repaired end-to-end;
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
 
+### 2026-07-27 18:20 ET · Claude Code
+- **Changed:** Fixed all 4 P0/P1 bugs from the site audit. P0: un-swapped the two case-study files (`case-studies/index.html` = listing, `.../are-the-dice-fair/index.html` = article; verified the full click-through). P1: deleted orphaned `pacts-and-power/session-v2.html` + fixed its `session.html` SELF fallback. P1: WTFF landing art moved from `raw.githubusercontent.com` to `/assets/img/` (9 files confirmed local). P1: Ashfall archive jump-scare gated to once-ever via localStorage (on top of existing reduced-motion guard). Recorded Taylor's ratified weight rule (Cinzel Decorative 700 display-only, 600 banned elsewhere) in `AUDIT.md §0`.
+- **Commit:** `d53d637`
+- **Next:** (1) NEW finding — 8 more pages use the same fragile `raw.githubusercontent` image URLs (session readers, archives, character), not just WTFF; offer a site-wide sweep. (2) Reflect the ratified weight rule in the `rc-brand` skill's "Three Weights Only" section (skill file location TBD). (3) Then AUDIT.md §5 fix-order: route every page through `tokens.css`, then the 600/700 weight sweep.
+- **Watch out:** Weight decision is Option A (display-only 700). Dashboard sweep items 4-6 still pending under all this.
+
 ### 2026-07-27 17:52 ET · Claude Code
 - **Changed:** Ran a REAL full-site design audit (all 19 HTML pages, not just the dashboard) after Taylor flagged the earlier "sweep" only looked at the dashboard deeply. Method: 4 parallel code-audit subagents (all pages read in full) + a rendered visual pass on every template type. Wrote consolidated scored findings to `.design/rc/AUDIT.md`.
 - **Commit:** `79f135c`
