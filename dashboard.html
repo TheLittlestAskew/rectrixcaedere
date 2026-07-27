@@ -58,14 +58,23 @@ body{background:var(--bg-void);color:var(--text-1);font-family:var(--f-body);fon
 .panel{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 18px;position:relative;overflow:hidden;transition:border-color var(--dur-hover) var(--ease)}
 .panel:hover{border-color:var(--border-strong)}
 
-/* ── KPI cards — frameless, centered content ── */
-.kpi{width:auto;min-width:0;height:var(--kpi-h);padding:16px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:all var(--dur-enter) var(--ease)}
-.kpi:hover{transform:translateY(-2px)}
-.kpi .kl{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:2px;text-transform:uppercase;color:var(--text-3);margin-bottom:6px}
-.kpi .kv{font-family:var(--f-display);font-size:clamp(32px,3.2vw,44px);font-weight:500;color:var(--text-1);line-height:1;letter-spacing:1px}
-.kpi .ks{font-family:var(--f-body);font-size:var(--text-xs);color:var(--text-2);margin-top:6px;font-weight:300}
+/* ── KPI cards — ornamental oracle framing, centered content ── */
+.kpi{width:auto;min-width:0;height:var(--kpi-h);padding:16px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:all var(--dur-enter) var(--ease);background:radial-gradient(130% 90% at 50% -12%,var(--gold-alpha-6),transparent 55%),var(--bg-card)}
+.kpi:hover{transform:translateY(-2px);box-shadow:var(--shadow-glow)}
+.kpi .kl{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.72;margin-bottom:6px;position:relative;z-index:2}
+.kpi .kv{font-family:var(--f-display);font-size:clamp(32px,3.2vw,44px);font-weight:500;color:var(--text-1);line-height:1;letter-spacing:1px;position:relative;z-index:2}
+.kpi .ks{font-family:var(--f-body);font-size:var(--text-xs);color:var(--text-2);margin-top:6px;font-weight:300;position:relative;z-index:2}
 .kpi.n20{--panel-accent:var(--success)}.kpi.n20 .kv{color:var(--success)}
 .kpi.n1{--panel-accent:var(--danger)}.kpi.n1 .kv{color:var(--danger)}
+/* ornament layer */
+.k-accent{position:absolute;top:0;left:13%;right:13%;height:1.5px;border-radius:2px;opacity:.75;pointer-events:none;z-index:1}
+.k-corner{position:absolute;width:30px;height:30px;pointer-events:none;z-index:1}
+.k-corner.tl{top:9px;left:9px}
+.k-corner.tr{top:9px;right:9px;transform:scaleX(-1)}
+.k-corner.bl{bottom:9px;left:9px;transform:scaleY(-1)}
+.k-corner.br{bottom:9px;right:9px;transform:scale(-1,-1)}
+.k-sigil{position:absolute;top:50%;left:50%;width:118px;height:118px;transform:translate(-50%,-48%);opacity:.06;pointer-events:none;z-index:0;transition:opacity var(--dur-enter) var(--ease)}
+.kpi:hover .k-sigil{opacity:.11}
 
 /* ── KPI chart panel — stretch to fill row height ── */
 .kpi-chart{grid-column:1/-1;height:var(--kpi-h);align-self:stretch}

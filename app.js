@@ -16,9 +16,32 @@ function PieC(p){var tot=p.data.reduce(function(s,d){return s+d.v},0);var dt=p.d
 
 function PH(p){return h('div',{className:'ph'},h('span',{className:'star'},'*'),h('h3',null,p.title),p.sub&&h('span',{className:'psub'},p.sub))}
 
+// Art Nouveau double-line corner bracket (drawn top-left; CSS mirrors it to the other three corners).
+function KCorner(p){var c=p.c||T.gold;return h('svg',{className:'k-corner '+(p.cls||''),viewBox:'0 0 44 44',fill:'none','aria-hidden':'true'},
+  h('path',{d:'M3 43 L3 17 Q3 3 17 3 L43 3',stroke:c,strokeWidth:1,opacity:.5}),
+  h('path',{d:'M9 43 L9 19 Q9 9 19 9 L43 9',stroke:c,strokeWidth:.7,opacity:.26}),
+  h('circle',{cx:17,cy:3,r:1.4,fill:c,opacity:.6}),
+  h('circle',{cx:3,cy:17,r:1.4,fill:c,opacity:.6}),
+  h('path',{d:'M9 20 q-5 -1 -7 -6 q6 0 8 5 z',fill:c,opacity:.3}))}
+// Faint per-card sigil sitting behind the number. One simple symbol per metric — the frame carries the magic.
+function KSigil(p){var c=p.c||T.gold;var g={
+  d20:h('g',{stroke:c,strokeWidth:1.4,fill:'none'},h('path',{d:'M50 6 L90 29 L90 71 L50 94 L10 71 L10 29 Z'}),h('path',{d:'M50 6 L50 40 M10 29 L50 40 L90 29 M10 71 L50 40 L90 71 M50 94 L50 40'})),
+  moon:h('path',{d:'M64 14 a38 38 0 1 0 0 72 a30 30 0 1 1 0 -72 Z',fill:c,fillRule:'evenodd'}),
+  star:h('g',{fill:c},h('path',{d:'M50 4 L58 42 L96 50 L58 58 L50 96 L42 58 L4 50 L42 42 Z'}),h('path',{d:'M50 22 L54 46 L78 50 L54 54 L50 78 L46 54 L22 50 L46 46 Z',opacity:.45})),
+  laurel:h('g',{stroke:c,strokeWidth:1.4,fill:'none'},h('path',{d:'M50 94 Q24 72 30 28 M50 94 Q76 72 70 28'}),h('path',{d:'M33 46 q-10 -3 -12 -12 M39 62 q-10 -3 -12 -12 M67 46 q10 -3 12 -12 M61 62 q10 -3 12 -12',opacity:.7})),
+  key:h('g',{stroke:c,strokeWidth:1.6,fill:'none'},h('circle',{cx:50,cy:28,r:14}),h('circle',{cx:50,cy:28,r:5,fill:c,stroke:'none'}),h('path',{d:'M50 42 L50 88 M50 70 L64 70 M50 78 L60 78'}))};
+  return h('svg',{className:'k-sigil',viewBox:'0 0 100 100',fill:'none','aria-hidden':'true'},g[p.s]||null)}
+
 function Kpi(p){
+  var ac=p.ac||T.gold;
   var style=p.bg?{backgroundImage:'url('+p.bg+')',backgroundSize:'100% 100%',backgroundPosition:'center'}:{};
-  return h('div',{className:'panel kpi ai '+(p.cn||'')+' d'+p.dl,style:style},h('div',{className:'kl'},p.label),h('div',{className:'kv'},typeof p.value==='number'?p.value.toLocaleString():p.value),p.sub&&h('div',{className:'ks'},p.sub))
+  return h('div',{className:'panel kpi ai '+(p.cn||'')+' d'+p.dl,style:style},
+    h('div',{className:'k-accent',style:{background:'linear-gradient(90deg,transparent,'+ac+',transparent)'}}),
+    h(KCorner,{c:ac,cls:'tl'}),h(KCorner,{c:ac,cls:'tr'}),h(KCorner,{c:ac,cls:'bl'}),h(KCorner,{c:ac,cls:'br'}),
+    p.sig&&h(KSigil,{c:ac,s:p.sig}),
+    h('div',{className:'kl'},p.label),
+    h('div',{className:'kv'},typeof p.value==='number'?p.value.toLocaleString():p.value),
+    p.sub&&h('div',{className:'ks'},p.sub))
 }
 
 function CharTable(p){
@@ -421,11 +444,11 @@ function App(){
       ),
 
       h('div',{className:'row-kpi'},
-        h(Kpi,{label:'Total Rolls',value:c.tr,dl:1}),
-        h(Kpi,{label:'Sessions Logged',value:c.se,dl:2}),
-        h(Kpi,{label:'Nat 20 Rate',value:r20,cn:'n20',dl:3}),
-        h(Kpi,{label:'Characters',value:c.ch,dl:4}),
-        h(Kpi,{label:'Open Quests',value:c.oq!=null?c.oq:'--',sub:'active threads',dl:5}),
+        h(Kpi,{label:'Total Rolls',value:c.tr,dl:1,sig:'d20'}),
+        h(Kpi,{label:'Sessions Logged',value:c.se,dl:2,sig:'moon'}),
+        h(Kpi,{label:'Nat 20 Rate',value:r20,cn:'n20',dl:3,sig:'star',ac:T.success}),
+        h(Kpi,{label:'Characters',value:c.ch,dl:4,sig:'laurel'}),
+        h(Kpi,{label:'Open Quests',value:c.oq!=null?c.oq:'--',sub:'active threads',dl:5,sig:'key'}),
         h(ProfMeter,{c:c}),
         h('div',{className:'panel cp ai d6 kpi-snap'},
           h(PH,{title:'Campaign Snapshot',sub:'session_id -- quest_tracker'}),
