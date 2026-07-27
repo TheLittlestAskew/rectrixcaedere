@@ -158,17 +158,29 @@ function LuckBoard(p){
     h('p',{className:'an-cap'},s.luckCap))
 }
 
+// value block (single or split), shared by hero + ledger rows
+function recVal(r,heroBig){
+  if(r.split)return h('div',{className:'rec-split'},r.split.map(function(sp,j){return h('div',{key:j,className:'rec-sh'},h('div',{className:'rec-big'+(heroBig?' rec-hbig':'')},sp.big),h('div',{className:'rec-who'},sp.who))}));
+  return h('div',null,h('div',{className:'rec-big'+(r.bigcls?' '+r.bigcls:'')+(heroBig?' rec-hbig':'')},r.big),r.who?h('div',{className:'rec-who'},r.who):null);
+}
 function RecordsGrid(p){
-  return h('div',{className:'rec-grid'},p.s.records.map(function(r,i){
-    var bc=r.bigcls?(' '+r.bigcls):'';
-    return h('div',{key:i,className:'rec-card'+(r.cls?' '+r.cls:'')},
-      h('div',{className:'rec-tag'},r.tag),
-      h('div',{className:'rec-title'},r.title),
-      r.split
-        ? h('div',{className:'rec-split'},r.split.map(function(sp,j){return h('div',{key:j,className:'rec-sh'},h('div',{className:'rec-big'},sp.big),h('div',{className:'rec-who'},sp.who))}))
-        : h('div',null,h('div',{className:'rec-big'+bc},r.big),r.who?h('div',{className:'rec-who'},r.who):null),
-      h('div',{className:'rec-note'},r.note))
-  }))
+  var recs=p.s.records||[];
+  if(!recs.length)return h('div',{className:'rec-empty'},'No superlatives recorded yet.');
+  var hero=recs[0],rest=recs.slice(1);
+  return h('div',{className:'rec-wrap'},
+    h('div',{className:'rec-hero'+(hero.cls?' '+hero.cls:'')},
+      h('div',{className:'rec-tag'},hero.tag),
+      h('div',{className:'rec-htitle'},hero.title),
+      recVal(hero,true),
+      h('div',{className:'rec-note'},hero.note)),
+    h('div',{className:'rec-ledger'},rest.map(function(r,i){
+      return h('div',{key:i,className:'rec-row'+(r.cls?' '+r.cls:'')},
+        h('div',{className:'rec-rmeta'},
+          h('div',{className:'rec-tag'},r.tag),
+          h('div',{className:'rec-title'},r.title),
+          h('div',{className:'rec-note rec-rnote'},r.note)),
+        h('div',{className:'rec-rval'},recVal(r,false)))
+    })))
 }
 
 function SigHof(p){
