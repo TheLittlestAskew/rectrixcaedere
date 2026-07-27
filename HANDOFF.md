@@ -21,6 +21,12 @@ SITL Session 19 is wired into the site and its roll data is repaired end-to-end;
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
 
+### 2026-07-27 17:18 ET · Claude Code
+- **Changed:** Taste-lens sweep continued. **Item 2:** Quick Access resource tiles rebuilt from 4 flat identical rounded rectangles into brand cathedral arch-top niche tiles (`--r-arch`), inner arched rule, gold halo ring behind each icon, hover lift; mobile now 2-col arch tiles (CSS-only, `dashboard.html`). **Item 3:** fixed the roll-activity chart x-axis (was 15 tiny 9px rotated low-contrast labels) to horizontal 11px lighter every-other ticks, session + quarterly both legible (`AreaC` in `app.js`).
+- **Commit:** `628d032` (quick access) · `324a9f8` (chart axis)
+- **Next:** Sweep item 4 — composed empty/loading states for the WTFF campaign (~20 rolls, 1 session; the analytics section currently just no-ops for stat-less campaigns). Then item 5 (campaign-page stat-row asymmetry), item 6 (deck/veil staggered fade-up).
+- **Watch out:** Correction to prior entry — paper grain is NOT missing; `#grain` SVG overlay (opacity .035, blend overlay) already exists and is brand-compliant. Open brand delta still standing: `bolder` stat-card corners are SVG-drawn vs brand's `elements\*.png`.
+
 ### 2026-07-27 16:52 ET · Claude Code
 - **Changed:** Whole-site "taste-lens" sweep (from `/design-taste-frontend-v1`, applied as brand-agnostic principles inside RC constraints, not the skill's literal light/sans aesthetic). **Item 1 of 6 done:** rebuilt Records & Reckonings from a 7-identical-clone tile grid into one editorial hero record (`The Workhorse`) + a divided ledger (asymmetric columns, hairline gold rules, right-aligned values, faint semantic tints on lucky/cursed). New `recVal` helper + rewritten `RecordsGrid` in `app.js`; replaced `.rec-grid`/`.rec-card` CSS with `.rec-wrap`/`.rec-hero`/`.rec-ledger`/`.rec-row` in `dashboard.html` (+ mobile stack).
 - **Commit:** `028bea0`
