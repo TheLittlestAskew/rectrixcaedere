@@ -21,6 +21,12 @@ SITL Session 19 is wired into the site and its roll data is repaired end-to-end;
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
 
+### 2026-07-27 18:38 ET · Claude Code
+- **Changed:** Investigated the "raw-URL sweep" and CORRECTED the prior overclaim. Only ONE more fixable instance existed — `where-the-flowers-forget/archive.html:123` tarot-face pointed at the site repo's own asset via raw URL (fixed to `/assets/img/`). The other 7 `raw.githubusercontent` references are **intentional cross-repo fetches to the campaign vault repos** (`sitl_vault`, `pacts_power_vault`, `ashfall_vault`, `wtff_vault`) — the site's data architecture, NOT the WTFF bug. Left them alone.
+- **Commit:** `a9dc158`
+- **Next:** `tokens.css` consolidation (AUDIT.md §5 step 1) — route every page through `tokens.css`, deleting the hand-rolled `:root` blocks. Root-cause fix that collapses most of the audit.
+- **Watch out:** Do NOT convert the vault-repo raw URLs to local paths — those files live in separate repos, converting breaks them. If their raw.githubusercontent fragility ever needs solving, that's an architecture question (CDN/proxy/build-time bake), not a path swap. Weight decision recorded in AUDIT.md §0 + rc-brand skill.
+
 ### 2026-07-27 18:20 ET · Claude Code
 - **Changed:** Fixed all 4 P0/P1 bugs from the site audit. P0: un-swapped the two case-study files (`case-studies/index.html` = listing, `.../are-the-dice-fair/index.html` = article; verified the full click-through). P1: deleted orphaned `pacts-and-power/session-v2.html` + fixed its `session.html` SELF fallback. P1: WTFF landing art moved from `raw.githubusercontent.com` to `/assets/img/` (9 files confirmed local). P1: Ashfall archive jump-scare gated to once-ever via localStorage (on top of existing reduced-motion guard). Recorded Taylor's ratified weight rule (Cinzel Decorative 700 display-only, 600 banned elsewhere) in `AUDIT.md §0`.
 - **Commit:** `d53d637`
