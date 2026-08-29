@@ -267,6 +267,7 @@ td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weigh
 var SB='https://vtrtyagltwdrbastpppl.supabase.co';
 var AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0cnR5YWdsdHdkcmJhc3RwcHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTY5NTAsImV4cCI6MjA5MTkzMjk1MH0.hnpwjHGIqiUN_VmmIkOAAFGGCKsyYgl7AO3FW5vDIeM';
 var VR='https://raw.githubusercontent.com/TheLittlestAskew/sitl_vault/main';
+var INDEX=VR+'/00-Campaign-Hub/Public%20Session%20Index.json';
 /* ===== Session recording player ===== */
 /* RECBASE = your bucket's Public Development URL (Settings tab) + the folder path.
    Files live at:  recordings (bucket) / Recordings / sitl / <filename>
@@ -335,6 +336,30 @@ var ARC=[
   {n:'18',d:'2026-06-14',lbl:'June 14, 2026',f:'01-Sessions/Session%2018%20%E2%80%94%20Trust%20the%20Whirlpool.md',t:'Trust the Whirlpool'},
   {n:'19',d:'2026-07-05',lbl:'July 5, 2026',f:'01-Sessions/Session%2019%20%E2%80%94%20We%20Are%20Split%20in%20Two.md',t:'We Are Split in Two'}
 ];
+
+/* Merge the vault's published session index into ARC. Sessions before S20 keep the
+   curated entries above; the index refreshes and extends from S20 on. If it can't be
+   reached the page still renders whatever is hardcoded here. */
+function loadRegistry(){
+  return fetch(INDEX+'?t='+Date.now())
+    .then(function(r){return r.ok?r.json():null;})
+    .catch(function(){return null;})
+    .then(function(data){
+      var sessions=data&&data.sessions;
+      if(!Array.isArray(sessions))return ARC;
+      sessions.forEach(function(x){
+        var known=null;
+        for(var i=0;i<ARC.length;i++)if(String(ARC[i].n)===String(x.n))known=ARC[i];
+        var entry=known||{};
+        entry.n=x.n;entry.d=x.d;entry.lbl=x.lbl;entry.t=x.t;entry.f=x.f;
+        if(x.rec)entry.rec=x.rec; else delete entry.rec;
+        if(!known)ARC.push(entry);
+      });
+      ARC.sort(function(a,b){return parseFloat(a.n)-parseFloat(b.n);});
+      return ARC;
+    })
+    .catch(function(){return ARC;});
+}
 
 function getN(){var m=location.search.match(/[?&]n=([^&]+)/);return m?m[1]:null;}
 
@@ -542,7 +567,8 @@ async function init(){
   }
 }
 
-if(typeof marked!=='undefined'){init();}else{window.addEventListener('load',init);}
+function boot(){loadRegistry().then(init);}
+if(typeof marked!=='undefined'){boot();}else{window.addEventListener('load',boot);}
 </script>
 <div class="pp-overlay" id="z-overlay" onclick="if(event.target===this)ppClose()">
   <div class="pp-modal">

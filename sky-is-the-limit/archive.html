@@ -152,11 +152,11 @@ footer a{color:var(--gold-pale);text-decoration:none}footer a:hover{color:var(--
   <h1 class="title">The Descent</h1>
   <p class="sub">Out of the Abyss is a journey downward. Every session is one more step into the dark &mdash; turn a card to see where it led.</p>
   <div class="stats" id="stats">
-    <div class="stat"><div class="v">19</div><div class="l">Sessions</div></div>
+    <div class="stat"><div class="v" id="s-count">&mdash;</div><div class="l">Sessions</div></div>
     <div class="stat"><div class="v" id="s-rolls">&mdash;</div><div class="l">Rolls Logged</div></div>
     <div class="stat"><div class="v up" id="s-n20">&mdash;</div><div class="l">Nat 20s</div></div>
     <div class="stat"><div class="v dn" id="s-n1">&mdash;</div><div class="l">Nat 1s</div></div>
-    <div class="stat"><div class="v" style="font-size:15px;line-height:1.5">Sloobludop</div><div class="l">Deepest Reach</div></div>
+    <div class="stat"><div class="v" id="s-deep" style="font-size:15px;line-height:1.5">&mdash;</div><div class="l">Deepest Reach</div></div>
   </div>
   <div class="hint">Descend<span class="chev">&#10507;</span></div>
 </header>
@@ -168,6 +168,8 @@ footer a{color:var(--gold-pale);text-decoration:none}footer a:hover{color:var(--
 <script>
 var SB='https://vtrtyagltwdrbastpppl.supabase.co';
 var AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0cnR5YWdsdHdkcmJhc3RwcHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTY5NTAsImV4cCI6MjA5MTkzMjk1MH0.hnpwjHGIqiUN_VmmIkOAAFGGCKsyYgl7AO3FW5vDIeM';
+var VR='https://raw.githubusercontent.com/TheLittlestAskew/sitl_vault/main';
+var INDEX=VR+'/00-Campaign-Hub/Public%20Session%20Index.json';
 
 var ARC=[
   {n:'01',d:'2025-10-12',lbl:'Oct 12, 2025',t:'Prisoners of the Underdark',r:'Velkynvelve',arc:'Prison cell \u2192 across the outpost',wp:'Velkynvelve',ev:["Jorlan secretly approaches Kit about freeing the prisoners.","Aeolus is cursed by a drow\u2019s Lolth gem \u2014 every spider now hunts him."]},
@@ -192,6 +194,34 @@ var ARC=[
 ];
 
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* Merge the vault's published session index into ARC. Sessions before S20 keep the
+   curated entries above; the index refreshes and extends from S20 on. If it can't be
+   reached the page still renders whatever is hardcoded here. */
+function loadRegistry(){
+  return fetch(INDEX+'?t='+Date.now())
+    .then(function(r){return r.ok?r.json():null;})
+    .catch(function(){return null;})
+    .then(function(data){
+      var sessions=data&&data.sessions;
+      if(!Array.isArray(sessions))return ARC;
+      sessions.forEach(function(x){
+        var known=null;
+        for(var i=0;i<ARC.length;i++)if(String(ARC[i].n)===String(x.n))known=ARC[i];
+        var entry=known||{};
+        entry.n=x.n;entry.d=x.d;entry.lbl=x.lbl_short||x.lbl;entry.t=x.t;
+        if(x.r)entry.r=x.r;
+        if(x.arc)entry.arc=x.arc;
+        if(x.wp)entry.wp=x.wp;
+        if(x.rec)entry.rec=x.rec; else delete entry.rec;
+        if(x.ev&&x.ev.length)entry.ev=x.ev;
+        if(!known)ARC.push(entry);
+      });
+      ARC.sort(function(a,b){return parseFloat(a.n)-parseFloat(b.n);});
+      return ARC;
+    })
+    .catch(function(){return ARC;});
+}
 
 function build(){
   var host=document.getElementById('descent');var html='';
@@ -226,6 +256,11 @@ function build(){
   });
   host.innerHTML=html;
 
+  // header stats that follow the registry rather than a hand-edited number
+  document.getElementById('s-count').textContent=ARC.length;
+  var last=ARC[ARC.length-1];
+  if(last&&last.r)document.getElementById('s-deep').textContent=last.r;
+
   // jump rail (built from ARC; click jumps via #anchor, smooth-scroll is CSS)
   var rail=document.getElementById('jumprail');
   if(rail){
@@ -259,10 +294,26 @@ function onScroll(){
   document.getElementById('veil').style.setProperty('--depth',p.toFixed(3));
 }
 
+/* PostgREST caps a response at 1000 rows no matter what &limit says, so page through
+   it with Range instead. Without this the archive only ever saw the oldest 1000 rolls
+   and every session past that read "no rolls synced". */
+async function allRolls(){
+  var rows=[],from=0;
+  for(var page=0;page<50;page++){
+    var r=await fetch(SB+'/rest/v1/sitl_session_rolls?select=session_date,dice_notation,individual_values',
+      {headers:{apikey:AK,Authorization:'Bearer '+AK,Range:from+'-'+(from+999)}});
+    if(!r.ok)throw new Error('roll fetch failed');
+    var batch=await r.json();
+    rows=rows.concat(batch);
+    if(batch.length<1000)return rows;
+    from+=1000;
+  }
+  return rows;
+}
+
 async function tallies(){
   try{
-    var r=await fetch(SB+'/rest/v1/sitl_session_rolls?select=session_date,dice_notation,individual_values&limit=5000',{headers:{apikey:AK,Authorization:'Bearer '+AK}});
-    if(!r.ok)return;var rows=await r.json();
+    var rows=await allRolls();
     var by={};rows.forEach(function(x){var d=x.session_date;if(!d)return;if(!by[d])by[d]={t:0,n20:0,n1:0};by[d].t++;
       if(x.dice_notation&&/^1d20/.test(x.dice_notation)){var v=x.individual_values;if(typeof v==='string'){try{v=JSON.parse(v);}catch(e){}}if(Array.isArray(v)&&v.length){if(v[0]===20)by[d].n20++;if(v[0]===1)by[d].n1++;}}});
     var T=0,N20=0,N1=0;
@@ -277,11 +328,9 @@ async function tallies(){
   }catch(e){}
 }
 
-build();
-onScroll();
 window.addEventListener('scroll',onScroll,{passive:true});
 window.addEventListener('resize',onScroll,{passive:true});
-tallies();
+loadRegistry().then(function(){build();onScroll();tallies();});
 </script>
 </body>
 </html>
