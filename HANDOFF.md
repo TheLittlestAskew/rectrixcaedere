@@ -21,6 +21,12 @@ SITL Session 19 is wired into the site and its roll data is repaired end-to-end;
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
 
+### 2026-08-29 17:45 ET · Codex
+- **Changed:** Ashfall’s public dashboard now refreshes its roll totals, sessions, natural 20/1 counts, session chart, roll/action breakdowns, and character table from the approved public roll source plus the vault’s public session index. It paginates beyond 1,000 rows and shows unavailable values if either source fails.
+- **Commit:** `f7def18`
+- **Next:** Verify the deployed Ashfall dashboard reflects live roll analytics.
+- **Watch out:** This deliberately exposes the approved analytics fields publicly; the raw session-note workflow remains gated by the vault index validator.
+
 ### 2026-08-29 17:38 ET · Codex
 - **Changed:** Ashfall’s archive and session reader now load new validated sessions from the vault’s public session index. This removes the two per-session Rectrix registry edits and selects the correct tracker range for each session.
 - **Commit:** `ae36d89`
