@@ -232,6 +232,7 @@ var VR='https://raw.githubusercontent.com/TheLittlestAskew/ashfall_vault/main';
 var QB=VR+'/00-Campaign-Hub/Trackers/Quote%20Board%20S01-S10.md';
 var PF=VR+'/00-Campaign-Hub/Trackers/Profanity%20Ledger%20S01-S10.md';
 var SESS='01-Sessions';
+var INDEX=VR+'/00-Campaign-Hub/Public%20Session%20Index.json';
 
 /* ——— the chronicle (curated; d = roll-archive-date join key) ——— */
 var ARC=[
@@ -277,6 +278,7 @@ function clean(s){
           .replace(/[\u2600-\u27BF\uD83C-\uDBFF\uDC00-\uDFFF\u2190-\u21FF\u2B00-\u2BFF\u2150-\u218F\uFE0F\u26A0\u2691\u2705\u274C]/g,'')
           .replace(/\s+/g,' ').trim();
 }
+function loadRegistry(){return fetchMd(INDEX).then(function(text){if(!text)return ARC;var data=JSON.parse(text),sessions=data&&data.sessions;if(!Array.isArray(sessions))throw new Error('Invalid public session index.');sessions.forEach(function(x){var known=null;for(var i=0;i<ARC.length;i++)if(String(ARC[i].n)===String(x.n))known=ARC[i];var entry={n:x.n,d:x.d,lbl:x.lbl,t:x.t,f:x.f,era:'warm',tags:[]};if(known){for(var k in known)entry[k]=known[k];entry.d=x.d;entry.lbl=x.lbl;entry.t=x.t;entry.f=x.f;}entry.trackers=x.trackers||null;if(known)ARC[ARC.indexOf(known)]=entry;else ARC.push(entry);});ARC.sort(function(a,b){return parseFloat(a.n)-parseFloat(b.n);});return ARC;}).catch(function(){return ARC;});}
 function firstSentences(txt,maxChars){
   var ss=txt.match(/[A-Z\u201c][^.!?]*[.!?]+["\u201d]?/g)||[];
   var pick=ss.filter(function(s){return s.split(/\s+/).length>6&&s.length>40;});
@@ -425,11 +427,12 @@ function init(){
     +'<div class="gap-meta" id="bootmeta">~196 rolls survive &nbsp;&middot;&nbsp; Unchronicled</div></div>';
 
   h+=eraHeader('','Behind the Walls \u00b7 Feb 2026');
-  h+=card(ARC[0])+card(ARC[1]);
+  h+=ARC.slice(0,2).map(card).join('');
   h+=eraHeader('dark','Into the Dark \u00b7 Feb&ndash;Apr 2026');
-  h+=card(ARC[2])+card(ARC[3])+card(ARC[4])+card(ARC[5])+card(ARC[6]);
+  h+=ARC.slice(2,7).map(card).join('');
   h+=eraHeader('light','The Light Recovered \u00b7 Apr&ndash;May 2026');
-  h+=card(ARC[7])+card(ARC[8])+card(ARC[9]);
+  h+=ARC.slice(7,10).map(card).join('');
+  if(ARC.length>10){h+=eraHeader('light','The Record Continues');h+=ARC.slice(10).map(card).join('');}
   tl.innerHTML=h;
 
   /* stats */
@@ -449,7 +452,7 @@ function init(){
   });
 
   /* quotes (single fetch) */
-  var quoteMapP=fetchMd(QB).then(parseQuotes);
+  var quoteMaps={};function quotesFor(s){var file=(s.trackers&&s.trackers.quotes)||QB.slice(VR.length+1);if(!quoteMaps[file])quoteMaps[file]=fetchMd(VR+'/'+file).then(parseQuotes);return quoteMaps[file];}
 
   /* per-session summary + quote */
   ARC.forEach(function(s){
@@ -460,7 +463,7 @@ function init(){
         else{sel.textContent='Session notes on file.';sel.className='asum';}
       }
     });
-    quoteMapP.then(function(map){
+    quotesFor(s).then(function(map){
       var key=String(parseFloat(s.n)); // '04.5'->'4.5', '01'->'1'
       var q=pickQuote(map[key]);
       var box=document.getElementById('aq'+s.id);
@@ -479,7 +482,7 @@ function init(){
     if(total>0) document.getElementById('profline').innerHTML='Curses sworn, and counted: <span class="swear">'+total+'</span> (attributed)';
   });
 }
-document.addEventListener('DOMContentLoaded',init);
+document.addEventListener('DOMContentLoaded',function(){loadRegistry().then(init);});
 </script>
 </body>
 </html>

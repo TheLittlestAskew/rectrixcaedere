@@ -201,6 +201,7 @@ var QB=VR+'/'+HUB+'/Quote%20Board%20S01-S10.md';
 var PF=VR+'/'+HUB+'/Profanity%20Ledger%20S01-S10.md';
 var LT=VR+'/'+HUB+'/Loot%20Tracker%20S01-S10.md';
 var VEGA=VR+'/03-Characters/01%20PCs/Vega%20Bloodroot.md';
+var INDEX=VR+'/00-Campaign-Hub/Public%20Session%20Index.json';
 var SELF=location.pathname.split('/').pop()||'session.html';
 var ROSTER=['Vega Bloodroot','Valerian Hellebore','Deanna Smith-Wesson','Samothy Smith-Wesson','Barrett Grimmskar','Zelda Z Whipper','Flux'];
 
@@ -217,6 +218,8 @@ var ARC=[
  {n:'09',d:'2026-05-11',lbl:'May 11, 2026',t:'The Battle of the Veiled Dawn',f:SS+'/Session%2009%20%E2%80%94%20The%20Battle%20of%20the%20Veiled%20Dawn%20(PARTIAL%20RECORDING).md',badge:'Partial Recording',tags:[{l:'\u2694 Combat',c:'combat'},{l:'\u21e7 Level 7\u21928',c:'level'}]}
 ];
 
+function loadRegistry(){return fetchT(INDEX).then(function(text){if(!text)return ARC;var data=JSON.parse(text),sessions=data&&data.sessions;if(!Array.isArray(sessions))throw new Error('Invalid public session index.');sessions.forEach(function(x){var known=null;for(var i=0;i<ARC.length;i++)if(String(ARC[i].n)===String(x.n))known=ARC[i];var entry={n:x.n,d:x.d,lbl:x.lbl,t:x.t,f:x.f,tags:[]};if(known){for(var k in known)entry[k]=known[k];entry.d=x.d;entry.lbl=x.lbl;entry.t=x.t;entry.f=x.f;}entry.trackers=x.trackers||null;if(known)ARC[ARC.indexOf(known)]=entry;else ARC.push(entry);});ARC.sort(function(a,b){return parseFloat(a.n)-parseFloat(b.n);});return ARC;}).catch(function(){return ARC;});}
+function trackerUrl(s,key,fallback){return VR+'/'+((s.trackers&&s.trackers[key])||fallback);}
 function getN(){var m=location.search.match(/[?&]n=([^&]+)/);return m?decodeURIComponent(m[1]):null;}
 function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function sw(s){return (s||'').replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g,'$2').replace(/\[\[([^\]]+)\]\]/g,'$1');}
@@ -384,9 +387,9 @@ function init(){
     renderArch(bodyMd);
     fetchT(VEGA).then(function(v){renderHero(v,bodyMd,s);});
   });
-  fetchT(QB).then(function(q){if(q)renderQuotes(q,s.n);else hide('z-quotes-card');});
-  fetchT(LT).then(function(l){if(l)renderLoot(l,s.n);else hide('z-loot-card');});
-  fetchT(PF).then(function(p){if(p)renderProf(p,s.n);else hide('z-prof-card');});
+  fetchT(trackerUrl(s,'quotes',HUB+'/Quote%20Board%20S01-S10.md')).then(function(q){if(q)renderQuotes(q,s.n);else hide('z-quotes-card');});
+  fetchT(trackerUrl(s,'loot',HUB+'/Loot%20Tracker%20S01-S10.md')).then(function(l){if(l)renderLoot(l,s.n);else hide('z-loot-card');});
+  fetchT(trackerUrl(s,'profanity',HUB+'/Profanity%20Ledger%20S01-S10.md')).then(function(p){if(p)renderProf(p,s.n);else hide('z-prof-card');});
 }
 /* meta needs fm for party-level */
 function renderMetaWrap(bodyMd,fm,s){
@@ -405,7 +408,8 @@ function renderMetaWrap(bodyMd,fm,s){
   guests.forEach(function(gx){chips.push('<span class="chip guest">'+esc(gx)+'</span>');});
   document.getElementById('z-party').innerHTML=chips.join('');
 }
-if(typeof marked!=='undefined'){document.addEventListener('DOMContentLoaded',init);}else{window.addEventListener('load',init);}
+function boot(){loadRegistry().then(init);}
+if(typeof marked!=='undefined'){document.addEventListener('DOMContentLoaded',boot);}else{window.addEventListener('load',boot);}
 </script>
 <div class="overlay" id="overlay" onclick="if(event.target===this)mclose()">
   <div class="modal"><button class="mclose" onclick="mclose()" aria-label="Close">&times;</button>
