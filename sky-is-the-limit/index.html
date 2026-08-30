@@ -97,10 +97,10 @@ footer .dot{color:var(--copper);margin:0 8px}
         <div><span class="pill active">Active &middot; Out of the Abyss</span></div>
         <p class="lead">A descent into the Underdark, chronicled session by session. <em>The fullest record in the archive</em>, with roll data, quotes, and threads all tracked.</p>
         <div class="stats">
-          <div class="stat"><div class="v">15</div><div class="l">Sessions</div></div>
-          <div class="stat"><div class="v">946</div><div class="l">Rolls Logged</div></div>
-          <div class="stat"><div class="v up">44</div><div class="l">Nat 20</div></div>
-          <div class="stat"><div class="v dn">41</div><div class="l">Nat 1</div></div>
+          <div class="stat"><div class="v" id="s-sessions">22</div><div class="l">Sessions</div></div>
+          <div class="stat"><div class="v" id="s-rolls">1,330</div><div class="l">Rolls Logged</div></div>
+          <div class="stat"><div class="v up" id="s-n20">51</div><div class="l">Nat 20</div></div>
+          <div class="stat"><div class="v dn" id="s-n1">47</div><div class="l">Nat 1</div></div>
         </div>
         <a class="cta" href="/sky-is-the-limit/archive.html">Enter the Descent <span class="arr">&#8594;</span></a>
         <a class="cta" href="/dashboard.html?c=1" style="margin-left:12px">Enter the Dashboard <span class="arr">&#8594;</span></a>
@@ -109,15 +109,50 @@ footer .dot{color:var(--copper);margin:0 8px}
     <div class="roster">
       <h2>The Party</h2>
       <div class="party">
-        <a class="pc" href="/sky-is-the-limit/character.html?pc=kit-aluri"><div class="pcimg"><img src="/assets/img/Kit-card.webp" alt="Kit Aluri"></div><div class="nm">Kit Aluri</div><div class="rl">192 rolls</div></a>
-        <a class="pc" href="/sky-is-the-limit/character.html?pc=darby-stonefeather"><div class="pcimg"><img src="/assets/img/Darby-card.webp" alt="Darby Stonefeather"></div><div class="nm">Darby Stonefeather</div><div class="rl">197 rolls</div></a>
-        <a class="pc" href="/sky-is-the-limit/character.html?pc=amanita-dechampignon"><div class="pcimg"><img src="/assets/img/Amanita-card.webp" alt="Amanita de'Champignon"></div><div class="nm">Amanita de'Champignon</div><div class="rl">172 rolls</div></a>
-        <a class="pc" href="/sky-is-the-limit/character.html?pc=blarg"><div class="pcimg"><img src="/assets/img/Blarg-card.webp" alt="Blarg"></div><div class="nm">Blarg</div><div class="rl">167 rolls</div></a>
-        <a class="pc" href="/sky-is-the-limit/character.html?pc=binks-stonevein"><div class="pcimg"><img src="/assets/img/Binks-card.webp" alt="Binks Stonevein"></div><div class="nm">Binks Stonevein</div><div class="rl">131 rolls</div></a>
-        <a class="pc" href="/sky-is-the-limit/character.html?pc=aeolus"><div class="pcimg"><img src="/assets/img/Aeolus-card.webp" alt="Aeolus"></div><div class="nm">Aeolus</div><div class="rl">81 rolls</div></a>
+        <a class="pc" href="/sky-is-the-limit/character.html?pc=kit-aluri"><div class="pcimg"><img src="/assets/img/Kit-card.webp" alt="Kit Aluri"></div><div class="nm">Kit Aluri</div><div class="rl" data-pc="Kit Aluri">192 rolls</div></a>
+        <a class="pc" href="/sky-is-the-limit/character.html?pc=darby-stonefeather"><div class="pcimg"><img src="/assets/img/Darby-card.webp" alt="Darby Stonefeather"></div><div class="nm">Darby Stonefeather</div><div class="rl" data-pc="Darby Stonefeather">197 rolls</div></a>
+        <a class="pc" href="/sky-is-the-limit/character.html?pc=amanita-dechampignon"><div class="pcimg"><img src="/assets/img/Amanita-card.webp" alt="Amanita de'Champignon"></div><div class="nm">Amanita de'Champignon</div><div class="rl" data-pc="Amanita de'Champignon">172 rolls</div></a>
+        <a class="pc" href="/sky-is-the-limit/character.html?pc=blarg"><div class="pcimg"><img src="/assets/img/Blarg-card.webp" alt="Blarg"></div><div class="nm">Blarg</div><div class="rl" data-pc="Blarg">167 rolls</div></a>
+        <a class="pc" href="/sky-is-the-limit/character.html?pc=binks-stonevein"><div class="pcimg"><img src="/assets/img/Binks-card.webp" alt="Binks Stonevein"></div><div class="nm">Binks Stonevein</div><div class="rl" data-pc="Binks Stonevein">131 rolls</div></a>
+        <a class="pc" href="/sky-is-the-limit/character.html?pc=aeolus"><div class="pcimg"><img src="/assets/img/Aeolus-card.webp" alt="Aeolus"></div><div class="nm">Aeolus</div><div class="rl" data-pc="Aeolus">81 rolls</div></a>
       </div>
     </div>
     <footer>Rectrix Caedere <span class="dot">&#10022;</span> Campaign Archive <span class="dot">&#10022;</span> rectrixcaedere.com</footer>
   </div>
+<script>
+/* Live hero stats + per-PC roll counts. Mirrors archive.html: pages past
+   PostgREST's 1000-row cap, and counts only rolls that fall on a real session
+   date (from the vault index's all_sessions), so this page, archive.html and
+   dashboard.html all report the same numbers. Falls back silently to the
+   baked-in values if either source is unavailable. */
+(function(){
+  var SB='https://vtrtyagltwdrbastpppl.supabase.co';
+  var AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0cnR5YWdsdHdkcmJhc3RwcHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTY5NTAsImV4cCI6MjA5MTkzMjk1MH0.hnpwjHGIqiUN_VmmIkOAAFGGCKsyYgl7AO3FW5vDIeM';
+  var INDEX='https://raw.githubusercontent.com/TheLittlestAskew/sitl_vault/main/00-Campaign-Hub/Public%20Session%20Index.json';
+  function die(v){if(typeof v==='string'){try{v=JSON.parse(v);}catch(e){return null;}}return Array.isArray(v)&&v.length?v[0]:null;}
+  function rows(){var out=[],from=0;function page(){return fetch(SB+'/rest/v1/sitl_session_rolls?select=session_date,character,dice_notation,individual_values',{headers:{apikey:AK,Authorization:'Bearer '+AK,Range:from+'-'+(from+999)}}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(b){out=out.concat(b);if(b.length===1000){from+=1000;return page();}return out;});}return page();}
+  function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+  Promise.all([rows(),fetch(INDEX+'?t='+Date.now()).then(function(r){if(!r.ok)throw 0;return r.json();})]).then(function(v){
+    var rs=v[0],idx=v[1],all=(idx&&(idx.all_sessions||idx.sessions))||[];
+    if(!all.length)return;
+    var known={};all.forEach(function(s){known[s.d]=1;});
+    var total=0,n20=0,n1=0,byChar={};
+    rs.forEach(function(r){
+      if(!r.session_date||!known[r.session_date])return;
+      total++;
+      if(r.character)byChar[r.character]=(byChar[r.character]||0)+1;
+      if(/^1d20/.test(r.dice_notation||'')){var f=die(r.individual_values);if(f===20)n20++;if(f===1)n1++;}
+    });
+    set('s-sessions',all.length);
+    set('s-rolls',total.toLocaleString());
+    set('s-n20',n20);
+    set('s-n1',n1);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-pc]'),function(el){
+      var n=byChar[el.getAttribute('data-pc')];
+      if(typeof n==='number')el.textContent=n+' rolls';
+    });
+  }).catch(function(){});
+})();
+</script>
 </body>
 </html>
