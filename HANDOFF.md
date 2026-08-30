@@ -5,10 +5,14 @@
 
 ## Status
 
+✅ **The SITL dashboard and landing page are live (`330a8bb`).** `dashboard.html?c=1` was fully hardcoded at **946 rolls / 15 sessions / "last session May 2 2026"**; it now reads **1,330 rolls / 22 sessions** from Supabase plus the vault index, matching `archive.html` exactly. `sky-is-the-limit/index.html` was equally static and now refreshes too. ⭐ **Also fixed Ashfall: `dashboard.html?c=3` was reporting SESSIONS LOGGED: 2** because it read the count from the index's curated `sessions` array (S10+ only); it now reads **12**.
+
 **SITL sessions now publish themselves.** `sky-is-the-limit/session.html` and `archive.html` fetch `00-Campaign-Hub/Public Session Index.json` from `sitl_vault` and merge it into their `ARC` arrays, so S20, S21 and S22 are live and a future session needs no edit in this repo. Entries S01–S19 keep their curated editorial hardcoded here; the index only refreshes and extends from S20 on. S16–S19 recordings still need uploading to R2.
 
 ## Next Steps
 
+- [ ] 🔴 **Do NOT enable `sessionRollsOnly` for Ashfall until its dates are fixed** — see the log entry. Two problems in `ashfall_vault`: its index dates are **off by one day** from its roll dates for S01/S02/S04, and **~400 rolls exist on dates after S11** that the vault has no session record for. Filtering would silently drop **1,037 real rolls**.
+- [ ] 🔵 **The other three campaign landing pages are still fully hardcoded** — `ashfall-britannia`, `pacts-and-power` and `where-the-flowers-forget` `index.html` all carry static session/roll counts. Same fix as `sky-is-the-limit/index.html` if wanted.
 - [ ] Upload SITL S16–19 recordings (`052426 pt2`, `060726`, `061426`, `070526` from `Session_Sources/Recordings/`) to the R2 `recordings` bucket → `Recordings/sitl/`
 - [ ] Add `rec:` fields to ARC entries 16–19 in `sky-is-the-limit/session.html` once those recordings are uploaded
 
@@ -20,6 +24,13 @@
 
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
+
+### 2026-08-30 12:20 ET · Claude Code (dashboards go live)
+- **Changed:** Generalised Codex's Ashfall-only live-analytics block into a per-campaign config (`RC_LIVE`) covering **both** SITL and Ashfall, and made `sky-is-the-limit/index.html` refresh its hero stats and per-PC roll counts from the same sources. Session count / date range / per-session chart now come from the vault index's new **`all_sessions`** array (every session, number+date only), falling back to the curated `sessions` list for older indexes. Each campaign catches its own failure, so one outage cannot blank the other.
+- **Commit:** `330a8bb` (vault side: `sitl_vault@15b1b67`, `ashfall_vault@7c2c99c`)
+- **Verification:** ✓ Confirmed on the **live domain**, not just locally. SITL **1,330 rolls / 22 sessions / 51 nat20 / 47 nat1**, and its chart now sums to its own headline. Ashfall **1,681 rolls / 12 sessions** (was 2), totals unchanged.
+- **Watch out:** 🛑 **`sessionRollsOnly` is ON for SITL and deliberately OFF for Ashfall.** For SITL, **90 rolls sit on 17 dates that are not sessions — 52 of them *before the campaign started*** (Aug–Oct 2025 character building), plus clusters on 2026-07-15/16/18. Excluding them is what makes the dashboard agree with `archive.html` at 1,330. 🔴 **Turning the same flag on for Ashfall would have deleted 1,037 real rolls**, because of two genuine problems in `ashfall_vault`: **(1)** its index dates are **off by one day** from its roll dates for S01, S02 and S04 (index 2026-02-13, rolls 2026-02-12) — the generator reads the Campaign Dashboard while the site's own ARC uses the roll dates; **(2)** **~400 rolls exist on 2026-08-03, 08-17 and 08-27, all after S11 (Jun 22)** — sessions appear to have been played that the vault has no record of. ⚠️ **The index fetch had no cache-buster**, unlike `session.html`/`archive.html`; without it the browser served a stale index and the fix looked broken. Added. ⚠️ SITL's character table now lists **9 names** because the archive contains DM-side rolls — *Black Pudding*, *Gelatinous Cube* and *Kirk* (Addison's own handle), 1–2 rolls each, sorted to the bottom. Left as truthful data; the headline "Characters" stat is a separate hardcoded 6.
+- **Next:** Unchanged — see the Next Steps block above.
 
 ### 2026-08-29 18:20 ET · Claude Code (SITL sessions load from the vault index)
 - **Changed:** S20, S21 and S22 had been invisible on the site since 2026-07-19 because `sky-is-the-limit/session.html` and `archive.html` both held hardcoded `ARC` arrays stopping at S19. Both now fetch `Public Session Index.json` from `sitl_vault` and merge it into `ARC`, the same `loadRegistry()` shape already running on `ashfall-britannia`. Entries before S20 keep their curated editorial here. `archive.html`'s hand-edited "19 Sessions" and "Sloobludop / Deepest Reach" stats now derive from the registry. If the index is unreachable both pages fall back to the hardcoded array, so this degrades to the old behaviour rather than to a blank page.
