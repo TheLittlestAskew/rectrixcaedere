@@ -189,6 +189,12 @@ td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weigh
 .zbody li{margin-bottom:10px}
 .zbody li::marker{color:var(--gold-pale)}
 .zbody em{color:var(--text)}
+.pp-scroll{max-height:430px;overflow-y:auto;overscroll-behavior:contain;padding-right:8px}
+.pp-scroll::-webkit-scrollbar{width:6px}
+.pp-scroll::-webkit-scrollbar-track{background:transparent}
+.pp-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.pp-scroll:hover::-webkit-scrollbar-thumb{background:var(--gold-pale)}
+.pp-scroll{scrollbar-width:thin;scrollbar-color:var(--border) transparent}
 .zref{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;align-items:start;width:100%;scroll-margin-top:74px}
 .zsec{scroll-margin-top:74px}
 @media(max-width:900px){.pp-grid,.pp-mini,.pp-fnotes{grid-template-columns:1fr}}
@@ -266,11 +272,11 @@ td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weigh
       <div class="pa-lost-note" id="z-audio-lost" style="display:none"></div>
       <audio id="z-audio-el" preload="none"></audio>
     </section>
-      <section class="pp-card"><h2>NPCs &amp; companions</h2><div class="pp-legend"><span><i class="pp-dot enemy"></i>Enemy</span><span><i class="pp-dot friendly"></i>Friendly</span><span><i class="pp-dot neutral"></i>Neutral</span></div><div id="z-npcs"></div></section>
+      <section class="pp-card"><h2>NPCs &amp; companions</h2><div class="pp-legend"><span><i class="pp-dot enemy"></i>Enemy</span><span><i class="pp-dot friendly"></i>Friendly</span><span><i class="pp-dot neutral"></i>Neutral</span></div><div class="pp-scroll" id="z-npcs"></div></section>
       <section class="pp-card zsec" id="zs-places"><h2>Locations</h2><div id="z-locs"></div></section>
-      <section class="pp-card zsec" id="zs-loot"><h2>Loot &amp; artifacts</h2><div id="z-loot"></div></section>
-      <section class="pp-card zsec" id="zs-quotes"><h2>Quote board</h2><div id="z-quotes"></div></section>
-      <section class="pp-card" id="z-prof-card"><h2>Profanity record</h2><div id="z-prof"></div></section>
+      <section class="pp-card zsec" id="zs-loot"><h2>Loot &amp; artifacts</h2><div class="pp-scroll" id="z-loot"></div></section>
+      <section class="pp-card zsec" id="zs-quotes"><h2>Quote board</h2><div class="pp-scroll" id="z-quotes"></div></section>
+      <section class="pp-card" id="z-prof-card"><h2>Profanity record</h2><div class="pp-scroll" id="z-prof"></div></section>
     </div>
   </div>
   <div class="pp-fullrule" id="z-logrule" style="display:none">&#10022;&nbsp;&nbsp;Logs&nbsp;&nbsp;&#10022;</div>
@@ -579,7 +585,7 @@ function renderZones(raw, s){
   else{var qre=/\*\*(.+?)\*\*\s*\u00b7\s*\[(.+?)\]\s*\n\s*\*"?([\s\S]+?)"?\*/g,qm;while((qm=qre.exec(qB))){quotes.push({sp:zsw(qm[1]),tag:qm[2],q:zsw(qm[3]).replace(/^"|"$/g,'')});}}
   function qh(x){return '<blockquote class="pp-q">\u201c'+zinl(x.q)+'\u201d<cite>\u2014 '+zinl(x.sp)+(x.tag?' \u00b7 '+zinl(x.tag):'')+'</cite></blockquote>';}
   var qc=document.getElementById('z-quotes');
-  if(quotes.length){qc.innerHTML=quotes.slice(0,4).map(qh).join('');if(quotes.length>4){ZMOD.quotes={eb:'Quotes & language',t:'Quote board',h:quotes.map(qh).join('')};qc.insertAdjacentHTML('beforeend','<button class="pp-more" onclick="ppModal(\'quotes\')">See all '+quotes.length+' quotes</button>');}}
+  if(quotes.length){qc.innerHTML=quotes.map(qh).join('');}
   else{document.getElementById('z-quotes-card').style.display='none';}
 
   // profanity (table by-word, or prose)
