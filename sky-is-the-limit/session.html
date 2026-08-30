@@ -522,7 +522,7 @@ function renderZones(raw, s){
 
   // loot (table or prose)
   var lootB=zblock(body,'Loot',STOP3);var lootT=ztable(lootB);
-  document.getElementById('z-loot').innerHTML=lootT.body.length?lootT.body.map(function(r){var item=r.length>=3?r[1]:r[0];var st=r.length>=3?r[2]:r[1];var own=r.length>=3?r[0]:'';return '<div class="pp-loot">'+zinl(item||'')+'<div class="o">'+zinl(st||''))+(own?' \u00b7 '+zesc(zsw(own)):'')+'</div></div>';}).join(''):(lootB?zmd(lootB):'<div class="pp-muted">&mdash;</div>');
+  document.getElementById('z-loot').innerHTML=lootT.body.length?lootT.body.map(function(r){var item=r.length>=3?r[1]:r[0];var st=r.length>=3?r[2]:r[1];var own=r.length>=3?r[0]:'';return '<div class="pp-loot">'+zinl(item||'')+'<div class="o">'+zinl(st||'')+(own?' \u00b7 '+zinl(own):'')+'</div></div>';}).join(''):(lootB?zmd(lootB):'<div class="pp-muted">&mdash;</div>');
 
   // quotes (table 2026, or **SP** [tag] *"q"* 2025)
   var qB=zblock(body,'Quote Board',STOP3);var qT=ztable(qB);var quotes=[];
