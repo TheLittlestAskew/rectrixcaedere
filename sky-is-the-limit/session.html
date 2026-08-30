@@ -413,6 +413,20 @@ function zbase(x){x=String(x).split('/').pop();return x.replace(/#.*/,'').trim()
 function zsw(s){return (s||'').replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g,'$2').replace(/\[\[([^\]]+)\]\]/g,function(m,a){return zbase(a);});}
 function zwl(s){return (s||'').replace(/\[\[PP_(\d+)_[^\]|]*?(?:\|([^\]]+))?\]\]/g,function(m,n,d){return '['+(d||'Session '+n)+']('+SELF+'?n='+n+')';}).replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g,function(m,a,b){return b||zbase(a);});}
 function zmd(t){if(!t)return'';return wrapTables(marked.parse(zwl(t)));}
+/* Inline markdown for TABLE CELLS and other short strings that must not become
+   block-level HTML. zesc() only escapes entities, so `**bold**` and `[[links]]`
+   were rendering as literal asterisks and brackets everywhere. Order matters:
+   strip wikilinks, escape entities, THEN promote the surviving markers. */
+function zinl(s){
+  if(s==null)return'';
+  var out=zesc(zsw(String(s)));
+  out=out.replace(/`([^`]+)`/g,'<code>$1</code>');
+  out=out.replace(/\*\*\*([^*]+)\*\*\*/g,'<strong><em>$1</em></strong>');
+  out=out.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+  out=out.replace(/(^|[^*])\*([^*]+)\*(?!\*)/g,'$1<em>$2</em>');
+  out=out.replace(/(^|[^_])__([^_]+)__/g,'$1<strong>$2</strong>');
+  return out;
+}
 function zfix(s){if(!s)return s;if(s===s.toUpperCase()&&/[A-Z]/.test(s)){return s.toLowerCase().split(' ').map(function(w){return w?w.charAt(0).toUpperCase()+w.slice(1):w;}).join(' ');}return s;}
 function zcensor(w){var i=Math.max(1,Math.floor(w.length/2));return w.slice(0,i)+'*'+w.slice(i+1);}
 var ZPC={'Kit Aluri':'#B98A56','Binks Stonevein':'#7FA6A0','Aeolus':'#8B6BB5','Blarg':'#6E8E5A','Amanita de\u2019Champignon':'#B56BA0',"Amanita de'Champignon":'#B56BA0','Darby Stonefeather':'#AF755A'};
@@ -443,11 +457,16 @@ async function fetchRollLog(date){
 
 function renderZones(raw, s){
   var fmText=(/^---\n([\s\S]*?)\n---/.exec(raw)||[null,''])[1];
-  function fm(k){var m=new RegExp('^'+k+':\\s*(.*)$','m').exec(fmText);return m?m[1].trim().replace(/^"|"$/g,''):'';}
-  function fmArr(k){var v=fm(k);if(/^\[.*\]$/.test(v)){return v.slice(1,-1).split(',').map(function(x){return x.trim().replace(/^"|"$/g,'');}).filter(Boolean);}
+  /* `\s*` used to swallow the newline, so a YAML block list matched with an
+     EMPTY capture and fmArr fell through to []. party_present and site_events
+     both rendered blank. Same-line only, and try the block list FIRST. */
+  function fm(k){var m=new RegExp('^'+k+':[ \\t]*(.*)$','m').exec(fmText);return m?m[1].trim().replace(/^"|"$/g,''):'';}
+  function fmArr(k){
+    var v=fm(k);
+    if(/^\[.*\]$/.test(v)){return v.slice(1,-1).split(',').map(function(x){return x.trim().replace(/^"|"$/g,'');}).filter(Boolean);}
+    var bm=new RegExp('^'+k+':[ \\t]*\\n((?:[ \\t]*-[ \\t].*\\n?)+)','m').exec(fmText);
+    if(bm){return bm[1].split('\n').map(function(l){return l.replace(/^[ \t]*-[ \t]*/,'').trim().replace(/^"|"$/g,'');}).filter(Boolean);}
     if(v&&!/^\[/.test(v)){return v.split(',').map(function(x){return x.trim().replace(/^"|"$/g,'');}).filter(Boolean);}
-    var bm=new RegExp('^'+k+':\\s*\\n((?:\\s*-\\s.*\\n?)+)','m').exec(fmText);
-    if(bm){return bm[1].split('\n').map(function(l){return l.replace(/^\s*-\s*/,'').trim().replace(/^"|"$/g,'');}).filter(Boolean);}
     return [];}
   var body=raw.replace(/^---\s*\n[\s\S]*?\n---\s*\n/,'');
 
@@ -482,7 +501,7 @@ function renderZones(raw, s){
   ZMOD.themes={eb:'Session analysis',t:'Themes & beats',h:zmd(themes)};
 
   // at a glance
-  document.getElementById('z-meta').innerHTML='<dt>Start</dt><dd>'+zesc(zsw(fm('start_location')))+'</dd><dt>End</dt><dd>'+zesc(zsw(fm('end_location')))+'</dd>';
+  document.getElementById('z-meta').innerHTML='<dt>Start</dt><dd>'+zinl(fm('start_location'))+'</dd><dt>End</dt><dd>'+zinl(fm('end_location'))+'</dd>';
   var party=fmArr('party_present');
   function isGuest(nm){return ZGUEST.some(function(x){return nm.toLowerCase().indexOf(x.toLowerCase())===0;});}
   document.getElementById('z-party').innerHTML=party.map(function(nm){var g=isGuest(nm);var c=ZPC[nm]||(g?'#6B8AAD':'#9A9590');return '<span class="pp-chip'+(g?' guest':'')+'" style="border-color:'+c+';color:'+c+'">'+zesc(nm)+(g?' *':'')+'</span>';}).join('');
@@ -491,32 +510,32 @@ function renderZones(raw, s){
 
   // quests
   var quests=zblock(body,'Quests',STOP3).split('\n').filter(function(l){return /^\s*[-*]\s/.test(l);});
-  document.getElementById('z-quests').innerHTML=quests.map(function(q){var tm=/\*\*(.+?)\*\*/.exec(q);var title=tm?tm[1]:q.replace(/^\s*[-*]\s/,'');var done=/complet|\u2705|done|\ud83c\udfc1/i.test(q);return '<div class="pp-thread"><div class="t">'+zesc(zsw(title))+'</div><span class="pp-status '+(done?'done':'open')+'">'+(done?'Completed':'Open')+'</span></div>';}).join('')||'<div class="pp-muted">&mdash;</div>';
+  document.getElementById('z-quests').innerHTML=quests.map(function(q){var tm=/\*\*(.+?)\*\*/.exec(q);var title=tm?tm[1]:q.replace(/^\s*[-*]\s/,'');var done=/complet|\u2705|done|\ud83c\udfc1/i.test(q);return '<div class="pp-thread"><div class="t">'+zinl((title))+'</div><span class="pp-status '+(done?'done':'open')+'">'+(done?'Completed':'Open')+'</span></div>';}).join('')||'<div class="pp-muted">&mdash;</div>';
 
   // NPCs
   var npc=ztable(zblock(body,'NPCs',STOP3));
-  document.getElementById('z-npcs').innerHTML=npc.body.map(function(r){var nm=zsw(r[0]||'');var st=r.length>5?r[5]:r[r.length-1]||'';return '<div class="pp-npc"><span class="pp-dot '+zdispo(nm)+'"></span> '+zesc(nm)+' <span class="m">'+zesc(zsw(st))+'</span></div>';}).join('')||'<div class="pp-muted">None recorded</div>';
+  document.getElementById('z-npcs').innerHTML=npc.body.map(function(r){var nm=zsw(r[0]||'');var st=r.length>5?r[5]:r[r.length-1]||'';return '<div class="pp-npc"><span class="pp-dot '+zdispo(nm)+'"></span> '+zinl(nm)+' <span class="m">'+zinl(st)+'</span></div>';}).join('')||'<div class="pp-muted">None recorded</div>';
 
   // locations (table or prose)
   var locB=zblock(body,'Locations',STOP3);var locT=ztable(locB);
-  document.getElementById('z-locs').innerHTML=locT.body.length?locT.body.map(function(r){return '<div class="pp-loot">'+zesc(zsw(r[0]||''))+'<div class="o">'+zesc(zsw(r[1]||''))+'</div></div>';}).join(''):(locB?zmd(locB):'<div class="pp-muted">&mdash;</div>');
+  document.getElementById('z-locs').innerHTML=locT.body.length?locT.body.map(function(r){return '<div class="pp-loot">'+zinl(r[0]||'')+'<div class="o">'+zinl(r[1]||'')+'</div></div>';}).join(''):(locB?zmd(locB):'<div class="pp-muted">&mdash;</div>');
 
   // loot (table or prose)
   var lootB=zblock(body,'Loot',STOP3);var lootT=ztable(lootB);
-  document.getElementById('z-loot').innerHTML=lootT.body.length?lootT.body.map(function(r){var item=r.length>=3?r[1]:r[0];var st=r.length>=3?r[2]:r[1];var own=r.length>=3?r[0]:'';return '<div class="pp-loot">'+zesc(zsw(item||''))+'<div class="o">'+zesc(zsw(st||''))+(own?' \u00b7 '+zesc(zsw(own)):'')+'</div></div>';}).join(''):(lootB?zmd(lootB):'<div class="pp-muted">&mdash;</div>');
+  document.getElementById('z-loot').innerHTML=lootT.body.length?lootT.body.map(function(r){var item=r.length>=3?r[1]:r[0];var st=r.length>=3?r[2]:r[1];var own=r.length>=3?r[0]:'';return '<div class="pp-loot">'+zinl(item||'')+'<div class="o">'+zinl(st||''))+(own?' \u00b7 '+zesc(zsw(own)):'')+'</div></div>';}).join(''):(lootB?zmd(lootB):'<div class="pp-muted">&mdash;</div>');
 
   // quotes (table 2026, or **SP** [tag] *"q"* 2025)
   var qB=zblock(body,'Quote Board',STOP3);var qT=ztable(qB);var quotes=[];
   if(qT.body.length){quotes=qT.body.map(function(r){return {sp:zsw(r[0]||''),q:zsw((r[1]||'')).replace(/^"|"$/g,''),tag:(r[2]||'')};});}
   else{var qre=/\*\*(.+?)\*\*\s*\u00b7\s*\[(.+?)\]\s*\n\s*\*"?([\s\S]+?)"?\*/g,qm;while((qm=qre.exec(qB))){quotes.push({sp:zsw(qm[1]),tag:qm[2],q:zsw(qm[3]).replace(/^"|"$/g,'')});}}
-  function qh(x){return '<blockquote class="pp-q">\u201c'+zesc(x.q)+'\u201d<cite>\u2014 '+zesc(x.sp)+(x.tag?' \u00b7 '+zesc(x.tag):'')+'</cite></blockquote>';}
+  function qh(x){return '<blockquote class="pp-q">\u201c'+zinl(x.q)+'\u201d<cite>\u2014 '+zinl(x.sp)+(x.tag?' \u00b7 '+zinl(x.tag):'')+'</cite></blockquote>';}
   var qc=document.getElementById('z-quotes');
   if(quotes.length){qc.innerHTML=quotes.slice(0,4).map(qh).join('');if(quotes.length>4){ZMOD.quotes={eb:'Quotes & language',t:'Quote board',h:quotes.map(qh).join('')};qc.insertAdjacentHTML('beforeend','<button class="pp-more" onclick="ppModal(\'quotes\')">See all '+quotes.length+' quotes</button>');}}
   else{document.getElementById('z-quotes-card').style.display='none';}
 
   // profanity (table by-word, or prose)
   var prB=zblock(body,'Profanity',STOP3);var prT=ztable(prB);
-  if(prT.body.length){var byw={},ord=[];prT.body.forEach(function(r){var sp=(r[0]||'').replace(/\s*\(OOC\)\s*/i,'').trim();var who=ZP2C[sp]||sp;var w=(r[1]||'').trim();var f=parseInt(r[2]||'1',10)||1;if(!w)return;if(!byw[w]){byw[w]=[];ord.push(w);}byw[w].push({who:who,f:f});});
+  if(prT.body.length){var byw={},ord=[];prT.body.forEach(function(r){var sp=zsw(r[0]||'').replace(/\s*\(OOC\)\s*/i,'').trim();var who=ZP2C[sp]||sp;var w=(r[1]||'').trim();var f=parseInt(r[2]||'1',10)||1;if(!w)return;if(!byw[w]){byw[w]=[];ord.push(w);}byw[w].push({who:who,f:f});});
     document.getElementById('z-prof').innerHTML=ord.map(function(w){return '<div class="pp-word"><div class="w">'+zesc(zcensor(w))+'</div><div class="says">'+byw[w].map(function(e){return '<span>'+zesc(e.who)+' \u00d7'+e.f+'</span>';}).join('')+'</div></div>';}).join('');}
   else if(prB){document.getElementById('z-prof').innerHTML=zmd(prB);}
   else{document.getElementById('z-prof-card').style.display='none';}
