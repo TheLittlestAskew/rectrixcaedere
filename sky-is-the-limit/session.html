@@ -192,6 +192,7 @@ td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weigh
 .zref{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;align-items:start;width:100%;scroll-margin-top:74px}
 .zsec{scroll-margin-top:74px}
 @media(max-width:900px){.pp-grid,.pp-mini,.pp-fnotes{grid-template-columns:1fr}}
+.wrap.settled{transform:none}
 @media(prefers-reduced-motion:reduce){.wrap{animation:none;opacity:1;transform:none}.zjump a{transition:none}}
   /* ===== Session recording player ===== */
   .pp-audio .pa-parts{display:flex;gap:6px;margin-bottom:13px;flex-wrap:wrap}
@@ -224,6 +225,9 @@ td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weigh
   <div class="metarow" id="stags"></div>
   <div class="divider">&#10022;</div>
   <div class="pp3" id="body">
+  <nav class="zjump" id="z-jump" style="display:none" aria-label="Jump to section">
+    <a href="#zs-story">Story</a><a href="#zs-people">People</a><a href="#zs-places">Places</a><a href="#zs-loot">Loot</a><a href="#zs-quotes">Quotes</a><a href="#z-logs-card">Rolls</a>
+  </nav>
   <section class="pp-hero" id="z-hero" style="display:none">
     <div class="pp-hero-inner">
       <div class="pp-eyebrow">Character POV &middot; storytelling exception</div>
@@ -232,9 +236,6 @@ td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weigh
       <div class="pp-prose" id="z-pov"></div>
     </div>
   </section>
-  <nav class="zjump" id="z-jump" style="display:none" aria-label="Jump to section">
-    <a href="#zs-story">Story</a><a href="#zs-people">People</a><a href="#zs-places">Places</a><a href="#zs-loot">Loot</a><a href="#zs-quotes">Quotes</a><a href="#z-logs-card">Rolls</a>
-  </nav>
   <div id="z-grid" style="display:none">
 
     <div class="zstory" id="zs-story">
@@ -636,7 +637,15 @@ async function init(){
   }
 }
 
-function boot(){loadRegistry().then(init);}
+function boot(){
+  /* Clear the entrance transform once it finishes: a transformed ancestor
+     becomes the containing block and breaks position:sticky on the jump nav. */
+  var w=document.querySelector(".wrap");
+  if(w){var settle=function(){w.classList.add("settled");};
+    w.addEventListener("animationend",settle,{once:true});
+    setTimeout(settle,1400);}
+  loadRegistry().then(init);
+}
 if(typeof marked!=='undefined'){boot();}else{window.addEventListener('load',boot);}
 </script>
 <div class="pp-overlay" id="z-overlay" onclick="if(event.target===this)ppClose()">
