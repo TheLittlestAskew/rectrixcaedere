@@ -7,6 +7,8 @@
 
 ✅ **The SITL dashboard and landing page are live (`330a8bb`).** `dashboard.html?c=1` was fully hardcoded at **946 rolls / 15 sessions / "last session May 2 2026"**; it now reads **1,330 rolls / 22 sessions** from Supabase plus the vault index, matching `archive.html` exactly. `sky-is-the-limit/index.html` was equally static and now refreshes too. ⭐ **Also fixed Ashfall: `dashboard.html?c=3` was reporting SESSIONS LOGGED: 2** because it read the count from the index's curated `sessions` array (S10+ only); it now reads **12**.
 
+✅ **The SITL session pages were rebuilt story-first on 2026-08-30 (`46fb570`).** Three parser defects were leaking raw markdown into every page (literal `**` bold markers, raw `[[wikilinks]]`, a blank party roster); all fixed and verified at zero leaks on S22 and S20. The three-column masonry is replaced by a sticky jump nav, an untruncated story tier and a reflowing reference grid. 📌 **`session.html` stores unicode as literal backslash-u escape text and breaks `position:sticky` if `.wrap` keeps a transform — read the 2026-08-30 log entry before editing it.**
+
 **SITL sessions now publish themselves.** `sky-is-the-limit/session.html` and `archive.html` fetch `00-Campaign-Hub/Public Session Index.json` from `sitl_vault` and merge it into their `ARC` arrays, so S20, S21 and S22 are live and a future session needs no edit in this repo. Entries S01–S19 keep their curated editorial hardcoded here; the index only refreshes and extends from S20 on. S16–S19 recordings still need uploading to R2.
 
 ## Next Steps
@@ -24,6 +26,16 @@
 
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
+
+### 2026-08-30 17:10 ET · Claude Code (SITL session pages: parser repairs + story-first layout)
+- **Changed:** Rebuilt `sky-is-the-limit/session.html` around how the table actually reads it. **Three parser defects fixed first**, because no layout looks right while markdown leaks: (1) `^key:\s*(.*)$` let `\s*` swallow the newline so **every YAML block list matched with an empty capture** — `party_present` and `site_events` both rendered blank; (2) table cells used `zesc()`, which escapes entities but leaves markdown, so `**Dead**` and `[[Nanny Plunk]]` printed as literal asterisks and brackets across NPCs, Loot, Locations, Quotes and Quests — added `zinl()` (strip wikilinks → escape → promote bold/italic/code, in that order, so no injection path opens); (3) profanity speakers never had wikilinks stripped. **Then the layout:** the three independent `.pp-col` stacks are gone, replaced by a sticky jump nav, a single-column story tier at a 740px measure, and a reference tier on an auto-fit grid that reflows into rows. **Nothing in the story tier is truncated any more** — journal, narrative, scene list and themes all render inline, and the three fade-to-modal patterns are gone. Quote board went from 4-of-95 to all of them. Profanity demoted out of the top-left slot.
+- **Commits:** `f78dbc8` (parser) · `5207c8b` (paren repair) · `7540063` (layout) · `bce3876` (sticky fix) · `46fb570` (scroll panels)
+- **Verification:** ✓ Live on S22 **and** S20: **0 leaked bold markers, 0 leaked wikilinks**, no empty panels. ✓ 6 party chips (was 1 malformed), 17 NPCs, 20 quests, 68 roll rows, all 6 jump links resolve. ✓ Reference grid reflows to 3 even 388px columns. ✓ Contrast **6.24:1** body / **14.61:1** quotes against the ink ground, both over 4.5:1. ✓ `prefers-reduced-motion` disables the entrance animation.
+- **Friction:** `gen-fail` — the `zesc`→`zinl` swap left an **unbalanced paren**, which is a parse error for the whole inline script, so the page hung on "Loading…" until I read the console. Worked once `node --check` on the extracted `<script>` block became part of the loop. 📌 **Never push an edit to this file without extracting the script and running `node --check` first.**
+- **Friction:** `gen-fail` — repeated failed string replacements because **this file stores unicode as literal backslash-u escape text** (`“`, `’`, `·`), not as characters, so pasting the real glyph never matches. Worked by targeting the line and swapping the function name instead. 📌 **Match on ASCII-only substrings in `session.html`, or operate line-wise.**
+- **Friction:** `misread` — I reported "Quests renders empty" in the audit. It was **collapsed by default**, not broken. Corrected before any code changed; the section is now open and always rendered.
+- **Next:** Backdating S01–S19 needs the parser made tolerant of the older heading shapes (S13 at H2, S17 with no `Related`, "Locations" vs "Locations Visited") — the layout itself is already shape-agnostic.
+- **Watch out:** ⚠️ **`position:sticky` breaks under `.wrap`** because its entrance animation leaves a `transform`, which makes it the containing block. The transform is now cleared on `animationend` with a 1.4s timeout fallback; **do not re-add a persistent transform to `.wrap`**. ⚠️ **Screenshots of this page are unreliable** — the capture scales differently from the real viewport (`innerWidth` reported 2071 against a 1554px capture), which made a working sticky nav look broken. Verify layout with `getBoundingClientRect` and `elementFromPoint`, not screenshots. ⚠️ The reference tier still lets one long list set its grid row height; NPCs/Loot/Quotes/Profanity are capped at 430px with internal scroll as the mitigation, not a true masonry.
 
 ### 2026-08-30 12:20 ET · Claude Code (dashboards go live)
 - **Changed:** Generalised Codex's Ashfall-only live-analytics block into a per-campaign config (`RC_LIVE`) covering **both** SITL and Ashfall, and made `sky-is-the-limit/index.html` refresh its hero stats and per-PC roll counts from the same sources. Session count / date range / per-session chart now come from the vault index's new **`all_sessions`** array (every session, number+date only), falling back to the curated `sessions` list for older indexes. Each campaign catches its own failure, so one outage cannot blank the other.
@@ -108,10 +120,5 @@
 - **Commit:** `WtFF: wire Session 02 (Something's Changing) into session reader + map`
 - **Next:** Add Session 03 the same way when notes are ready.
 
-### 2026-06-25 ET · Claude chat
-- **Changed:** `app.js` — replaced the single hardcoded `QuoteBoard` with a live, per-campaign random-quote loader. Added a `vault` field to each campaign in `D`; fetches `00-Campaign-Hub/Quote Board Master.md`, follows the `[[Quote Board …]]` batch-file links (SITL & Ashfall masters are stubs), parses three formats (bold-header, blockquote, P&P table), dedupes, and random-picks on mount + on campaign switch.
-- **Commit:** `feat: live per-campaign random quotes on dashboard` (fill short-SHA on push)
-- **Next:** eyeball all 4 campaigns, then build the live roll-stats pipeline (Phase 1).
-- **Watch out:** parser validated against live vault data (SITL 299 / P&P 206 / Ashfall 112 / WTFF 19 quotes) but full browser render was not testable in-sandbox. `app.js` is ~50KB → local-Git deploy.
 
 > Older entries archived to `handoff-archive/2026-06.md`
