@@ -170,7 +170,29 @@ td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weigh
 #z-mbody.pov{font-family:var(--fs)}#z-mbody.pov p{font-style:italic;color:var(--text);line-height:1.8}
 #z-mbody strong{color:var(--text)}#z-mbody ul,#z-mbody ol{margin:0 0 14px 18px;color:var(--text2)}#z-mbody li{margin-bottom:8px}
 .pp-close{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--muted);font-size:24px;cursor:pointer;z-index:2}.pp-close:hover{color:var(--gold)}
+/* ---- story-first layout -------------------------------------------------
+   Replaces the three independent .pp-col stacks, which ran to wildly unequal
+   heights and left two thirds of the viewport empty. Story reads straight
+   through at a single generous measure; reference reflows into rows. */
+.zjump{position:sticky;top:0;z-index:20;display:flex;gap:4px;flex-wrap:wrap;justify-content:center;padding:9px 10px;margin:0 0 26px;background:rgba(13,20,28,.94);border-top:1px solid var(--border);border-bottom:1px solid var(--border);border-radius:8px}
+.zjump a{font-family:var(--fl);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--text2);text-decoration:none;padding:7px 13px;border:1px solid transparent;border-radius:3px;transition:color .25s,border-color .25s}
+.zjump a:hover{color:var(--gold-bright);border-color:var(--border)}
+.zjump a:focus-visible{outline:1px solid var(--gold);outline-offset:2px;color:var(--gold-bright)}
+.zjump a.on{color:var(--gold-bright);border-color:var(--gold)}
+.zstory{width:100%;max-width:740px;margin:0 auto}
+.zstory section{margin-bottom:38px;scroll-margin-top:74px}
+.zstory h2{font-family:var(--fdisp);font-weight:500;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-pale);margin-bottom:15px;padding-bottom:9px;border-bottom:1px solid var(--border)}
+.zbody{font-size:15px;line-height:1.75;color:var(--text2)}
+.zbody p{margin-bottom:15px}
+.zbody strong,.zbody b{color:var(--text);font-weight:500}
+.zbody ul,.zbody ol{margin:0 0 15px 20px}
+.zbody li{margin-bottom:10px}
+.zbody li::marker{color:var(--gold-pale)}
+.zbody em{color:var(--text)}
+.zref{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;align-items:start;width:100%;scroll-margin-top:74px}
+.zsec{scroll-margin-top:74px}
 @media(max-width:900px){.pp-grid,.pp-mini,.pp-fnotes{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.wrap{animation:none;opacity:1;transform:none}.zjump a{transition:none}}
   /* ===== Session recording player ===== */
   .pp-audio .pa-parts{display:flex;gap:6px;margin-bottom:13px;flex-wrap:wrap}
   .pp-audio .pa-part{font-family:var(--fl);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-pale);background:rgba(13,20,28,.6);border:1px solid var(--border);border-radius:20px;padding:4px 12px;cursor:pointer;transition:border-color .3s,color .3s}
@@ -208,47 +230,50 @@ td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weigh
       <div class="pp-hero-title">Kit&rsquo;s Journal</div>
       <div class="pp-byline" id="z-byline"></div>
       <div class="pp-prose" id="z-pov"></div>
-      <div style="text-align:center"><button class="pp-more" onclick="ppModal('pov')">Read the full entry</button></div>
     </div>
   </section>
-  <div class="pp-grid" id="z-grid" style="display:none">
-    <div class="pp-col">
-      <section class="pp-card pp-audio" id="z-audio-card" style="display:none">
-        <h2>Session recording</h2>
-        <div class="pa-parts" id="z-audio-parts"></div>
-        <div class="pa-bar" id="z-audio-bar">
-          <button class="pa-play" id="z-audio-toggle" type="button" aria-label="Play recording">
-            <svg class="pa-ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-            <svg class="pa-ic-pause" viewBox="0 0 24 24" aria-hidden="true" style="display:none"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
-          </button>
-          <div class="pa-track" id="z-audio-track" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-            <div class="pa-fill" id="z-audio-fill"></div><div class="pa-knob" id="z-audio-knob"></div>
-          </div>
-          <div class="pa-time"><span id="z-audio-cur">0:00</span><span class="pa-sep">/</span><span id="z-audio-dur">0:00</span></div>
-        </div>
-        <div class="pa-lost-note" id="z-audio-lost" style="display:none"></div>
-        <audio id="z-audio-el" preload="none"></audio>
-      </section>
+  <nav class="zjump" id="z-jump" style="display:none" aria-label="Jump to section">
+    <a href="#zs-story">Story</a><a href="#zs-people">People</a><a href="#zs-places">Places</a><a href="#zs-loot">Loot</a><a href="#zs-quotes">Quotes</a><a href="#z-logs-card">Rolls</a>
+  </nav>
+  <div id="z-grid" style="display:none">
+
+    <div class="zstory" id="zs-story">
+      <section><h2>What happened</h2><div class="zbody" id="z-narr"></div></section>
+      <section id="z-scene-card"><h2>Scene &amp; timeline</h2><div class="zbody" id="z-scene"></div></section>
+      <section><h2>Themes &amp; beats</h2><div class="zbody" id="z-themes"></div></section>
+      <section id="z-quests-card"><h2>Quests &amp; objectives</h2><div id="z-quests"></div></section>
+    </div>
+
+    <div class="pp-fullrule">&#10022;&nbsp;&nbsp;The table&nbsp;&nbsp;&#10022;</div>
+    <div class="zref" id="zs-people">
       <section class="pp-card"><h2>At a glance</h2><dl class="pp-kv" id="z-meta"></dl>
         <div class="pp-lbl" style="margin:14px 0 4px">Party present</div><div class="pp-chips" id="z-party"></div>
         <div class="pp-lbl" id="z-guestnote" style="display:none;font-size:10px;color:var(--muted);margin-top:8px">&#42; guest planeswalker</div></section>
+    <section class="pp-card pp-audio" id="z-audio-card" style="display:none">
+      <h2>Session recording</h2>
+      <div class="pa-parts" id="z-audio-parts"></div>
+      <div class="pa-bar" id="z-audio-bar">
+        <button class="pa-play" id="z-audio-toggle" type="button" aria-label="Play recording">
+          <svg class="pa-ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="pa-ic-pause" viewBox="0 0 24 24" aria-hidden="true" style="display:none"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+        </button>
+        <div class="pa-track" id="z-audio-track" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="pa-fill" id="z-audio-fill"></div><div class="pa-knob" id="z-audio-knob"></div>
+        </div>
+        <div class="pa-time"><span id="z-audio-cur">0:00</span><span class="pa-sep">/</span><span id="z-audio-dur">0:00</span></div>
+      </div>
+      <div class="pa-lost-note" id="z-audio-lost" style="display:none"></div>
+      <audio id="z-audio-el" preload="none"></audio>
+    </section>
+      <section class="pp-card"><h2>NPCs &amp; companions</h2><div class="pp-legend"><span><i class="pp-dot enemy"></i>Enemy</span><span><i class="pp-dot friendly"></i>Friendly</span><span><i class="pp-dot neutral"></i>Neutral</span></div><div id="z-npcs"></div></section>
+      <section class="pp-card zsec" id="zs-places"><h2>Locations</h2><div id="z-locs"></div></section>
+      <section class="pp-card zsec" id="zs-loot"><h2>Loot &amp; artifacts</h2><div id="z-loot"></div></section>
+      <section class="pp-card zsec" id="zs-quotes"><h2>Quote board</h2><div id="z-quotes"></div></section>
       <section class="pp-card" id="z-prof-card"><h2>Profanity record</h2><div id="z-prof"></div></section>
-    </div>
-    <div class="pp-col">
-      <section class="pp-card pp-read"><h2>Narrative summary</h2><div class="pp-prev" id="z-narr"></div><button class="pp-more" onclick="ppModal('narr')">Read more</button></section>
-      <section class="pp-card collapsible"><h2 class="ctoggle" onclick="toggsec(this)" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggsec(this);}">Quests &amp; objectives<span class="caret">▸</span></h2><div class="cbody"><div id="z-quests"></div></div></section>
-      <section class="pp-card pp-read" id="z-scene-card"><h2>Scene / timeline</h2><div class="pp-prev" id="z-scene"></div><button class="pp-more" onclick="ppModal('scene')">See all</button></section>
-      <section class="pp-card pp-read"><h2>Themes &amp; beats</h2><div class="pp-prev" id="z-themes"></div><button class="pp-more" onclick="ppModal('themes')">Read more</button></section>
-      <section class="pp-card" id="z-quotes-card"><h2>Quote board</h2><div id="z-quotes"></div></section>
-    </div>
-    <div class="pp-col">
-      <section class="pp-card"><h2>NPCs</h2><div class="pp-legend"><span><i class="pp-dot enemy"></i>Enemy</span><span><i class="pp-dot friendly"></i>Friendly</span><span><i class="pp-dot neutral"></i>Neutral</span></div><div id="z-npcs"></div></section>
-      <section class="pp-card"><h2>Locations</h2><div id="z-locs"></div></section>
-      <section class="pp-card"><h2>Loot &amp; artifacts</h2><div id="z-loot"></div></section>
     </div>
   </div>
   <div class="pp-fullrule" id="z-logrule" style="display:none">&#10022;&nbsp;&nbsp;Logs&nbsp;&nbsp;&#10022;</div>
-  <section class="pp-card collapsible" id="z-logs-card" style="display:none"><h2 class="ctoggle" onclick="toggsec(this)" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggsec(this);}">Full roll log <span class="pp-lbl" style="font-weight:400">&middot; live from D&amp;D Beyond</span><span class="caret">▸</span></h2>
+  <section class="pp-card collapsible zsec" id="z-logs-card" style="display:none"><h2 class="ctoggle" onclick="toggsec(this)" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggsec(this);}">Full roll log <span class="pp-lbl" style="font-weight:400">&middot; live from D&amp;D Beyond</span><span class="caret">▸</span></h2>
     <div class="cbody">
     <div class="tbl-wrap"><table><thead><tr><th>Character</th><th>Action</th><th>Type</th><th>Result</th></tr></thead><tbody id="z-rolllog"></tbody></table></div>
     <div class="pp-mini"><div><div class="pp-lbl" style="margin-bottom:6px">Encounters</div><div id="z-enc"></div></div><div id="z-init-wrap"><div class="pp-lbl" style="margin-bottom:6px">Initiative</div><div id="z-init"></div></div></div>
@@ -436,6 +461,31 @@ var ZDISP={'Ilvara':'enemy','Ilvara Mizzrym':'enemy','Shoor':'enemy','Shoor Vand
 function zdispo(n){return ZDISP[n]||'neutral';}
 var ZMOD={};
 function ppModal(k){var m=ZMOD[k];if(!m)return;document.getElementById('z-meyebrow').textContent=m.eb||'';document.getElementById('z-mtitle').textContent=m.t||'';var b=document.getElementById('z-mbody');b.className=(k==='pov'?'pov':'');b.innerHTML=m.h||'';b.scrollTop=0;document.getElementById('z-overlay').classList.add('open');document.body.style.overflow='hidden';}
+/* Scroll-spy for the sticky jump nav. IntersectionObserver only: no scroll
+   handler, so nothing runs on the main thread while scrolling. Degrades to a
+   plain anchor list if the API is missing or a target id is absent. */
+function zSpy(){
+  var nav=document.getElementById('z-jump');
+  if(!nav||!('IntersectionObserver' in window))return;
+  var links=Array.prototype.slice.call(nav.querySelectorAll('a'));
+  var maps=links.map(function(a){
+    var id=a.getAttribute('href').slice(1);
+    return {a:a,el:document.getElementById(id)};
+  }).filter(function(m){return m.el;});
+  if(!maps.length)return;
+  var visible=Object.create(null);
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting)visible[e.target.id]=e.boundingClientRect.top;
+      else delete visible[e.target.id];
+    });
+    var best=null;
+    maps.forEach(function(m){ if(m.el.id in visible && best===null) best=m; });
+    links.forEach(function(a){a.classList.remove('on');});
+    if(best)best.a.classList.add('on');
+  },{rootMargin:'-80px 0px -55% 0px',threshold:0});
+  maps.forEach(function(m){io.observe(m.el);});
+}
 function toggsec(h){var c=h.closest('section');if(!c)return;var o=c.classList.toggle('open');h.setAttribute('aria-expanded',o?'true':'false');var car=h.querySelector('.caret');if(car)car.innerHTML=o?'\u25be':'\u25b8';}
 function ppClose(){document.getElementById('z-overlay').classList.remove('open');document.body.style.overflow='';}
 document.addEventListener('keydown',function(e){if(e.key==='Escape')ppClose();});
@@ -477,8 +527,7 @@ function renderZones(raw, s){
     var povTitle=subm?zfix(subm[1].trim()):s.t;
     var povBody=pov.replace(/^###\s+.+$/m,'').trim();
     document.getElementById('z-byline').textContent=povTitle;
-    var pp=zparas(povBody);
-    document.getElementById('z-pov').innerHTML=zmd(pp.slice(0,2).join('\n\n'));
+    document.getElementById('z-pov').innerHTML=zmd(povBody);
     ZMOD.pov={eb:'Kit\u2019s Journal',t:povTitle,h:zmd(povBody)};
     document.getElementById('z-hero').style.display='';
   }
@@ -487,18 +536,17 @@ function renderZones(raw, s){
   var narr=zblock(body,'Narrative Summary',STOP3);
   if(!narr){var sa=zblock(body,'Session Analysis',STOP2);var cut=sa.search(/^###\s+(Quests|Themes|Locations|Scene|Session Setting|Reputation|Party Structure)/mi);narr=cut===-1?sa:sa.slice(0,cut).trim();}
   var np=zparas(narr);
-  document.getElementById('z-narr').innerHTML=zmd(np.slice(0,2).join('\n\n'))||'<p class="pp-muted">&mdash;</p>';
-  ZMOD.narr={eb:'Session analysis',t:'Narrative summary',h:zmd(narr)};
+  document.getElementById('z-narr').innerHTML=zmd(narr)||'<p class="pp-muted">&mdash;</p>';
 
   // scene/timeline (hide if absent)
   var scene=zblock(body,'Scene',STOP3);
-  if(scene){document.getElementById('z-scene').innerHTML=zmd(scene.split('\n').slice(0,7).join('\n'));ZMOD.scene={eb:'Session analysis',t:'Scene / timeline',h:zmd(scene)};}
+  if(scene){document.getElementById('z-scene').innerHTML=zmd(scene);}
   else{document.getElementById('z-scene-card').style.display='none';}
 
   // themes
   var themes=zblock(body,'Themes',STOP3);
-  document.getElementById('z-themes').innerHTML=zmd(zparas(themes).slice(0,2).join('\n\n'))||'<p class="pp-muted">&mdash;</p>';
-  ZMOD.themes={eb:'Session analysis',t:'Themes & beats',h:zmd(themes)};
+  document.getElementById('z-themes').innerHTML=zmd(themes)||'<p class="pp-muted">&mdash;</p>';
+  if(!themes){var tc=document.getElementById('z-themes').closest('section');if(tc)tc.style.display='none';}
 
   // at a glance
   document.getElementById('z-meta').innerHTML='<dt>Start</dt><dd>'+zinl(fm('start_location'))+'</dd><dt>End</dt><dd>'+zinl(fm('end_location'))+'</dd>';
@@ -550,6 +598,8 @@ function renderZones(raw, s){
   var contB=zblock(body,'Continuity',STOP3);document.getElementById('z-flags').innerHTML=contB?zmd(contB):'<div class="pp-muted">&mdash;</div>';
 
   document.getElementById('z-grid').style.display='';
+  document.getElementById('z-jump').style.display='';
+  zSpy();
   document.getElementById('z-logrule').style.display='';
   document.getElementById('z-logs-card').style.display='';
   document.getElementById('z-fnotes').style.display='';
