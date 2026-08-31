@@ -139,8 +139,28 @@ footer .d{color:var(--copper);margin:0 8px}
 <script>
 var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 
-/* ====================== CONFIG ====================== */
-var CONFIG = {
+/* ====================== MAP DATA ======================
+   The map is now built from the vault, not from this file.
+
+   wtff_vault/Workflows/scripts/generate_public_session_index.mjs reads every
+   session note's `site_location` and the coordinates in
+   wtff_vault/00-Campaign-Hub/Map Locations.json, and emits the `map` block of
+   Public Session Index.json. Adding a session note is all it takes to put a new
+   bloom on the map, move the "party is here" pin and extend the travel line.
+
+   TO ADD A NEW PLACE: add its x/y to Map Locations.json in the vault (only a
+   human can decide where it sits on the image), then reference the key from the
+   session note. Do NOT hand-edit the FALLBACK below to publish a session — it
+   will be overwritten by the live index on the next load and you will be the
+   only person who ever sees it.
+
+   FALLBACK is a frozen snapshot used only if the fetch fails (offline, GitHub
+   down, rate-limited). It is deliberately allowed to go stale.
+   ====================================================== */
+var VAULT_RAW = 'https://raw.githubusercontent.com/TheLittlestAskew/wtff_vault/main';
+var INDEX = VAULT_RAW + '/00-Campaign-Hub/Public%20Session%20Index.json';
+
+var FALLBACK = {
   party: 'sunrootcrossing',
   path: ['rhusatatiam', 'sunrootcrossing'],
   locations: {
@@ -161,13 +181,33 @@ var CONFIG = {
     ]}
   ]
 };
+
+var CONFIG = FALLBACK;
+
+/* Fetch the live map block. Resolves either way — a map drawn from the frozen
+   fallback is far better than no map at all, so a failed fetch is logged and
+   swallowed rather than thrown. */
+function loadMap(){
+  return fetch(INDEX + '?t=' + Date.now())
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(j){
+      if(j && j.map && j.map.locations && j.map.events){ CONFIG = j.map; }
+      else { console.warn('WTFF map: index had no usable map block; using frozen fallback.'); }
+    })
+    .catch(function(e){ console.warn('WTFF map: could not load the live index (' + e + '); using frozen fallback.'); });
+}
 /* =================================================== */
 
 var mapwrap=document.getElementById('mapwrap');
 var markers=document.getElementById('markers');
 var reveal=document.getElementById('reveal');
-var L=CONFIG.locations;
+var L={};
 function place(el,key){var p=L[key];el.style.left=p.x+'%';el.style.top=p.y+'%';}
+
+/* Everything below draws from CONFIG, so it can only run once the live index has
+   resolved. renderMap() is called at the bottom of this script. */
+function renderMap(){
+L=CONFIG.locations;
 
 /* path polyline */
 if(CONFIG.path.length>1){
@@ -219,7 +259,14 @@ CONFIG.events.forEach(function(ev){
   });
   pt.appendChild(btn);pt.appendChild(pop);place(pt,ev.at);markers.appendChild(pt);
 });
+} /* ── end renderMap() ── */
+
 document.addEventListener('click',function(){if(openPop){openPop.pop.classList.remove('open');openPop.btn.setAttribute('aria-expanded','false');openPop=null;}});
+
+/* Draw the map as soon as the live index resolves. loadMap() never rejects — on
+   any failure CONFIG is still the frozen fallback, so the map always renders.
+   This is independent of runReveal() below, which only fades `markers` in. */
+loadMap().then(renderMap);
 
 /* ── intro: fly-in turns the card horizontal en route (cross-page) → flip to the map → enlarge & un-crop ── */
 var revealRan=false;
