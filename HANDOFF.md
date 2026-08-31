@@ -27,6 +27,14 @@
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
 
+### 2026-08-31 11:20 ET · Claude Code (WTFF map now reads the vault index)
+- **Changed:** `where-the-flowers-forget/archive.html` no longer hardcodes the Map of Artemesia. It fetches the `map` block of `wtff_vault`'s `Public Session Index.json` — locations, blooms, travel line and the "party is here" pin — so a new WTFF session note publishes itself to the map with no edit in this repo. The render code is wrapped in `renderMap()` and driven by `loadMap().then(renderMap)`.
+- **Commit:** `0f69051` (vault side: `wtff_vault@2bd2674`)
+- **Verification:** ✓ Headless render test drove the real script and produced **identical output from the live index and from the frozen fallback** — 1 pin, 2 blooms, 1 travel polyline, 3 session links, exactly matching the hardcoded version. ✓ Script parses standalone. ✓ Confirmed the WTFF index is live on `raw.githubusercontent.com` with the expected party/path/blooms.
+- **Friction:** gen-fail — my first edit replaced only the opening line of the multi-line `budFlower` SVG string literal and left its continuation lines orphaned, which would have been a syntax error on a live page. Caught by parse-checking the script block rather than by eye. ✅ **What works: after editing inline `<script>` in an HTML file, extract the block and `new Function(body)` it as a parse check before committing.**
+- **Watch out:** ⚠️ The old hardcoded CONFIG survives as **`FALLBACK`** and is used **only** when the fetch fails. It is deliberately allowed to go stale. **Editing it does not publish anything** — the live index replaces it on the next successful load. ⚠️ `runReveal()` (the cross-page card-flip intro) is untouched and still independent of the map data; it only fades `markers` in, so a slow fetch delays the blooms, not the animation.
+- **Next:** Unchanged. See the DO NEXT block above.
+
 ### 2026-08-30 17:10 ET · Claude Code (SITL session pages: parser repairs + story-first layout)
 - **Changed:** Rebuilt `sky-is-the-limit/session.html` around how the table actually reads it. **Three parser defects fixed first**, because no layout looks right while markdown leaks: (1) `^key:\s*(.*)$` let `\s*` swallow the newline so **every YAML block list matched with an empty capture** — `party_present` and `site_events` both rendered blank; (2) table cells used `zesc()`, which escapes entities but leaves markdown, so `**Dead**` and `[[Nanny Plunk]]` printed as literal asterisks and brackets across NPCs, Loot, Locations, Quotes and Quests — added `zinl()` (strip wikilinks → escape → promote bold/italic/code, in that order, so no injection path opens); (3) profanity speakers never had wikilinks stripped. **Then the layout:** the three independent `.pp-col` stacks are gone, replaced by a sticky jump nav, a single-column story tier at a 740px measure, and a reference tier on an auto-fit grid that reflows into rows. **Nothing in the story tier is truncated any more** — journal, narrative, scene list and themes all render inline, and the three fade-to-modal patterns are gone. Quote board went from 4-of-95 to all of them. Profanity demoted out of the top-left slot.
 - **Commits:** `f78dbc8` (parser) · `5207c8b` (paren repair) · `7540063` (layout) · `bce3876` (sticky fix) · `46fb570` (scroll panels)
@@ -116,10 +124,4 @@
 - **Commit:** `session readers: move quests to center, collapsible roll log (SITL/WtFF/Ashfall); add Scene+Themes to WtFF`
 - **Next:** Add Scene / Timeline Breakdown and Themes & Emotional Beats sections to WtFF vault notes for them to render.
 
-### 2026-06-29 · Claude chat
-- **Changed:** Wired WtFF Session 02 "Something's Changing" (2026-06-28) into the session reader (`ARC` array in `session.html`) and the archive map (`CONFIG.events[0].sessions` in `archive.html`, Rhusatatiam node). Prev/next nav, tags (⚑ Crossover, ● Roleplay), and popover link all wired. Session 00 intentionally excluded.
-- **Commit:** `WtFF: wire Session 02 (Something's Changing) into session reader + map`
-- **Next:** Add Session 03 the same way when notes are ready.
-
-
-> Older entries archived to `handoff-archive/2026-06.md`
+> Older entries archived to handoff-archive/2026-08.md
