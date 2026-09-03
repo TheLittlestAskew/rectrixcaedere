@@ -27,6 +27,12 @@
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
 
+### 2026-09-02 22:20 ET · Claude Code (TOOLS.md tool inventory added)
+- **Changed:** Added `TOOLS.md` (15 active rows) — the pinned React 18.2 / Recharts 2.12.7 / prop-types CDN stack, Supabase `Rectrix_Caedere` + the `supabase-cutter` MCP server, the two hash-pinned skills from `skills-lock.json`, and the rest. `AGENTS.md` gained a `### TOOLS.md` subsection so Codex maintains it too. One of 13 project tables that `septentrion-sync` v4 rolls into the vault's new `The Toolbox.md`.
+- **Commit:** `ea0a317`
+- **Next:** Unchanged. See the block above this log.
+- **Watch out:** The version pins in `TOOLS.md` restate the hard constraints from `CLAUDE.md` — Recharts must stay 2.12.7 (3.x breaks React 18 UMD), and script order is React → ReactDOM → prop-types → Recharts. If those ever change, the tool table has to change with them or it becomes a second, lying source of truth.
+
 ### 2026-08-31 11:20 ET · Claude Code (WTFF map now reads the vault index)
 - **Changed:** `where-the-flowers-forget/archive.html` no longer hardcodes the Map of Artemesia. It fetches the `map` block of `wtff_vault`'s `Public Session Index.json` — locations, blooms, travel line and the "party is here" pin — so a new WTFF session note publishes itself to the map with no edit in this repo. The render code is wrapped in `renderMap()` and driven by `loadMap().then(renderMap)`.
 - **Commit:** `0f69051` (vault side: `wtff_vault@2bd2674`)
