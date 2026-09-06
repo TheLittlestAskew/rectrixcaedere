@@ -125,9 +125,4 @@
 - **Commit:** `SITL: wire Session 19 (We Are Split in Two) into archive + session reader`
 - **Next:** DO NEXT items 1–2 above (R2 recording uploads; S19 Supabase roll registration in the vault pipeline).
 
-### 2026-06-29 · Claude chat
-- **Changed:** All three session readers (WtFF, Ashfall, SITL): moved "Open threads"/"Quests & objectives" card into the center column directly below "Narrative summary"; made "Full roll log" section collapsible, default collapsed, with clickable header toggle and ▸/▾ caret. WtFF only: added "Scene / timeline" and "Themes & beats" cards in center column (wired to `renderScene`/`renderThemes`, hidden if section absent). Ashfall's collapsible log + quests position were already correct from a prior edit — only the column re-order was applied. pacts-and-power untouched.
-- **Commit:** `session readers: move quests to center, collapsible roll log (SITL/WtFF/Ashfall); add Scene+Themes to WtFF`
-- **Next:** Add Scene / Timeline Breakdown and Themes & Emotional Beats sections to WtFF vault notes for them to render.
-
-> Older entries archived to handoff-archive/2026-08.md
+> Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-08.md` - everything before 2026-07-16 00:00 ET.
