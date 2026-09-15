@@ -205,11 +205,11 @@ footer .swear{color:var(--gold-pale)}
   <img class="logo" src="/assets/img/logo_only-transparent2.webp" alt="Rectrix Caedere">
   <div class="page-eye">Ashfall Britannia</div>
   <h1 class="chron">Beyond the Walls</h1>
-  <p class="chron-sub">Nine sessions into a sunless Britain &mdash; the boot camp lost to ash, the Sun Shard dragged back into the dark. Every roll the record kept.</p>
+  <p class="chron-sub" id="chron-sub">A sunless Britain &mdash; the boot camp lost to ash, the Sun Shard dragged back into the dark. Every roll the record kept.</p>
 
   <div class="era-bar">
-    <div class="era-seg"><div class="v">9</div><div class="l">Sessions Chronicled</div></div>
-    <div class="era-seg"><div class="v">4&#8201;&rarr;&#8201;8</div><div class="l">Levels Climbed</div></div>
+    <div class="era-seg"><div class="v skel" id="sv-sessions">&nbsp;</div><div class="l">Sessions Chronicled</div></div>
+    <div class="era-seg"><div class="v skel" id="sv-levels">&nbsp;</div><div class="l">Levels Climbed</div></div>
     <div class="era-seg"><div class="v skel" id="sv-rolls">&nbsp;</div><div class="l">Rolls Cast</div></div>
     <div class="era-seg"><div class="v skel" id="sv-n20">&nbsp;</div><div class="l">Nat&#8201;20s</div></div>
     <div class="era-seg"><div class="v skel" id="sv-n1">&nbsp;</div><div class="l">Nat&#8201;1s</div></div>
@@ -344,28 +344,49 @@ function pickQuote(list){
   return list.slice().sort(function(a,b){return score(b)-score(a);})[0];
 }
 
-/* ——— supabase roll stats, bucketed by session_date ——— */
+/* ——— supabase roll stats, bucketed by session_date ———
+   PostgREST caps every response at 1000 rows server-side, and that cap silently
+   overrides any larger `limit=`. The old single-shot `limit=4000` therefore
+   returned exactly 1000 rows — the oldest ones — so the header read "1000 rolls
+   cast" and every session from S10 on bucketed to zero. Page through instead,
+   ordered by id so the offsets are stable. */
+/* Sessions whose rolls are filed in the archive under a different date than the
+   session's own calendar date. The data is what is misdated, not the notes —
+   fixing `session_date` in ashfall_session_rolls would let these be deleted.
+   S01/S02/S04 are listed for safety: they resolve today only because the public
+   index publishes S10+ only, so their hardcoded ARC dates are never overwritten. */
+var ROLLDATE={'01':'2026-02-12','02':'2026-02-16','04':'2026-03-03','13':'2026-08-03'};
+var PAGE=1000, MAX_PAGES=40;
 function rollStats(){
-  return fetch(SB+'/rest/v1/ashfall_session_rolls?select=session_date,dice_notation,individual_values&limit=4000',
-    {headers:{apikey:AK,Authorization:'Bearer '+AK,Accept:'application/json'}})
-   .then(function(r){return r.ok?r.json():[];})
-   .then(function(rows){
-     var bd={},tot={total:0,n20:0,n1:0};
-     rows.forEach(function(row){
-       var d=row.session_date; if(!d) return;
-       if(!bd[d]) bd[d]={total:0,n20:0,n1:0};
-       bd[d].total++; tot.total++;
-       if(row.dice_notation&&/^1d20/.test(row.dice_notation)){
-         var v=row.individual_values;
-         if(typeof v==='string'){try{v=JSON.parse(v);}catch(e){}}
-         if(Array.isArray(v)&&v.length){
-           if(v[0]===20){bd[d].n20++;tot.n20++;}
-           if(v[0]===1){bd[d].n1++;tot.n1++;}
-         }
-       }
+  var bd={},tot={total:0,n20:0,n1:0};
+  function absorb(rows){
+    rows.forEach(function(row){
+      var d=row.session_date; if(!d) return;
+      if(!bd[d]) bd[d]={total:0,n20:0,n1:0};
+      bd[d].total++; tot.total++;
+      if(!row.dice_notation||!/^\dd20/.test(row.dice_notation)) return;
+      var v=row.individual_values;
+      if(typeof v==='string'){try{v=JSON.parse(v);}catch(e){}}
+      if(!Array.isArray(v)||!v.length) return;
+      /* A 20 on any die of an advantage pair is still a crit; a "nat 1" only
+         counts when every die came up 1. Single-die rolls reduce to v[0]. */
+      var hi=Math.max.apply(null,v), allOne=v.every(function(x){return x===1;});
+      if(hi===20){bd[d].n20++;tot.n20++;}
+      if(allOne){bd[d].n1++;tot.n1++;}
+    });
+  }
+  function page(offset,guard){
+    if(guard>MAX_PAGES) return {bd:bd,tot:tot};
+    return fetch(SB+'/rest/v1/ashfall_session_rolls?select=session_date,dice_notation,individual_values&order=id.asc&limit='+PAGE+'&offset='+offset,
+      {headers:{apikey:AK,Authorization:'Bearer '+AK,Accept:'application/json'}})
+     .then(function(r){return r.ok?r.json():[];})
+     .then(function(rows){
+       absorb(rows);
+       if(rows.length<PAGE) return {bd:bd,tot:tot};
+       return page(offset+PAGE,guard+1);
      });
-     return {bd:bd,tot:tot};
-   }).catch(function(){return {bd:{},tot:{total:0,n20:0,n1:0}};});
+  }
+  return page(0,0).catch(function(){return {bd:bd,tot:tot};});
 }
 
 function fetchMd(url){return fetch(url).then(function(r){return r.ok?r.text():null;}).catch(function(){return null;});}
@@ -435,6 +456,14 @@ function init(){
   if(ARC.length>10){h+=eraHeader('light','The Record Continues');h+=ARC.slice(10).map(card).join('');}
   tl.innerHTML=h;
 
+  /* session count — whole sessions only, so the 04.5 lost session isn't counted
+     as one. Derived from the merged registry so it can never go stale again. */
+  var chronicled=ARC.filter(function(s){return String(s.n).indexOf('.')<0;}).length;
+  var sc=document.getElementById('sv-sessions');
+  if(sc){sc.textContent=chronicled;sc.className='v';}
+  var sub=document.getElementById('chron-sub');
+  if(sub) sub.textContent=chronicled+' sessions into a sunless Britain — the boot camp lost to ash, the Sun Shard dragged back into the dark. Every roll the record kept.';
+
   /* stats */
   rollStats().then(function(R){
     document.getElementById('sv-rolls').textContent=R.tot.total||'\u2014';document.getElementById('sv-rolls').className='v';
@@ -443,7 +472,7 @@ function init(){
     var bc=R.bd['2025-11-12'];
     if(bc) document.getElementById('bootmeta').innerHTML=bc.total+' rolls survive &nbsp;&middot;&nbsp; Unchronicled';
     ARC.forEach(function(s){
-      var st=R.bd[s.d]||{total:0,n20:0,n1:0};
+      var st=R.bd[ROLLDATE[s.n]||s.d]||{total:0,n20:0,n1:0};
       var pt=document.getElementById('pt'+s.id),p20=document.getElementById('p20'+s.id),p1=document.getElementById('p1'+s.id);
       if(pt){pt.textContent=st.total+' rolls';pt.className='ap';}
       if(p20){p20.textContent='nat\u202f20 \u00d7\u202f'+st.n20;p20.className='ap up';}
@@ -454,15 +483,34 @@ function init(){
   /* quotes (single fetch) */
   var quoteMaps={};function quotesFor(s){var file=(s.trackers&&s.trackers.quotes)||QB.slice(VR.length+1);if(!quoteMaps[file])quoteMaps[file]=fetchMd(VR+'/'+file).then(parseQuotes);return quoteMaps[file];}
 
-  /* per-session summary + quote */
-  ARC.forEach(function(s){
-    fetchMd(VR+'/'+s.f).then(function(md){
+  /* per-session summary + quote. The note fetch doubles as the source for
+     "Levels Climbed" — every session note carries a `party-level:` front-matter
+     key, in forms like "4 → 5", "7→8" or "12", so pull every integer out of it
+     and take the span. Nothing about the level range is hardcoded. */
+  var levels=[];
+  var noteJobs=ARC.map(function(s){
+    return fetchMd(VR+'/'+s.f).then(function(md){
       var sel=document.getElementById('as'+s.id);
       if(sel){
         if(md){sel.textContent=summary(md);sel.className='asum';}
         else{sel.textContent='Session notes on file.';sel.className='asum';}
       }
+      if(!md) return;
+      var m=/^party[-_]level:\s*(.+)$/mi.exec(md);
+      if(!m) return;
+      var nums=m[1].match(/\d+/g);
+      if(nums) nums.forEach(function(x){levels.push(parseInt(x,10));});
     });
+  });
+  Promise.all(noteJobs).then(function(){
+    var el=document.getElementById('sv-levels');
+    if(!el||!levels.length) return;
+    var lo=Math.min.apply(null,levels),hi=Math.max.apply(null,levels);
+    el.innerHTML=lo+' → '+hi;
+    el.className='v';
+  });
+
+  ARC.forEach(function(s){
     quotesFor(s).then(function(map){
       var key=String(parseFloat(s.n)); // '04.5'->'4.5', '01'->'1'
       var q=pickQuote(map[key]);
