@@ -132,9 +132,4 @@
 - **Next:** Unchanged. See the block above this log.
 - **Watch out:** Log entries must now carry a tool label (`Claude Code` / `Claude desktop` / `Codex` / `ChatGPT`). Do not restructure this file; the dashboard parses it.
 
-### 2026-07-16 · Claude Code
-- **Changed:** Wired SITL Session 19 "We Are Split in Two" (2026-07-05) into `sky-is-the-limit/session.html` (ARC entry, note fetched from sitl_vault main — URL verified 200) and `sky-is-the-limit/archive.html` (ARC card with 4 event beats + session count 18→19). No `rec:` field, matching S16–18 (recordings not yet on R2 — see DO NEXT). No new map waypoint; the party is still in Sloobludop (wp set at S18). Both ARC arrays syntax-validated (19 contiguous entries).
-- **Commit:** `SITL: wire Session 19 (We Are Split in Two) into archive + session reader`
-- **Next:** DO NEXT items 1–2 above (R2 recording uploads; S19 Supabase roll registration in the vault pipeline).
-
-> Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-08.md` - everything before 2026-07-16 00:00 ET.
+> Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-07.md`, `handoff-archive/2026-08.md` - everything before 2026-07-26 11:44 ET.
