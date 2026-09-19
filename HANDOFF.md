@@ -21,6 +21,9 @@
 - [ ] 🔵 **The other three campaign landing pages are still fully hardcoded** — `ashfall-britannia`, `pacts-and-power` and `where-the-flowers-forget` `index.html` all carry static session/roll counts. Same fix as `sky-is-the-limit/index.html` if wanted.
 - [ ] Upload SITL S16–19 recordings (`052426 pt2`, `060726`, `061426`, `070526` from `Session_Sources/Recordings/`) to the R2 `recordings` bucket → `Recordings/sitl/`
 - [ ] Add `rec:` fields to ARC entries 16–19 in `sky-is-the-limit/session.html` once those recordings are uploaded
+- [ ] 🔵 **Confirm what `TOOLS.md`'s `/rc-brand` skill reference actually maps to.** The account-level brand skill used in Claude sessions is named `rectrix-caedere`; unconfirmed whether `/rc-brand` is the same skill under a different label or a second one that could silently drift from it.
+- [ ] 🔵 **Confirm which serif font is actually rendering on session-reader quote/italic text.** Old chat history has Taylor swapping it from EB Garamond to Lora for dark-background readability; `tokens.css`'s `--f-serif` still lists EB Garamond. Either a local override never made it into `tokens.css`, or the swap didn't survive consolidation — needs a live visual check.
+- [ ] 🔵 **Decide and standardize the Ashfall spelling.** `ddb_campaigns.sheet_name` and the project title use "Brittania" (two T's); the folder and every log entry above use "Britannia" (one T). Flagged as an open decision at least twice in outside reference material, never made.
 
 ## Context
 
@@ -30,6 +33,13 @@
 
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
+
+### 2026-09-19 · Claude (chat) — reference-doc consolidation + project memory update
+
+- **Changed:** Cross-checked three independently-compiled "RC site reference" docs (from separate campaign chats, all compiled 2026-09-19) directly against this file, `TOOLS.md`, and the repo tree. Confirmed the working Supabase MCP connector is `supabase-cutter` — some Claude account-level memory had drifted to a stale `supabase-rectrix`, now corrected. Filed the durable architecture, deploy, and data-rule facts into two new project memory files (`rectrix-caedere.md`, `rectrix-caedere-site.md`) so future campaign-chat sessions don't independently re-derive this doc a fourth time.
+- **Commit:** (this commit)
+- **Next:** Added three Next Steps items below (skill-naming ambiguity, `--f-serif` check, Ashfall spelling decision) — none of these are new problems, just previously untracked in this file.
+- **Watch out:** This entry made no code change and re-verified nothing live — the facts absorbed are only as fresh as the source docs' own 2026-09-19 compile date. One thing was confirmed empirically: GitHub MCP write access to this repo works fine from claude.ai chat (this push), contradicting a stale note in one source doc claiming it was read-only (403 on PR creation) and not cloned locally.
 
 ### 2026-09-15 09:30 ET · Claude Code (Ashfall archive: header + roll counts fixed)
 
@@ -59,7 +69,7 @@
 - **Housekeeping:** trimmed the log to 15 and archived the oldest entry. It was first filed into a new `handoff-archive/2026-07.md`, which was wrong — the entry is dated **2026-06-25**, so it was moved into the existing `2026-06.md` and the stray July file deleted (`8d5cdc5`). The archive marker at the foot of this file stays accurate.
 - **Verification:** ✓ Live on S22 **and** S20: **0 leaked bold markers, 0 leaked wikilinks**, no empty panels. ✓ 6 party chips (was 1 malformed), 17 NPCs, 20 quests, 68 roll rows, all 6 jump links resolve. ✓ Reference grid reflows to 3 even 388px columns. ✓ Contrast **6.24:1** body / **14.61:1** quotes against the ink ground, both over 4.5:1. ✓ `prefers-reduced-motion` disables the entrance animation.
 - **Friction:** `gen-fail` — the `zesc`→`zinl` swap left an **unbalanced paren**, which is a parse error for the whole inline script, so the page hung on "Loading…" until I read the console. Worked once `node --check` on the extracted `<script>` block became part of the loop. 📌 **Never push an edit to this file without extracting the script and running `node --check` first.**
-- **Friction:** `gen-fail` — repeated failed string replacements because **this file stores unicode as literal backslash-u escape text** (`“`, `’`, `·`), not as characters, so pasting the real glyph never matches. Worked by targeting the line and swapping the function name instead. 📌 **Match on ASCII-only substrings in `session.html`, or operate line-wise.**
+- **Friction:** `gen-fail` — repeated failed string replacements because **this file stores unicode as literal backslash-u escape text** (`"`, `'`, `·`), not as characters, so pasting the real glyph never matches. Worked by targeting the line and swapping the function name instead. 📌 **Match on ASCII-only substrings in `session.html`, or operate line-wise.**
 - **Friction:** `misread` — I reported "Quests renders empty" in the audit. It was **collapsed by default**, not broken. Corrected before any code changed; the section is now open and always rendered.
 - **Next:** Backdating S01–S19 needs the parser made tolerant of the older heading shapes (S13 at H2, S17 with no `Related`, "Locations" vs "Locations Visited") — the layout itself is already shape-agnostic.
 - **Watch out:** ⚠️ **`position:sticky` breaks under `.wrap`** because its entrance animation leaves a `transform`, which makes it the containing block. The transform is now cleared on `animationend` with a 1.4s timeout fallback; **do not re-add a persistent transform to `.wrap`**. ⚠️ **Screenshots of this page are unreliable** — the capture scales differently from the real viewport (`innerWidth` reported 2071 against a 1554px capture), which made a working sticky nav look broken. Verify layout with `getBoundingClientRect` and `elementFromPoint`, not screenshots. ⚠️ The reference tier still lets one long list set its grid row height; NPCs/Loot/Quotes/Profanity are capped at 430px with internal scroll as the mitigation, not a true masonry.
@@ -79,13 +89,13 @@
 - **Watch out:** 🛑 **Fixed a pre-existing bug in `archive.html`'s `tallies()` that publishing S20–S22 made visible.** It requested `&limit=5000`, but **PostgREST caps a response at 1000 rows** and `sitl_session_rolls` now holds **1,420**. The page only ever saw the oldest 1000 rolls, so **every session from S18 on displayed "no rolls synced"** and the header totals were computed from a truncated set. Paginated with `Range`; totals went **948 → 1,330 rolls, 37 → 51 nat 20s, 40 → 47 nat 1s**. ⭐ This is the same cap the 17:45 Codex entry hit on the Ashfall dashboard — two independent finds on the same day. ⚠️ **`pacts-and-power/archive.html` still has the identical `&limit=6000` pattern and was not audited.** Check it and `dashboard.html` before trusting either one's totals. ⚠️ `where-the-flowers-forget` and the other campaigns still use hardcoded `ARC` only; the vault-index pattern is now live on `ashfall-britannia` and `sky-is-the-limit`.
 
 ### 2026-08-29 17:45 ET · Codex
-- **Changed:** Ashfall’s public dashboard now refreshes its roll totals, sessions, natural 20/1 counts, session chart, roll/action breakdowns, and character table from the approved public roll source plus the vault’s public session index. It paginates beyond 1,000 rows and shows unavailable values if either source fails.
+- **Changed:** Ashfall's public dashboard now refreshes its roll totals, sessions, natural 20/1 counts, session chart, roll/action breakdowns, and character table from the approved public roll source plus the vault's public session index. It paginates beyond 1,000 rows and shows unavailable values if either source fails.
 - **Commit:** `f7def18`
 - **Next:** Verify the deployed Ashfall dashboard reflects live roll analytics.
 - **Watch out:** This deliberately exposes the approved analytics fields publicly; the raw session-note workflow remains gated by the vault index validator.
 
 ### 2026-08-29 17:38 ET · Codex
-- **Changed:** Ashfall’s archive and session reader now load new validated sessions from the vault’s public session index. This removes the two per-session Rectrix registry edits and selects the correct tracker range for each session.
+- **Changed:** Ashfall's archive and session reader now load new validated sessions from the vault's public session index. This removes the two per-session Rectrix registry edits and selects the correct tracker range for each session.
 - **Commit:** `ae36d89`
 - **Next:** Wire the Ashfall dashboard to its approved public data source.
 - **Watch out:** The index is live only after the ashfall vault pushes `00-Campaign-Hub/Public Session Index.json`; legacy sessions 01–09 remain in the curated fallback registry.
