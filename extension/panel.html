@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="color-scheme" content="dark" />
+  <title>DDB Roll Sync</title>
+  <style>
+    :root {
+      --navy-1: #111A24;   /* Deep Blue-Black — main surface */
+      --navy-2: #162230;   /* Smoked Navy — panels, rows, inputs */
+      --gold-base: #8C5D3F;      /* Aged Copper */
+      --gold-highlight: #DA9565; /* Moonlit Apricot */
+      --gold-shadow: #68442F;    /* Burnished Copper */
+      --sage: #56644C;     /* positive / crit */
+      --coral: #B7634D;    /* negative / fumble / error */
+      --cream: #F4EBDD;    /* Ritual Cream — text */
+      --text-1: var(--cream);
+      --text-2: rgba(244, 235, 221, 0.55);
+      --text-3: rgba(244, 235, 221, 0.38);
+      --warn: #D9A054;
+      --border: rgba(140, 93, 63, 0.35);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+
+    body {
+      font-family: 'Work Sans', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--navy-1);
+      color: var(--text-1);
+      padding: 16px;
+      min-width: 320px;
+    }
+
+    h1 {
+      font-family: 'Cinzel Decorative', Georgia, 'Times New Roman', serif;
+      font-size: 16px;
+      color: var(--gold-highlight);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    h2.section-head {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gold-highlight);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin: 20px 0 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h2.section-head:first-of-type { margin-top: 0; }
+
+    h2.section-head.collapsible {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      border-radius: 4px;
+    }
+
+    h2.section-head.collapsible:focus-visible {
+      outline: 2px solid var(--gold-highlight);
+      outline-offset: 2px;
+    }
+
+    .chevron {
+      font-size: 10px;
+      color: var(--text-2);
+      transition: transform 0.15s;
+    }
+
+    .chevron.collapsed { transform: rotate(-90deg); }
+
+    #siphon-body.collapsed { display: none; }
+
+    .subtitle {
+      font-size: 11px;
+      color: var(--text-2);
+      margin-bottom: 14px;
+    }
+
+    .token-status {
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      background: var(--navy-2);
+      border: 1px solid var(--border);
+    }
+
+    .token-status.ok    { border-color: var(--sage); color: #8CA37C; }
+    .token-status.warn  { border-color: var(--warn); color: var(--warn); }
+    .token-status.error { border-color: var(--coral); color: var(--coral); }
+
+    .campaigns {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .campaign-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--navy-2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    .campaign-row .name { flex: 1; }
+
+    .campaign-row .badge {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      margin-left: 8px;
+    }
+
+    .badge.active { background: rgba(86, 100, 76, 0.25); color: #9DB08A; border: 1px solid var(--sage); }
+    .badge.paused  { background: rgba(217, 160, 84, 0.15); color: var(--warn); border: 1px solid var(--warn); }
+
+    .campaign-row .sync-status {
+      font-size: 10px;
+      color: var(--text-2);
+      margin-left: 8px;
+      min-width: 60px;
+      text-align: right;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    button {
+      padding: 9px 0;
+      border: none;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: opacity 0.15s;
+      min-height: 36px;
+    }
+
+    button:disabled { opacity: 0.4; cursor: default; }
+    button:focus-visible {
+      outline: 2px solid var(--gold-highlight);
+      outline-offset: 2px;
+    }
+
+    #btn-sync-all { flex: 1; background: var(--gold-highlight); color: var(--navy-1); }
+    #btn-sync-all:hover:not(:disabled) { opacity: 0.85; }
+
+    #btn-snapshot { flex: 0 0 130px; background: #6a8caf; color: var(--navy-1); }
+    #btn-snapshot:hover:not(:disabled) { opacity: 0.85; }
+
+    #btn-clear-log { background: var(--navy-2); color: var(--text-2); border: 1px solid var(--border); flex: 0 0 80px; }
+
+    #log {
+      background: #0A0F14;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 8px;
+      font-family: 'Cascadia Code', Consolas, monospace;
+      font-size: 11px;
+      height: 130px;
+      overflow-y: auto;
+      line-height: 1.6;
+      margin-bottom: 4px;
+    }
+
+    #log .info  { color: var(--text-2); }
+    #log .ok    { color: #9DB08A; }
+    #log .warn  { color: var(--warn); }
+    #log .error { color: var(--coral); }
+    #log .head  { color: var(--gold-highlight); }
+
+    /* ─── Marginalia ─────────────────────────────────────────── */
+
+    label.field-label {
+      display: block;
+      font-size: 10px;
+      color: var(--text-2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .field-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .field-row > div { flex: 1; }
+
+    select, input[type="text"], textarea {
+      width: 100%;
+      background: var(--navy-2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-1);
+      font-size: 12px;
+      font-family: inherit;
+      padding: 7px 8px;
+    }
+
+    select:focus-visible, input:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--gold-highlight);
+      outline-offset: 1px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 54px;
+      margin-bottom: 10px;
+    }
+
+    #note-type-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .type-tab {
+      --tab-color: var(--gold-highlight);
+      background: var(--navy-2);
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      font-size: 11px;
+      font-weight: normal;
+      padding: 6px 10px;
+      border-radius: 12px;
+      min-height: 30px;
+    }
+
+    .type-tab:focus-visible {
+      outline: 2px solid var(--gold-highlight);
+      outline-offset: 2px;
+    }
+
+    .type-tab.active {
+      border-color: var(--tab-color);
+      color: var(--tab-color);
+      background: rgba(218, 149, 101, 0.08);
+    }
+
+    .field-hidden { display: none !important; }
+
+    #resolved-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-2);
+      margin-bottom: 10px;
+    }
+
+    #btn-add-note {
+      width: 100%;
+      background: var(--gold-highlight);
+      color: var(--navy-1);
+      margin-bottom: 16px;
+    }
+    #btn-add-note:hover { opacity: 0.85; }
+
+    #notes-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+
+    .note-row {
+      background: var(--navy-2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold-highlight);
+      border-radius: 4px;
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+
+    .note-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .note-type { font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+    .note-who { font-size: 10px; color: var(--text-2); }
+
+    .note-resolved {
+      font-size: 10px;
+      margin-left: auto;
+      padding: 1px 6px;
+      border-radius: 3px;
+    }
+    .note-resolved.yes { color: #9DB08A; border: 1px solid var(--sage); }
+    .note-resolved.no  { color: var(--warn); border: 1px solid var(--warn); }
+
+    .note-del {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: var(--text-2);
+      font-size: 15px;
+      padding: 4px 6px;
+      min-height: auto;
+      cursor: pointer;
+    }
+    .note-del:hover { color: var(--coral); }
+    .note-del:focus-visible {
+      outline: 2px solid var(--gold-highlight);
+      outline-offset: 1px;
+    }
+
+    .note-body {
+      color: var(--text-1);
+      line-height: 1.5;
+      word-wrap: break-word;
+    }
+
+    .note-title {
+      font-weight: bold;
+      color: var(--text-1);
+      font-size: 12.5px;
+      margin-bottom: 2px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎲 DDB Roll Sync</h1>
+  <p class="subtitle">Rolls + session notes → Supabase</p>
+
+  <h2 class="section-head collapsible" id="siphon-header" role="button" tabindex="0" aria-expanded="true" aria-controls="siphon-body">
+    <span>⚡ The Siphon</span>
+    <span class="chevron" id="siphon-chevron">▾</span>
+  </h2>
+
+  <div id="siphon-body">
+    <div id="token-status" class="token-status warn">
+      ⏳ No token captured yet — browse any DDB page first.
+    </div>
+
+    <div class="campaigns" id="campaign-list"><!-- populated by panel.js --></div>
+
+    <div class="buttons">
+      <button id="btn-sync-all" disabled>⚡ Sync All Campaigns</button>
+      <button id="btn-snapshot">📸 Snapshot Characters</button>
+      <button id="btn-clear-log">Clear</button>
+    </div>
+
+    <div id="log"><span class="info">Ready.</span></div>
+  </div>
+
+  <h2 class="section-head">🖋 Marginalia</h2>
+
+  <div class="field-row">
+    <div>
+      <label class="field-label" for="note-campaign">Campaign</label>
+      <select id="note-campaign"><!-- populated by panel.js --></select>
+    </div>
+    <div>
+      <label class="field-label" for="note-session">Session</label>
+      <input type="text" id="note-session" placeholder="e.g. 88" />
+    </div>
+  </div>
+
+  <div id="note-type-tabs"><!-- populated by panel.js --></div>
+
+  <div class="field-row field-hidden" id="title-row">
+    <div>
+      <label class="field-label" id="note-title-label" for="note-title">Name</label>
+      <input type="text" id="note-title" />
+    </div>
+    <div id="quantity-wrap" class="field-hidden" style="flex: 0 0 70px;">
+      <label class="field-label" for="note-quantity">Qty</label>
+      <input type="text" id="note-quantity" inputmode="numeric" placeholder="1" />
+    </div>
+  </div>
+
+  <div class="field-row field-hidden" id="relationship-row">
+    <div>
+      <label class="field-label" for="note-relationship">Relationship</label>
+      <select id="note-relationship">
+        <option value="">—</option>
+        <option value="Ally">Ally</option>
+        <option value="Neutral">Neutral</option>
+        <option value="Hostile">Hostile</option>
+        <option value="Unknown">Unknown</option>
+      </select>
+    </div>
+  </div>
+
+  <label class="field-label" id="note-content-label" for="note-content">What happened</label>
+  <textarea id="note-content" placeholder="What happened…"></textarea>
+
+  <div class="field-row field-hidden" id="who-row" style="margin-bottom: 6px;">
+    <div>
+      <label class="field-label" id="note-who-label" for="note-who">Who</label>
+      <input type="text" id="note-who" list="who-suggestions" placeholder="Character or NPC" />
+      <datalist id="who-suggestions"></datalist>
+    </div>
+  </div>
+
+  <div id="resolved-row" class="field-hidden">
+    <input type="checkbox" id="note-resolved" />
+    <label for="note-resolved">Resolved</label>
+  </div>
+
+  <button id="btn-add-note">📝 Add Note</button>
+
+  <div id="notes-feed"><span class="info">No notes yet this sitting.</span></div>
+
+  <script src="panel.js"></script>
+</body>
+</html>
