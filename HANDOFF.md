@@ -15,6 +15,7 @@
 
 ## Next Steps
 
+- [ ] 🔵 **DM Dossier vault (planned 2026-09-27, not built).** A private, per-campaign DM login on RC that serves Taylor's Dossier for that campaign; the party and public see nothing Dossier-related. Access: **Taylor = all · Addison = SITL · Taylor (DM) = Ashfall · Adam = WTFF.** Build: Supabase Auth with **public sign-ups OFF** (invite-only), a `dm_access` table (user_id, campaign_id) with **real** RLS, a private Storage bucket with one folder per campaign, and a login page that hands out short-lived signed URLs. Groundwork can be built now against a placeholder file; real Dossier files and DM invites wait until the Dossier ships. Full plan and guardrails in the 2026-09-27 log entry.
 - [ ] 🔵 **Consider dropping `ddb_character_snapshots`.** Confirmed stale (no writes since 2026-08-16) while closing out the `session_notes` RLS item — `panel.js` (the `ddb-roll-sync` extension) writes to the unprefixed `character_snapshots` table instead (25 rows, most recent 2026-09-17, and now the one with RLS applied). `ddb_character_snapshots` matches the repo's `ddb_` naming convention but isn't the live one. Not dropped yet — confirm nothing else reads from it first.
 - [ ] 🔴 **Fix `session_date` for S13 in `ashfall_session_rolls`, then delete its `ROLLDATE` entry.** S13's 63 rolls are filed under **2026-08-03** against a session the vault dates **2026-08-02**, so it bucketed to zero even after the paging fix. `archive.html` now carries a documented **`ROLLDATE` override map** as a workaround — **the data is what is misdated, not the notes.** The map also lists S01/S02/S04, which have the same one-day skew but resolve today only because the public index publishes **S10+ only**, so their hardcoded ARC dates are never overwritten by the merge. ⚠️ **If the generator ever starts publishing S01–S09, that safety net is what keeps them working.**
 - [ ] 🔴 **Still do NOT enable `sessionRollsOnly` for Ashfall.** The date skew above is now *worked around* on the archive page but **not fixed at the source**, and the second problem is untouched: **~400 rolls exist on dates the vault has no session record for** (e.g. `2025-11-08`, `2026-02-25`, `2026-04-15`, `2026-06-04`, `2026-06-08`, `2026-06-29`, `2026-09-13`). Filtering would silently drop them.
@@ -36,6 +37,13 @@
 
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
+
+### 2026-09-27 13:07 ET · Claude (chat) — DM Dossier vault planned (no code)
+
+- **Changed:** Planning only. Decided to give each of Taylor's three DMs a private RC login that serves Taylor's **Dossier** (the Etsy character-sheet product, source in `aftermath-atlas/Dossier/`) for their campaign only: **Addison → SITL, Taylor (DM) → Ashfall, Adam → WTFF** (Adam is unlikely to use it, but gets access anyway). The whole Dossier is hidden from the party; no player version is planned. The DMs get it free and double as the Dossier's playtest group, chosen partly because their DM styles differ. Chose **plan A (private file vault)** over porting the Dossier into RC: finished Dossier files go in a private Supabase Storage bucket on this project, one folder per campaign, and RC serves them through short-lived signed URLs after login. Porting was rejected because it would mean maintaining two copies of the product, and DMs should playtest the exact file buyers get. Also rotated the 2026-07-26 entry into `handoff-archive/2026-07.md` to hold the log at 15.
+- **Commit:** `227146d` (archive rotation; the plan itself is docs-only, no code change)
+- **Next:** Claude Code prompt for the pieces that don't need the finished Dossier: invite-only Auth, `dm_access` table + RLS, private bucket + storage policies, login page, all tested with a placeholder file. Real Dossier files + DM invites come after the Dossier ships (SRD popup library, then the help/FAQ doc).
+- **Watch out:** 🛑 **This is the first real access control on this project.** Every existing table uses `roles = {public}` + `using (true)` (see the 2026-09-20 entry); the DM table and bucket must NOT copy that policy shape. Verify by actually querying as the anon key and as a wrong-campaign DM, not by reading the policy name. 🛑 **Public sign-ups must be OFF before the login page ships**, or anyone who finds it can create an account. 🛑 **Nothing Dossier-related is ever committed to this repo**; it is public (GitHub Pages), so only the login page and fetch code live here. ⚠️ SQL for this track runs through `supabase-cutter` or the rectrix project's SQL Editor (`vtrtyagltwdrbastpppl`), never the Aftermath Meridian connector. ⚠️ Ask Taylor (DM) and Adam before inviting them; Addison already leans on RC.
 
 ### 2026-09-20 · Claude (chat) — session_notes + character_snapshots RLS closed, second unrestricted table found
 
@@ -153,10 +161,4 @@
 - **Next:** Roll the corner-flourish + accent framing to the Quick Access cards and the Records & Reckonings tiles (the next identical-clone rows), then push live and eyeball on rectrixcaedere.com.
 - **Watch out:** Status / Next Steps blocks above are the standing R2-recordings work order (separate track), left untouched on purpose. Verified rendering clean via local server (`python -m http.server`), no console errors; not yet deployed to the live GitHub Pages site.
 
-### 2026-07-26 11:44 ET · Claude Code
-- **Changed:** Added the Handoff Contract to `AGENTS.md` so Codex follows it. Codex reads `AGENTS.md`, never `~/.claude/skills/`, so it had no handoff instructions at all before this.
-- **Commit:** `3a02611`
-- **Next:** Unchanged. See the block above this log.
-- **Watch out:** Log entries must now carry a tool label (`Claude Code` / `Claude desktop` / `Codex` / `ChatGPT`). Do not restructure this file; the dashboard parses it.
-
-> Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-07.md`, `handoff-archive/2026-08.md` - everything before 2026-07-26 11:44 ET.
+> Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-07.md`, `handoff-archive/2026-08.md` - everything before 2026-07-27 16:24 ET.
