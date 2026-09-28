@@ -168,8 +168,20 @@ footer a{color:var(--gold-pale);text-decoration:none}footer a:hover{color:var(--
 <script>
 var SB='https://vtrtyagltwdrbastpppl.supabase.co';
 var AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0cnR5YWdsdHdkcmJhc3RwcHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTY5NTAsImV4cCI6MjA5MTkzMjk1MH0.hnpwjHGIqiUN_VmmIkOAAFGGCKsyYgl7AO3FW5vDIeM';
-var VR='https://raw.githubusercontent.com/TheLittlestAskew/sitl_vault/main';
-var INDEX=VR+'/00-Campaign-Hub/Public%20Session%20Index.json';
+/* UTC on purpose: formatting an ET session date in local time rolls it back a day. */
+function fmtDateShort(iso){
+  var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso||''));
+  if(!m)return String(iso||'');
+  return new Date(Date.UTC(+m[1],+m[2]-1,+m[3]))
+    .toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
+}
+
+/* Session listing comes from Supabase, never from the vault repo. The vault is
+   private and its notes carry above-table material; `public_sessions` is the
+   curated boundary and only returns rows marked published. */
+var PUBSESS=SB+'/rest/v1/public_sessions'
+  +'?select=session_label,session_date,title,region,waypoint,arc,events,recording'
+  +'&published=eq.true&order=session_sort';
 
 var ARC=[
   {n:'01',d:'2025-10-12',lbl:'Oct 12, 2025',t:'Prisoners of the Underdark',r:'Velkynvelve',arc:'Prison cell \u2192 across the outpost',wp:'Velkynvelve',ev:["Jorlan secretly approaches Kit about freeing the prisoners.","Aeolus is cursed by a drow\u2019s Lolth gem \u2014 every spider now hunts him."]},
@@ -199,22 +211,22 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
    curated entries above; the index refreshes and extends from S20 on. If it can't be
    reached the page still renders whatever is hardcoded here. */
 function loadRegistry(){
-  return fetch(INDEX+'?t='+Date.now())
+  return fetch(PUBSESS,{headers:{apikey:AK,Authorization:'Bearer '+AK}})
     .then(function(r){return r.ok?r.json():null;})
     .catch(function(){return null;})
-    .then(function(data){
-      var sessions=data&&data.sessions;
-      if(!Array.isArray(sessions))return ARC;
-      sessions.forEach(function(x){
+    .then(function(rows){
+      if(!Array.isArray(rows))return ARC;
+      rows.forEach(function(x){
+        var n=String(x.session_label);
         var known=null;
-        for(var i=0;i<ARC.length;i++)if(String(ARC[i].n)===String(x.n))known=ARC[i];
+        for(var i=0;i<ARC.length;i++)if(String(ARC[i].n)===n)known=ARC[i];
         var entry=known||{};
-        entry.n=x.n;entry.d=x.d;entry.lbl=x.lbl_short||x.lbl;entry.t=x.t;
-        if(x.r)entry.r=x.r;
+        entry.n=n;entry.d=x.session_date;entry.lbl=fmtDateShort(x.session_date);entry.t=x.title;
+        if(x.region)entry.r=x.region;
         if(x.arc)entry.arc=x.arc;
-        if(x.wp)entry.wp=x.wp;
-        if(x.rec)entry.rec=x.rec; else delete entry.rec;
-        if(x.ev&&x.ev.length)entry.ev=x.ev;
+        if(x.waypoint)entry.wp=x.waypoint;
+        if(x.recording)entry.rec=x.recording; else delete entry.rec;
+        if(Array.isArray(x.events)&&x.events.length)entry.ev=x.events;
         if(!known)ARC.push(entry);
       });
       ARC.sort(function(a,b){return parseFloat(a.n)-parseFloat(b.n);});

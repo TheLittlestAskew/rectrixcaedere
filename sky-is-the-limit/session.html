@@ -298,8 +298,16 @@ td .up{color:var(--success);font-weight:500}td .dn{color:var(--coral);font-weigh
 <script>
 var SB='https://vtrtyagltwdrbastpppl.supabase.co';
 var AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0cnR5YWdsdHdkcmJhc3RwcHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTY5NTAsImV4cCI6MjA5MTkzMjk1MH0.hnpwjHGIqiUN_VmmIkOAAFGGCKsyYgl7AO3FW5vDIeM';
-var VR='https://raw.githubusercontent.com/TheLittlestAskew/sitl_vault/main';
-var INDEX=VR+'/00-Campaign-Hub/Public%20Session%20Index.json';
+/* Session content comes from Supabase, never from the vault repo.
+   This page used to fetch 01-Sessions/*.md straight out of a public sitl_vault
+   and render it, which meant the published page WAS the working vault note --
+   quote board, profanity record, archivist continuity flags and all. The vault
+   is private now and `public_sessions` is the curated boundary: a row only
+   reaches this page if someone marked it published, and the body is limited to
+   the in-character journal. Do NOT reintroduce a fallback to the raw note. */
+var PUBSESS=SB+'/rest/v1/public_sessions'
+  +'?select=session_label,session_date,title,region,waypoint,arc,events,recording,body_md'
+  +'&published=eq.true&order=session_sort';
 /* ===== Session recording player ===== */
 /* RECBASE = your bucket's Public Development URL (Settings tab) + the folder path.
    Files live at:  recordings (bucket) / Recordings / sitl / <filename>
@@ -372,25 +380,53 @@ var ARC=[
 /* Merge the vault's published session index into ARC. Sessions before S20 keep the
    curated entries above; the index refreshes and extends from S20 on. If it can't be
    reached the page still renders whatever is hardcoded here. */
+/* UTC on purpose: formatting an ET session date in local time rolls it back a
+   day, which would label the session wrong and query the wrong day's rolls. */
+function fmtDate(iso){
+  var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso||''));
+  if(!m)return String(iso||'');
+  return new Date(Date.UTC(+m[1],+m[2]-1,+m[3]))
+    .toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric',timeZone:'UTC'});
+}
+
 function loadRegistry(){
-  return fetch(INDEX+'?t='+Date.now())
+  return fetch(PUBSESS,{headers:{apikey:AK,Authorization:'Bearer '+AK}})
     .then(function(r){return r.ok?r.json():null;})
     .catch(function(){return null;})
-    .then(function(data){
-      var sessions=data&&data.sessions;
-      if(!Array.isArray(sessions))return ARC;
-      sessions.forEach(function(x){
+    .then(function(rows){
+      if(!Array.isArray(rows))return ARC;
+      rows.forEach(function(x){
+        var n=String(x.session_label);
         var known=null;
-        for(var i=0;i<ARC.length;i++)if(String(ARC[i].n)===String(x.n))known=ARC[i];
+        for(var i=0;i<ARC.length;i++)if(String(ARC[i].n)===n)known=ARC[i];
         var entry=known||{};
-        entry.n=x.n;entry.d=x.d;entry.lbl=x.lbl;entry.t=x.t;entry.f=x.f;
-        if(x.rec)entry.rec=x.rec; else delete entry.rec;
+        entry.n=n;entry.d=x.session_date;entry.lbl=fmtDate(x.session_date);entry.t=x.title;
+        entry.region=x.region||'';entry.waypoint=x.waypoint||'';entry.arc=x.arc||'';
+        entry.events=Array.isArray(x.events)?x.events:[];
+        entry.body=x.body_md||'';
+        if(x.recording)entry.rec=x.recording; else delete entry.rec;
         if(!known)ARC.push(entry);
       });
       ARC.sort(function(a,b){return parseFloat(a.n)-parseFloat(b.n);});
       return ARC;
     })
     .catch(function(){return ARC;});
+}
+
+/* Assemble the renderable document out of curated fields only.
+   renderZones() hides any zone whose heading is absent, so the zones that used
+   to be sliced out of the vault note (quote board, profanity, continuity flags,
+   encounters) simply do not appear -- which is the point, not a regression. */
+function buildNote(s){
+  var out='---\nparty_present:\n---\n\n';
+  var ev=s.events||[];
+  if(ev.length){
+    out+='## Narrative Summary\n\n'+ev.map(function(e){return '- '+e;}).join('\n')+'\n\n';
+  }else if(!s.body){
+    out+='## Narrative Summary\n\n*No published write-up for this session yet.*\n\n';
+  }
+  if(s.body)out+='## POV Overview\n\n'+s.body+'\n';
+  return out;
 }
 
 function getN(){var m=location.search.match(/[?&]n=([^&]+)/);return m?m[1]:null;}
@@ -630,9 +666,7 @@ async function init(){
   else nextHtml='<a class="disabled"><span class="lbl">Next &rarr;</span><span class="ttl">\u2014</span></a>';
   snav.innerHTML=prevHtml+nextHtml;
   try{
-    var resp=await fetch(VR+'/'+s.f+'?t='+Date.now());
-    if(!resp.ok) throw new Error('fetch failed');
-    var md=await resp.text();
+    var md=buildNote(s);
     renderZones(md, s);
     var tArr=tags(md);
     if(tArr.length){document.getElementById('stags').innerHTML=tArr.map(function(t){return '<span class="tag '+t.cls+'">'+t.lbl+'</span>';}).join('');}
