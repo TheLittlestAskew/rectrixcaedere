@@ -54,12 +54,23 @@ a{color:inherit}
 .acct .av{width:26px;height:26px;border-radius:50%;border:1px solid var(--border);display:grid;place-items:center;font-size:var(--text-sm);color:var(--gold)}
 
 /* ─────────── shell ─────────── */
+/* Three explicit rows so the reference rail starts level with the CENTRE PANEL
+   rather than with the page title. Row 1 is the title block + POV, row 2 is the
+   panel and the rail beside it, row 3 is the session pager. Aligning by row is
+   why this is a grid and not three independent sticky columns. */
 .shell{
-  display:grid;grid-template-columns:232px minmax(0,1fr) 300px;
+  display:grid;
+  grid-template-columns:232px minmax(0,1fr) 300px;
+  grid-template-rows:auto auto auto;
   gap:var(--space-6);align-items:start;
   max-width:1560px;margin:0 auto;padding:var(--space-6);
 }
-.rail,.refs{position:sticky;top:var(--space-4);display:grid;gap:var(--space-5)}
+.rail{grid-column:1;grid-row:1/4}
+.stage-head{grid-column:2;grid-row:1;display:grid;gap:var(--space-5);min-width:0}
+.panel{grid-column:2;grid-row:2;min-width:0}
+.snav{grid-column:2;grid-row:3}
+.refs{grid-column:3;grid-row:2/4}
+.rail,.refs{position:sticky;top:var(--space-4);align-self:start;display:grid;gap:var(--space-5)}
 
 /* ─────────── left rail ─────────── */
 .roster{display:flex;flex-wrap:wrap;gap:var(--space-2)}
@@ -107,9 +118,14 @@ a{color:inherit}
 .nav button:hover{color:var(--text-1);background:var(--gold-alpha-4)}
 .nav button[aria-current="true"]{background:var(--gold-alpha-12);color:var(--gold-pale);border-bottom-color:var(--gold-alpha-35)}
 .nav .n{font-family:var(--f-label);font-size:var(--text-2xs);opacity:.6;font-variant-numeric:tabular-nums}
+/* A section the note never recorded stays VISIBLE but inert, so the rail reads
+   the same on Session 01 as on Session 25 and the gap is legible rather than
+   silent. Omitting them made a thin early note look like a broken page. */
+.nav button[disabled]{cursor:default;color:var(--text-2);opacity:.38}
+.nav button[disabled]:hover{background:none;color:var(--text-2)}
+.nav button[disabled] .n{font-style:italic;opacity:.9}
 
 /* ─────────── centre stage ─────────── */
-.stage{display:grid;gap:var(--space-5);min-width:0}
 .eyebrow{font-family:var(--f-label);font-size:var(--text-xs);letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
 .stitle{margin:2px 0 0;font-family:var(--f-deco);font-weight:700;font-size:var(--text-3xl);line-height:1.12;color:var(--text-1)}
 .sdate{font-family:var(--f-serif);font-style:italic;color:var(--text-2);font-size:var(--text-lg)}
@@ -134,7 +150,11 @@ a{color:inherit}
 
 .panel{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-card);padding:var(--space-6) var(--space-7);min-height:200px}
 .panel h2{margin:0 0 var(--space-4);font-family:var(--f-display);font-size:var(--text-xl);letter-spacing:.06em;color:var(--gold-pale);font-weight:400}
-.prose{font-family:var(--f-serif);font-size:var(--text-lg);line-height:1.72;color:var(--text-1);max-width:72ch}
+.prose{font-family:var(--f-serif);font-size:var(--text-lg);line-height:1.72;color:var(--text-1)}
+/* Panel prose runs the full width of the centre column. The POV journal keeps a
+   reading measure because it is continuous first-person narrative; a summary
+   full of bolded proper nouns is scanned, not read line by line. */
+.panel .prose{max-width:none}
 .prose p{margin:0 0 1em}
 .prose strong{color:var(--gold-pale);font-weight:500}
 .prose em{color:var(--text-1)}
@@ -186,6 +206,9 @@ td strong{color:var(--text-1);font-weight:500}
 .kv dt{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-top:var(--space-3)}
 .kv dt:first-child{margin-top:0}
 .kv dd{margin:2px 0 0;color:var(--text-2)}
+/* Where sits under the title as a compact three-column strip, not a rail card. */
+.where{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:var(--space-2) var(--space-5);margin-top:var(--space-4);padding-top:var(--space-4);border-top:1px solid var(--gold-alpha-8)}
+.where dt{margin-top:0}
 .item{padding:var(--space-2) 0;border-bottom:1px solid var(--gold-alpha-8);font-family:var(--f-serif);font-size:var(--text-md);line-height:1.5}
 .item:last-child{border-bottom:0}
 .item .t{color:var(--text-1)}
@@ -222,12 +245,21 @@ footer a{color:var(--gold);text-decoration:none}
 
 /* ─────────── responsive ─────────── */
 @media (max-width:1180px){
-  .shell{grid-template-columns:200px minmax(0,1fr)}
-  .refs{grid-column:1/-1;position:static;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));display:grid}
+  /* Two columns: the reference rail drops below the pager and spreads out. The
+     explicit row assignments above must be cleared or the rail stays boxed into
+     a column that no longer exists. */
+  .shell{grid-template-columns:200px minmax(0,1fr);grid-template-rows:auto auto auto auto}
+  .rail{grid-column:1;grid-row:1/5}
+  .stage-head{grid-column:2;grid-row:1}
+  .panel{grid-column:2;grid-row:2}
+  .snav{grid-column:2;grid-row:3}
+  .refs{grid-column:2;grid-row:4;position:static;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
 }
 @media (max-width:860px){
   .shell{grid-template-columns:1fr;padding:var(--space-4)}
-  .rail{position:static}
+  .rail,.stage-head,.panel,.snav,.refs{grid-column:1}
+  .rail{grid-row:auto;position:static}
+  .stage-head,.panel,.snav,.refs{grid-row:auto}
   .topbar{grid-template-columns:1fr;justify-items:center;gap:var(--space-2);text-align:center}
   .topright{justify-self:center}
   .stitle{font-size:var(--text-2xl)}
@@ -283,15 +315,16 @@ footer a{color:var(--gold);text-decoration:none}
       <nav class="nav" id="nav" aria-label="Section"></nav>
     </aside>
 
-    <main class="stage">
+    <main class="stage-head">
       <div>
         <div class="eyebrow" id="eyebrow">Sky Is The Limit</div>
         <h1 class="stitle" id="stitle">Loading&hellip;</h1>
         <div class="sdate" id="sdate"></div>
         <div class="chips" id="chips"></div>
+        <div id="where"></div>
       </div>
 
-      <details class="pov" id="pov" hidden open>
+      <details class="pov" id="pov" open>
         <summary>
           <span class="lbl">Character POV</span>
           <span class="byline" id="byline"></span>
@@ -299,16 +332,16 @@ footer a{color:var(--gold);text-decoration:none}
         </summary>
         <div class="prose" id="povbody"></div>
       </details>
-
-      <section class="panel" id="panel" aria-live="polite">
-        <h2 id="panelh">&mdash;</h2>
-        <div id="panelbody"></div>
-      </section>
-
-      <nav class="snav" id="snav" aria-label="Adjacent sessions"></nav>
     </main>
 
+    <section class="panel" id="panel" aria-live="polite">
+      <h2 id="panelh">&mdash;</h2>
+      <div id="panelbody"></div>
+    </section>
+
     <aside class="refs" id="refs"></aside>
+
+    <nav class="snav" id="snav" aria-label="Adjacent sessions"></nav>
   </div>
   <div class="err" id="err" hidden></div>
 </div>
@@ -355,7 +388,11 @@ function fmtDate(iso){
 }
 function getN(){var m=location.search.match(/[?&]n=([^&]+)/);return m?decodeURIComponent(m[1]):null;}
 
-var PC={'Kit Aluri':'#B98A56','Binks Stonevein':'#7FA6A0','Ormic':'#7FA6A0','Aeolus':'#8B6BB5','Blarg':'#6E8E5A','Amanita de’Champignon':'#B56BA0',"Amanita de'Champignon":'#B56BA0','Darby Stonefeather':'#AF755A'};
+/* PC colours. Kit is green by Taylor's call (2026-09-29); it has to stay clear
+   of Blarg's olive, so Kit takes a cooler jade and Blarg keeps the warm olive.
+   Binks/Ormic was #7FA6A0, too dim against the card at this size, and brighter
+   also separates him from Kit now that both sit in the green-teal range. */
+var PC={'Kit Aluri':'#4FC58C','Binks Stonevein':'#78D6E0','Ormic':'#78D6E0','Aeolus':'#A084D8','Blarg':'#8FA85F','Amanita de’Champignon':'#D084BC',"Amanita de'Champignon":'#D084BC','Darby Stonefeather':'#D08A63'};
 var ROSTER=['Kit Aluri','Binks Stonevein','Aeolus','Blarg','Amanita de’Champignon','Darby Stonefeather'];
 var DISPO={'Ilvara':'enemy','Ilvara Mizzrym':'enemy','Shoor':'enemy','Shoor Vandree':'enemy','Jorlan':'enemy','Jorlan Duskryn':'enemy','Asha':'enemy','Black Pudding':'enemy','Gelatinous Cube':'enemy','Gray Ooze':'enemy','Wererat':'enemy','Lolth':'enemy','Topsy':'friendly','Turvy':'friendly','Stool':'friendly','Glabbagool':'friendly','Derendil':'friendly','Roxanne':'friendly','Roxy':'friendly','Clementine':'friendly','Eldeth':'friendly','Psilofyr':'friendly','Naos':'friendly','Echo':'friendly','Indigo':'friendly','Jimjar':'friendly','Hemeth':'friendly','Selûne':'friendly'};
 function dispo(n){return DISPO[n]||'neutral';}
@@ -534,13 +571,19 @@ var NAVSPEC=[
 /* Right rail: reference material that stays visible while the centre changes. */
 var REFSPEC=[['loot','Loot & Artifacts'],['npcs','NPCs & Companions'],['locations','Locations'],['profanity','Profanity Record']];
 
+/* Region / waypoint / arc belong with the title, not in the reference rail:
+   they describe the session, and keeping them out of the rail is what lets
+   Loot & Artifacts sit at the top of it, level with the centre panel. */
+function buildWhere(sess){
+  var where=[['Region',sess.region],['Waypoint',sess.waypoint],['Arc',sess.arc]].filter(function(x){return x[1];});
+  if(!where.length)return '';
+  return '<dl class="kv where">'+where.map(function(x){
+    return '<dt>'+esc(x[0])+'</dt><dd>'+inl(x[1])+'</dd>';
+  }).join('')+'</dl>';
+}
+
 function buildRefs(byKey,sess){
   var out='';
-  var where=[['Region',sess.region],['Waypoint',sess.waypoint],['Arc',sess.arc]].filter(function(x){return x[1];});
-  if(where.length){
-    out+='<details class="card" open><summary>Where<span class="caret" aria-hidden="true">&#9662;</span></summary><div class="body"><dl class="kv">'
-      +where.map(function(x){return '<dt>'+esc(x[0])+'</dt><dd>'+inl(x[1])+'</dd>';}).join('')+'</dl></div></details>';
-  }
   REFSPEC.forEach(function(spec,i){
     var p=byKey[spec[0]]; if(!p)return;
     var inner;
@@ -634,18 +677,35 @@ async function init(){
   buildRoster(byKey.roster);
   mountAudio(parseRec(s.recording));
 
+  el('where').innerHTML=buildWhere(s);
+
+  /* The POV card always renders. When a session has no cleared journal it says
+     so, rather than disappearing and leaving a hole where Session 25 has a card
+     -- only S21 onward have a body, and a silent gap read as a broken page. */
   if(s.body_md){
-    el('pov').hidden=false;
     el('byline').textContent='The Devil You Know';
     el('povbody').innerHTML=md(s.body_md);
+  }else{
+    el('pov').open=false;
+    el('byline').textContent='Not written for this session';
+    el('povbody').innerHTML='<p class="muted">No in-character journal has been cleared for publication here. '
+      +'The journal runs from <a href="'+SELF+'?n=21">Session 21</a> onward.</p>';
   }
 
-  var nav=NAVSPEC.filter(function(x){return x[0]==='rolllog'||byKey[x[0]];});
-  el('nav').innerHTML=nav.map(function(x,i){
-    var count='';
-    var p=byKey[x[0]];
-    if(p&&p.kind==='list')count='<span class="n">'+(p.items||[]).length+'</span>';
-    return '<button type="button" data-k="'+x[0]+'" aria-current="'+(i===0?'true':'false')+'">'+esc(x[1])+count+'</button>';
+  /* Every section is listed every time. Ones this note never recorded render
+     disabled rather than being dropped, so the rail is stable across sessions:
+     Session 01's note is 9.8 KB against Session 25's 174 KB, and silently
+     hiding ten entries made the early sessions look like a rendering failure. */
+  var nav=NAVSPEC.slice();
+  var first=null;
+  el('nav').innerHTML=nav.map(function(x){
+    var k=x[0],p=byKey[k],live=(k==='rolllog')||!!p;
+    if(live&&first===null)first=k;
+    var tag='';
+    if(p&&p.kind==='list')tag='<span class="n">'+(p.items||[]).length+'</span>';
+    else if(!live)tag='<span class="n">not recorded</span>';
+    return '<button type="button" data-k="'+k+'"'+(live?'':' disabled')
+      +' aria-current="false">'+esc(x[1])+tag+'</button>';
   }).join('');
 
   var logCache=null;
@@ -661,9 +721,9 @@ async function init(){
     }
   }
   el('nav').addEventListener('click',function(e){
-    var b=e.target.closest('button[data-k]'); if(b)show(b.dataset.k);
+    var b=e.target.closest('button[data-k]'); if(b&&!b.disabled)show(b.dataset.k);
   });
-  if(nav.length)show(nav[0][0]);
+  if(first)show(first);
 
   el('refs').innerHTML=buildRefs(byKey,s);
 
