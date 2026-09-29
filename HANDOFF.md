@@ -42,6 +42,18 @@
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
 
+### 2026-09-29 14:05 ET · Claude Code — first review pass on the rebuilt page
+
+- **Changed:** Taylor's review of the new `session.html`, all applied in `d4a9950`.
+  - **The shell is an explicit three-row grid**, so the reference rail begins level with the centre panel rather than with the page title. Region/waypoint/arc moved out of the rail and under the session title, which is what frees the rail's top slot for Loot & Artifacts.
+  - **Sections a note never recorded now render disabled and labelled *"not recorded"*** instead of being dropped from the nav. Same for the POV card, which explains its own absence.
+  - Panel prose fills the centre column; the POV journal keeps a reading measure, being continuous narrative rather than scanned summary.
+  - Kit is green (a cooler jade, to stay clear of Blarg's olive); Binks/Ormic brightened from `#7FA6A0`, which was too dim on the card.
+- **Commit:** `d4a9950`
+- **Verification:** ✓ Render test re-run: 307 panels, 0 empty, 0 leaking. ✓ Script parses. ✓ All five grid children carry an explicit `grid-column` **and** `grid-row`, so none auto-places into the wrong cell — that was the specific risk of moving to an explicit grid. 🛑 **Still zero pixels checked.** `chrome-devtools` was blocked by the locked profile on a second attempt.
+- **Next:** Unchanged — the browser pass is still owed, and it is now the only thing standing between this page and "done".
+- **Watch out:** 🛑 **Taylor's four "missing" sections were not a bug — she was on Session 01.** Its note has only `narrative`, `quests`, `encounters` of the seven in her mock, and no POV body. The data was complete and the nav filter was correct; the page was just silently hiding what the *source note* lacks. ⭐ **The lesson generalises: when a data-driven page looks broken, check which record is loaded before checking the code.** 📌 **No DDB resync is needed for the nat-20 fix** — `individual_values` always stored every die face, so only the reading rule was wrong. Measured on SITL: 1,178 d20 rolls, 105 of them advantage/disadvantage, 71 with a 20 on any die against 67 on the first die, so **4 nat 20s were invisible**. The nat-1 count will fall slightly, because a disadvantage roll of 1-then-14 was being counted as a nat 1 and is not one.
+
 ### 2026-09-29 13:20 ET · Claude Code — the session page is rebuilt around per-panel data, and the notes are back
 
 - **Changed:** `sky-is-the-limit/session.html` rebuilt to Taylor's new layout, reading the new `public_session_panels` table instead of a whole vault note. Left rail: party roster (dimmed when absent, click → `character.html`), recording player, section nav. Centre: title block with stat/tag chips, a collapsible Character POV card, and one panel at a time. Right rail: Where, Loot & Artifacts, NPCs, Locations, Profanity, Quotes, all collapsible. **Sections a session does not have are omitted from the nav** rather than rendered empty, so an early 7-panel note shows 7 entries and S25 shows 13.
