@@ -313,12 +313,16 @@ var PUBSESS=SB+'/rest/v1/public_sessions'
    Files live at:  recordings (bucket) / Recordings / sitl / <filename>
    so RECBASE ends with /Recordings/sitl/ and each rec is just the filename. */
 var RECBASE='https://pub-33596be843004e7282ae8a9069ae9b82.r2.dev/Recordings/sitl/';
-/* Per-session audio goes in the ARC entry as a `rec` field. Spaces are encoded automatically:
-     single file : rec:'010426 Sky Is The Limit Recording.mp3'
-     full URL    : rec:'https://host/clip.mp3'                     (used exactly as written)
-     multi-part  : rec:[{lbl:'Pt 1',url:'..._pt1.mp3'},{lbl:'Pt 2',url:'..._pt2.mp3'}]
-     lost part   : rec:[{lbl:'Pt 1',lost:true},{lbl:'Pt 2',url:'..._pt2.mp3'}]
-   No rec field -> the card hides itself. */
+/* Per-session audio comes from public_sessions.recording, parsed by parseRec().
+   It is NOT maintained here any more: the filenames used to be hardcoded in ARC
+   below, drifted out of sync with the bucket, and silently 404'd S14 and S15.
+   Objects are keyed by session number, written by the vault's
+   Workflows/scripts/r2_sync_recordings.mjs:
+     single file : "S14.mp3"
+     full URL    : "https://host/clip.mp3"                (used exactly as written)
+     multi-part  : [{"lbl":"Pt 1","url":"S25-pt1.mp3"},{"lbl":"Pt 2","url":"S25-pt2.mp3"}]
+     lost part   : [{"lbl":"Pt 1","lost":true},{"lbl":"Pt 2","url":"S16-pt2.mp3"}]
+   Null/absent -> the card hides itself. Spaces are encoded automatically. */
 var EL={};
 ['card','parts','bar','toggle','track','fill','knob','cur','dur','lost','el'].forEach(function(k){EL[k]=document.getElementById('z-audio-'+k);});
 function paFmt(t){if(!isFinite(t)||t<0)t=0;t=Math.floor(t);var h=Math.floor(t/3600),m=Math.floor((t%3600)/60),s=t%60;var ss=(s<10?'0':'')+s;return h?h+':'+(m<10?'0':'')+m+':'+ss:m+':'+ss;}
@@ -356,21 +360,21 @@ function zAudio(rec){
   loadPart(parts.indexOf(playable[0]));
 }
 var ARC=[
-  {n:'01',d:'2025-10-12',lbl:'October 12, 2025',f:'01-Sessions/Session%2001%20%E2%80%94%20Prisoners%20of%20the%20Underdark.md',t:'Prisoners of the Underdark',rec:'101225 Sky Is The Limit Recording.mp3'},
-  {n:'02',d:'2025-10-26',lbl:'October 26, 2025',f:'01-Sessions/Session%2002%20%E2%80%94%20Come%20Get%20Your%20Shit.md',t:'Come Get Your Shit',rec:'102625 Sky Is The Limit Recording.mp3'},
-  {n:'03',d:'2025-11-09',lbl:'November 9, 2025',f:'01-Sessions/Session%2003%20%E2%80%94%20Into%20the%20Dark.md',t:'Into the Dark',rec:'110925 Sky Is The Limit Recording.mp3'},
-  {n:'04',d:'2025-11-23',lbl:'November 23, 2025',f:'01-Sessions/Session%2004%20%E2%80%94%20Life%20Isn%27t%20Faer-zress.md',t:'Life Isn\u2019t Faer-zress',rec:'112325 Sky Is The Limit Recording.mp3'},
-  {n:'05',d:'2025-12-07',lbl:'December 7, 2025',f:'01-Sessions/Session%2005%20%E2%80%94%20Silvered.md',t:'Silvered',rec:'120725 Sky Is The Limit Recording.mp3'},
-  {n:'06',d:'2025-12-21',lbl:'December 21, 2025',f:'01-Sessions/Session%2006%20%E2%80%94%20The%20Long%20Way%20Down.md',t:'The Long Way Down',rec:'122125 Sky Is The Limit Recording.mp3'},
-  {n:'07',d:'2026-01-04',lbl:'January 4, 2026',f:'01-Sessions/Session%2007%20%E2%80%94%20Escape%20from%20the%20Oozing%20Temple.md',t:'Escape from the Oozing Temple',rec:'010426 Sky Is The Limit Recording.mp3'},
-  {n:'08',d:'2026-01-18',lbl:'January 18, 2026',f:'01-Sessions/Session%2008%20%E2%80%94%20The%20Whirlwind%20and%20the%20Depths.md',t:'The Whirlwind and the Depths',rec:'011826 Sky Is The Limit Recording.mp3'},
-  {n:'09',d:'2026-02-01',lbl:'February 1, 2026',f:'01-Sessions/Session%2009%20%E2%80%94%20%20Every%20Party%20Needs%20A%20Little%20Guy.md',t:'Adopt-a-Rothe',rec:'020126 Sky Is the Limit Recording.mp3'},
-  {n:'10',d:'2026-02-15',lbl:'February 15, 2026',f:'01-Sessions/Session%2010%20%E2%80%94%20021526_Echoes_in_the_Feydark.md',t:'Through the Fungal Gate',rec:'021526 Sky Is The Limit Recording.mp3'},
-  {n:'11',d:'2026-03-01',lbl:'March 1, 2026',f:'01-Sessions/Session%2011%20%E2%80%94%20Gifts_of_the_Carrion_King.md',t:'Gifts of the Carrion King',rec:'030126 Sky Is the Limit Recording.mp3'},
-  {n:'12',d:'2026-03-29',lbl:'March 29, 2026',f:'01-Sessions/Session%2012%20%E2%80%94%20Return%20to%20Velkynvelve.md',t:'Return to Velkynvelve',rec:'032926 Sky Is The Limit Recording.mp3'},
-  {n:'13',d:'2026-04-11',lbl:'April 11, 2026',f:'01-Sessions/Session%2013%20%E2%80%94%20Reckoning%20at%20Velkynvelve.md',t:'Reckoning at Velkynvelve',rec:'041126 Sky Is The Limit Recording.mp3'},
-  {n:'14',d:'2026-04-12',lbl:'April 12, 2026',f:'01-Sessions/Session%2014%20%E2%80%94%20Far%20From%20the%20Sun.md',t:'Far From the Sun',rec:'041226 Sky Is The Limit Recording.mp3'},
-  {n:'15',d:'2026-05-03',lbl:'May 3, 2026',f:'01-Sessions/Session%2015%20%E2%80%94%20The%20Long%20Road%20to%20Sloobludop.md',t:'The Long Road to Sloobludop',rec:'050326 Sky Is The Limit Recording.mp3'},
+  {n:'01',d:'2025-10-12',lbl:'October 12, 2025',f:'01-Sessions/Session%2001%20%E2%80%94%20Prisoners%20of%20the%20Underdark.md',t:'Prisoners of the Underdark'},
+  {n:'02',d:'2025-10-26',lbl:'October 26, 2025',f:'01-Sessions/Session%2002%20%E2%80%94%20Come%20Get%20Your%20Shit.md',t:'Come Get Your Shit'},
+  {n:'03',d:'2025-11-09',lbl:'November 9, 2025',f:'01-Sessions/Session%2003%20%E2%80%94%20Into%20the%20Dark.md',t:'Into the Dark'},
+  {n:'04',d:'2025-11-23',lbl:'November 23, 2025',f:'01-Sessions/Session%2004%20%E2%80%94%20Life%20Isn%27t%20Faer-zress.md',t:'Life Isn\u2019t Faer-zress'},
+  {n:'05',d:'2025-12-07',lbl:'December 7, 2025',f:'01-Sessions/Session%2005%20%E2%80%94%20Silvered.md',t:'Silvered'},
+  {n:'06',d:'2025-12-21',lbl:'December 21, 2025',f:'01-Sessions/Session%2006%20%E2%80%94%20The%20Long%20Way%20Down.md',t:'The Long Way Down'},
+  {n:'07',d:'2026-01-04',lbl:'January 4, 2026',f:'01-Sessions/Session%2007%20%E2%80%94%20Escape%20from%20the%20Oozing%20Temple.md',t:'Escape from the Oozing Temple'},
+  {n:'08',d:'2026-01-18',lbl:'January 18, 2026',f:'01-Sessions/Session%2008%20%E2%80%94%20The%20Whirlwind%20and%20the%20Depths.md',t:'The Whirlwind and the Depths'},
+  {n:'09',d:'2026-02-01',lbl:'February 1, 2026',f:'01-Sessions/Session%2009%20%E2%80%94%20%20Every%20Party%20Needs%20A%20Little%20Guy.md',t:'Adopt-a-Rothe'},
+  {n:'10',d:'2026-02-15',lbl:'February 15, 2026',f:'01-Sessions/Session%2010%20%E2%80%94%20021526_Echoes_in_the_Feydark.md',t:'Through the Fungal Gate'},
+  {n:'11',d:'2026-03-01',lbl:'March 1, 2026',f:'01-Sessions/Session%2011%20%E2%80%94%20Gifts_of_the_Carrion_King.md',t:'Gifts of the Carrion King'},
+  {n:'12',d:'2026-03-29',lbl:'March 29, 2026',f:'01-Sessions/Session%2012%20%E2%80%94%20Return%20to%20Velkynvelve.md',t:'Return to Velkynvelve'},
+  {n:'13',d:'2026-04-11',lbl:'April 11, 2026',f:'01-Sessions/Session%2013%20%E2%80%94%20Reckoning%20at%20Velkynvelve.md',t:'Reckoning at Velkynvelve'},
+  {n:'14',d:'2026-04-12',lbl:'April 12, 2026',f:'01-Sessions/Session%2014%20%E2%80%94%20Far%20From%20the%20Sun.md',t:'Far From the Sun'},
+  {n:'15',d:'2026-05-03',lbl:'May 3, 2026',f:'01-Sessions/Session%2015%20%E2%80%94%20The%20Long%20Road%20to%20Sloobludop.md',t:'The Long Road to Sloobludop'},
   {n:'16',d:'2026-05-24',lbl:'May 24, 2026',f:'01-Sessions/Session%2016%20%E2%80%94%20Zone%20of%20Truth.md',t:'Zone of Truth'},
   {n:'17',d:'2026-06-07',lbl:'June 7, 2026',f:'01-Sessions/Session%2017%20%E2%80%94%20The%20Big%20Fish%20Eat%20the%20Little%20Fish.md',t:'The Big Fish Eat the Little Fish'},
   {n:'18',d:'2026-06-14',lbl:'June 14, 2026',f:'01-Sessions/Session%2018%20%E2%80%94%20Trust%20the%20Whirlpool.md',t:'Trust the Whirlpool'},
@@ -389,6 +393,28 @@ function fmtDate(iso){
     .toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric',timeZone:'UTC'});
 }
 
+/* public_sessions.recording is TEXT holding one of two shapes, both keyed by
+   session number so no filename is maintained by hand any more:
+     "S14.mp3"                                   single-part
+     '[{"lbl":"Pt 1","url":"S25-pt1.mp3"}, ...]'  multi-part, or a part marked lost
+   zAudio() already accepts a string or an array, so this only has to turn the
+   stored JSON back into one. A malformed value yields null -- the player then
+   hides itself, and the reason is on the console rather than swallowed. */
+function parseRec(v){
+  if(!v)return null;
+  var s=String(v).trim();
+  if(s.charAt(0)!=='[')return s;
+  try{
+    var a=JSON.parse(s);
+    if(Array.isArray(a))return a;
+    console.warn('session: recording JSON is not an array, ignoring:',s);
+    return null;
+  }catch(e){
+    console.warn('session: recording is not valid JSON, ignoring:',s,e);
+    return null;
+  }
+}
+
 function loadRegistry(){
   return fetch(PUBSESS,{headers:{apikey:AK,Authorization:'Bearer '+AK}})
     .then(function(r){return r.ok?r.json():null;})
@@ -404,7 +430,7 @@ function loadRegistry(){
         entry.region=x.region||'';entry.waypoint=x.waypoint||'';entry.arc=x.arc||'';
         entry.events=Array.isArray(x.events)?x.events:[];
         entry.body=x.body_md||'';
-        if(x.recording)entry.rec=x.recording; else delete entry.rec;
+        entry.rec=parseRec(x.recording);
         if(!known)ARC.push(entry);
       });
       ARC.sort(function(a,b){return parseFloat(a.n)-parseFloat(b.n);});
