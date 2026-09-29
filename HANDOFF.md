@@ -170,16 +170,4 @@
 - **Next:** Verify the deployed Ashfall dashboard reflects live roll analytics.
 - **Watch out:** This deliberately exposes the approved analytics fields publicly; the raw session-note workflow remains gated by the vault index validator.
 
-### 2026-08-29 17:38 ET · Codex
-- **Changed:** Ashfall's archive and session reader now load new validated sessions from the vault's public session index. This removes the two per-session Rectrix registry edits and selects the correct tracker range for each session.
-- **Commit:** `ae36d89`
-- **Next:** Wire the Ashfall dashboard to its approved public data source.
-- **Watch out:** The index is live only after the ashfall vault pushes `00-Campaign-Hub/Public Session Index.json`; legacy sessions 01–09 remain in the curated fallback registry.
-
-### 2026-07-27 18:38 ET · Claude Code
-- **Changed:** Investigated the "raw-URL sweep" and CORRECTED the prior overclaim. Only ONE more fixable instance existed — `where-the-flowers-forget/archive.html:123` tarot-face pointed at the site repo's own asset via raw URL (fixed to `/assets/img/`). The other 7 `raw.githubusercontent` references are **intentional cross-repo fetches to the campaign vault repos** (`sitl_vault`, `pacts_power_vault`, `ashfall_vault`, `wtff_vault`) — the site's data architecture, NOT the WTFF bug. Left them alone.
-- **Commit:** `a9dc158`
-- **Next:** `tokens.css` consolidation (AUDIT.md §5 step 1) — route every page through `tokens.css`, deleting the hand-rolled `:root` blocks. Root-cause fix that collapses most of the audit.
-- **Watch out:** Do NOT convert the vault-repo raw URLs to local paths — those files live in separate repos, converting breaks them. If their raw.githubusercontent fragility ever needs solving, that's an architecture question (CDN/proxy/build-time bake), not a path swap. Weight decision recorded in AUDIT.md §0 + rc-brand skill.
-
-> Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-07.md`, `handoff-archive/2026-08.md` - everything before 2026-07-27 18:38 ET.
+> Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-07.md`, `handoff-archive/2026-08.md` - everything before 2026-08-29 17:45 ET.
