@@ -154,10 +154,4 @@
 - **Next:** `tokens.css` consolidation (AUDIT.md §5 step 1) — route every page through `tokens.css`, deleting the hand-rolled `:root` blocks. Root-cause fix that collapses most of the audit.
 - **Watch out:** Do NOT convert the vault-repo raw URLs to local paths — those files live in separate repos, converting breaks them. If their raw.githubusercontent fragility ever needs solving, that's an architecture question (CDN/proxy/build-time bake), not a path swap. Weight decision recorded in AUDIT.md §0 + rc-brand skill.
 
-### 2026-07-27 18:20 ET · Claude Code
-- **Changed:** Fixed all 4 P0/P1 bugs from the site audit. P0: un-swapped the two case-study files (`case-studies/index.html` = listing, `.../are-the-dice-fair/index.html` = article; verified the full click-through). P1: deleted orphaned `pacts-and-power/session-v2.html` + fixed its `session.html` SELF fallback. P1: WTFF landing art moved from `raw.githubusercontent.com` to `/assets/img/` (9 files confirmed local). P1: Ashfall archive jump-scare gated to once-ever via localStorage (on top of existing reduced-motion guard). Recorded Taylor's ratified weight rule (Cinzel Decorative 700 display-only, 600 banned elsewhere) in `AUDIT.md §0`.
-- **Commit:** `d53d637`
-- **Next:** (1) NEW finding — 8 more pages use the same fragile `raw.githubusercontent` image URLs (session readers, archives, character), not just WTFF; offer a site-wide sweep. (2) Reflect the ratified weight rule in the `rc-brand` skill's "Three Weights Only" section (skill file location TBD). (3) Then AUDIT.md §5 fix-order: route every page through `tokens.css`, then the 600/700 weight sweep.
-- **Watch out:** Weight decision is Option A (display-only 700). Dashboard sweep items 4-6 still pending under all this.
-
-> Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-07.md`, `handoff-archive/2026-08.md` - everything before 2026-07-27 18:20 ET.
+> Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-07.md`, `handoff-archive/2026-08.md` - everything before 2026-07-27 18:38 ET.
