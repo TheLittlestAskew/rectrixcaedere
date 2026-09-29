@@ -179,10 +179,4 @@
 - **Next:** Unchanged — see the Next Steps block above.
 - **Watch out:** 🛑 **Fixed a pre-existing bug in `archive.html`'s `tallies()` that publishing S20–S22 made visible.** It requested `&limit=5000`, but **PostgREST caps a response at 1000 rows** and `sitl_session_rolls` now holds **1,420**. The page only ever saw the oldest 1000 rolls, so **every session from S18 on displayed "no rolls synced"** and the header totals were computed from a truncated set. Paginated with `Range`; totals went **948 → 1,330 rolls, 37 → 51 nat 20s, 40 → 47 nat 1s**. ⭐ This is the same cap the 17:45 Codex entry hit on the Ashfall dashboard — two independent finds on the same day. ⚠️ **`pacts-and-power/archive.html` still has the identical `&limit=6000` pattern and was not audited.** Check it and `dashboard.html` before trusting either one's totals. ⚠️ `where-the-flowers-forget` and the other campaigns still use hardcoded `ARC` only; the vault-index pattern is now live on `ashfall-britannia` and `sky-is-the-limit`.
 
-### 2026-08-29 17:45 ET · Codex
-- **Changed:** Ashfall's public dashboard now refreshes its roll totals, sessions, natural 20/1 counts, session chart, roll/action breakdowns, and character table from the approved public roll source plus the vault's public session index. It paginates beyond 1,000 rows and shows unavailable values if either source fails.
-- **Commit:** `f7def18`
-- **Next:** Verify the deployed Ashfall dashboard reflects live roll analytics.
-- **Watch out:** This deliberately exposes the approved analytics fields publicly; the raw session-note workflow remains gated by the vault index validator.
-
-> Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-07.md`, `handoff-archive/2026-08.md` - everything before 2026-08-29 17:45 ET.
+> Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-07.md`, `handoff-archive/2026-08.md` - everything before 2026-08-29 18:20 ET.
