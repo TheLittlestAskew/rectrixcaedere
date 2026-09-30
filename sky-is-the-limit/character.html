@@ -210,7 +210,7 @@ function makeFm(raw){var fmText=(/^---\n([\s\S]*?)\n---/.exec(raw)||[null,''])[1
 
 async function rollStats(name){
   try{
-    var url=SB+'/rest/v1/sitl_session_rolls?character=eq.'+encodeURIComponent(name)+'&select=dice_notation,individual_values&limit=6000';
+    var url=SB+'/rest/v1/skitl_session_rolls?character=eq.'+encodeURIComponent(name)+'&select=dice_notation,individual_values&limit=6000';
     var r=await fetch(url,{headers:{apikey:AK,Authorization:'Bearer '+AK}});
     if(!r.ok)return null;var rows=await r.json();
     function iv(v){if(v==null)return null;if(typeof v==='string'){try{v=JSON.parse(v);}catch(e){return null;}}return Array.isArray(v)?v:null;}

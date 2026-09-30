@@ -63,7 +63,7 @@ Campaign data is currently hardcoded in `app.js` as a JavaScript array. Four cam
 The data will eventually be fetched live from Supabase at runtime. Connection details:
 - **Project URL:** `https://vtrtyagltwdrbastpppl.supabase.co`
 - **Anon key:** available in `ddb_sync_supabase.js` in the SITL project knowledge
-- **Primary view:** `sitl_session_rolls` (pre-filtered to SITL, includes `session_date` in ET)
+- **Primary view:** `skitl_session_rolls` (pre-filtered to the campaign, includes `session_date` in ET). Renamed from `sitl_session_rolls` on 2026-09-30; the old view still exists until the rename's Phase C3 drops it, so code written against either name works *today* and only the new name works after. 🛑 It has `security_invoker` unset, so it runs as its owner and **bypasses RLS** on `ddb_rolls` / `ddb_campaigns` — do not treat the base tables' policies as governing what this view returns.
 - **Raw table:** `ddb_rolls` joined with `ddb_campaigns` for cross-campaign queries
 - **Roll data schema:** Each row = one roll. Columns include `character`, `action`, `roll_type`, `roll_kind`, `total`, `individual_values` (JSONB), `timestamp_iso`, `roll_id` (links related rolls like to-hit + damage)
 

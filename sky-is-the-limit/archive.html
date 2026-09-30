@@ -312,7 +312,7 @@ function onScroll(){
 async function allRolls(){
   var rows=[],from=0;
   for(var page=0;page<50;page++){
-    var r=await fetch(SB+'/rest/v1/sitl_session_rolls?select=session_date,dice_notation,individual_values',
+    var r=await fetch(SB+'/rest/v1/skitl_session_rolls?select=session_date,dice_notation,individual_values',
       {headers:{apikey:AK,Authorization:'Bearer '+AK,Range:from+'-'+(from+999)}});
     if(!r.ok)throw new Error('roll fetch failed');
     var batch=await r.json();
