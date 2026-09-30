@@ -128,7 +128,11 @@ footer .dot{color:var(--copper);margin:0 8px}
 (function(){
   var SB='https://vtrtyagltwdrbastpppl.supabase.co';
   var AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0cnR5YWdsdHdkcmJhc3RwcHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTY5NTAsImV4cCI6MjA5MTkzMjk1MH0.hnpwjHGIqiUN_VmmIkOAAFGGCKsyYgl7AO3FW5vDIeM';
-  var INDEX='https://raw.githubusercontent.com/TheLittlestAskew/sitl_vault/main/00-Campaign-Hub/Public%20Session%20Index.json';
+  /* Same-origin since 2026-09-30, published by the vault's publish_site_assets.mjs.
+     Was a raw.githubusercontent.com URL into sitl_vault, which 404'd once that repo
+     went private — and because the failure path below falls back silently to the
+     baked-in numbers, nothing surfaced it. */
+  var INDEX='/sky-is-the-limit/data/session-index.json';
   function die(v){if(typeof v==='string'){try{v=JSON.parse(v);}catch(e){return null;}}return Array.isArray(v)&&v.length?v[0]:null;}
   function rows(){var out=[],from=0;function page(){return fetch(SB+'/rest/v1/sitl_session_rolls?select=session_date,character,dice_notation,individual_values',{headers:{apikey:AK,Authorization:'Bearer '+AK,Range:from+'-'+(from+999)}}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(b){out=out.concat(b);if(b.length===1000){from+=1000;return page();}return out;});}return page();}
   function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}

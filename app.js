@@ -317,9 +317,14 @@ function qbBatchLinks(md){
   while((m=re.exec(md))){var k=m[1].trim();if(!seen[k]){seen[k]=1;out.push(k);}}
   return out;
 }
+/* Vaults that are private on GitHub, so raw.githubusercontent.com 404s and the quote
+   board has to be served from this repo instead. The catch() below caches an empty
+   board on failure, which is why SITL's board silently emptied rather than erroring
+   when sitl_vault went private. Other campaigns' vaults are public and still read live. */
+var QB_LOCAL={sitl_vault:'/sky-is-the-limit/data/campaign-hub/'};
 function qbLoad(vault){
   if(QUOTE_CACHE[vault])return Promise.resolve(QUOTE_CACHE[vault]);
-  var base='https://raw.githubusercontent.com/TheLittlestAskew/'+vault+'/main/00-Campaign-Hub/';
+  var base=QB_LOCAL[vault]||('https://raw.githubusercontent.com/TheLittlestAskew/'+vault+'/main/00-Campaign-Hub/');
   return fetch(base+encodeURIComponent('Quote Board Master')+'.md').then(function(r){return r.ok?r.text():'';}).then(function(master){
     var all=qbParse(master),links=qbBatchLinks(master);
     return Promise.all(links.map(function(link){
@@ -514,7 +519,9 @@ function App(){
    list for older indexes that predate that field. */
 var RC_API='https://vtrtyagltwdrbastpppl.supabase.co',RC_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0cnR5YWdsdHdkcmJhc3RwcHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTY5NTAsImV4cCI6MjA5MTkzMjk1MH0.hnpwjHGIqiUN_VmmIkOAAFGGCKsyYgl7AO3FW5vDIeM';
 var RC_LIVE=[
-  {id:1,label:'Sky Is The Limit',sessionRollsOnly:true,view:'sitl_session_rolls',index:'https://raw.githubusercontent.com/TheLittlestAskew/sitl_vault/main/00-Campaign-Hub/Public%20Session%20Index.json'},
+  /* SITL's index is same-origin: sitl_vault is private, so raw 404s. Published by that
+     vault's Workflows/scripts/publish_site_assets.mjs. Ashfall's vault is still public. */
+  {id:1,label:'Sky Is The Limit',sessionRollsOnly:true,view:'sitl_session_rolls',index:'/sky-is-the-limit/data/session-index.json'},
   {id:3,label:'Ashfall Britannia',sessionRollsOnly:false,view:'ashfall_session_rolls',index:'https://raw.githubusercontent.com/TheLittlestAskew/ashfall_vault/main/00-Campaign-Hub/Public%20Session%20Index.json'}
 ];
 function rcRows(view,label){var out=[],start=0;function page(){return fetch(RC_API+'/rest/v1/'+view+'?select=session_date,character,roll_type,action,dice_notation,individual_values&order=timestamp_iso.asc',{headers:{apikey:RC_KEY,Authorization:'Bearer '+RC_KEY,Range:start+'-'+(start+999),Prefer:'count=exact'}}).then(function(r){if(!r.ok)throw new Error(label+' roll source unavailable.');return r.json().then(function(rows){out=out.concat(rows);if(rows.length===1000){start+=1000;return page();}return out;});});}return page();}

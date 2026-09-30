@@ -174,7 +174,16 @@ footer .dot{color:var(--accent);margin:0 8px}
 <script>
 var SB='https://vtrtyagltwdrbastpppl.supabase.co';
 var AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0cnR5YWdsdHdkcmJhc3RwcHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTY5NTAsImV4cCI6MjA5MTkzMjk1MH0.hnpwjHGIqiUN_VmmIkOAAFGGCKsyYgl7AO3FW5vDIeM';
-var VR='https://raw.githubusercontent.com/TheLittlestAskew/sitl_vault/main/03-Characters/PCs';
+/* Same-origin since 2026-09-30. These used to come from
+   raw.githubusercontent.com/TheLittlestAskew/sitl_vault, which broke the moment that
+   repo went private (raw 404s for private repos) and every character page rendered
+   "Failed to load character notes."
+   The vault stays private; Workflows/scripts/publish_site_assets.mjs copies a
+   whitelisted subset of each sheet in here. That generator drops the sections this
+   page never rendered anyway (Inner Life, POV Journal) plus the DDB user IDs, so do
+   NOT point this back at a raw vault URL to "get the full note" — the full note is
+   not meant to be public. */
+var VR='/sky-is-the-limit/data/pcs';
 
 var PCS={
   'kit-aluri':            {file:'Kit Aluri.md',              name:'Kit Aluri',              img:'Kit-card.webp',    accent:'#B98A56'},

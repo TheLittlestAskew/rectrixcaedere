@@ -1,0 +1,214 @@
+{
+  "version": 1,
+  "generated_at": "2026-09-28T00:32:52.174Z",
+  "first_published_session": "20",
+  "all_sessions": [
+    {
+      "n": "01",
+      "d": "2025-10-12"
+    },
+    {
+      "n": "02",
+      "d": "2025-10-26"
+    },
+    {
+      "n": "03",
+      "d": "2025-11-09"
+    },
+    {
+      "n": "04",
+      "d": "2025-11-23"
+    },
+    {
+      "n": "05",
+      "d": "2025-12-07"
+    },
+    {
+      "n": "06",
+      "d": "2025-12-21"
+    },
+    {
+      "n": "07",
+      "d": "2026-01-04"
+    },
+    {
+      "n": "08",
+      "d": "2026-01-18"
+    },
+    {
+      "n": "09",
+      "d": "2026-02-01"
+    },
+    {
+      "n": "10",
+      "d": "2026-02-15"
+    },
+    {
+      "n": "11",
+      "d": "2026-03-01"
+    },
+    {
+      "n": "12",
+      "d": "2026-03-29"
+    },
+    {
+      "n": "13",
+      "d": "2026-04-11"
+    },
+    {
+      "n": "14",
+      "d": "2026-04-12"
+    },
+    {
+      "n": "15",
+      "d": "2026-05-03"
+    },
+    {
+      "n": "16",
+      "d": "2026-05-24"
+    },
+    {
+      "n": "17",
+      "d": "2026-06-07"
+    },
+    {
+      "n": "18",
+      "d": "2026-06-14"
+    },
+    {
+      "n": "19",
+      "d": "2026-07-05"
+    },
+    {
+      "n": "20",
+      "d": "2026-07-19"
+    },
+    {
+      "n": "21",
+      "d": "2026-08-02"
+    },
+    {
+      "n": "22",
+      "d": "2026-08-16"
+    },
+    {
+      "n": "23",
+      "d": "2026-08-30"
+    },
+    {
+      "n": "24",
+      "d": "2026-09-13"
+    },
+    {
+      "n": "25",
+      "d": "2026-09-27"
+    }
+  ],
+  "sessions": [
+    {
+      "n": "20",
+      "t": "Not My Circus, Not My Demogorgon",
+      "d": "2026-07-19",
+      "lbl": "July 19, 2026",
+      "lbl_short": "Jul 19, 2026",
+      "f": "01-Sessions/Session%2020%20%E2%80%94%20Not%20My%20Circus,%20Not%20My%20Demogorgon.md",
+      "r": "Sloobludop",
+      "arc": "Ploop’s home → the Altar of the Deep Father",
+      "ev": [
+        "A kuo-toa escort marches the party toward the Altar of the Deep Father as an uncommon fog rolls off the Darklake — Kit and Indigo slip the column and shadow it, hidden in steam Indigo pulls off the canal.",
+        "Ploop springs the betrayal mid-ritual, striking his own daughter Bloppblippodd with his scepter; his Destructive Wave kills the massed Deep Father kuo-toa where they stand.",
+        "Ixitxachitls boil out of the Darklake in droves, fleeing the water they live in, while Kit shrugs off a manic pull from the lake urging her into frenzy.",
+        "Ploop’s final blow kills Blop as she calls Limu Gugun’s name, and the ritual succeeds anyway — Demogorgon rises from the Darklake and wades toward Sloobludop as combat ends unresolved."
+      ]
+    },
+    {
+      "n": "21",
+      "t": "The Shield and the Middle Finger",
+      "d": "2026-08-02",
+      "lbl": "August 2, 2026",
+      "lbl_short": "Aug 2, 2026",
+      "f": "01-Sessions/Session%2021%20%E2%80%94%20The%20Shield%20and%20the%20Middle%20Finger.md",
+      "r": "The Darklake",
+      "arc": "Sloobludop’s canal district → the bone teeth",
+      "ev": [
+        "The whole party crosses to level 5 in the middle of Demogorgon’s arrival — Addison has every player narrate their own surge.",
+        "Amanita’s Insight settles Derendil for good: there was never a prince. He was always a quaggoth, and he breaks off into the dark.",
+        "Kit prays for the first time in the campaign and clears a DC 30 — Binks’s last duplicate solidifies into a golden shrine to Garl Glittergold holding a shield toward Demogorgon, and Binks adds a raised middle finger.",
+        "Roxy is coaxed into longboat form; the party clears the whirlpool and the bone teeth and finds a green hag waiting on a stalactite — “It is you.”"
+      ]
+    },
+    {
+      "n": "22",
+      "t": "Blind Faith in a Hunter's Mark",
+      "d": "2026-08-16",
+      "lbl": "August 16, 2026",
+      "lbl_short": "Aug 16, 2026",
+      "f": "01-Sessions/Session%2022%20%E2%80%94%20Blind%20Faith%20in%20a%20Hunter's%20Mark.md",
+      "r": "The Mermaid Cove",
+      "arc": "Into the fog → the cleared shallows",
+      "wp": "The Mermaid Cove",
+      "ev": [
+        "Nanny Plunk is waiting in a fog-drowned starlit cove — Indigo names her aloud, and the ritual hidden behind the fog is converting charmed merfolk into a third hag.",
+        "Amanita’s Dispel Magic collapses the fog, revealing the Stormcallers, the Wave Benders, and a second green hag who was a merfolk hours ago.",
+        "Darby knowingly kills a charmed Wave Bender, fails an Intelligence save against her own mace, and takes her first level of madness.",
+        "The hags shimmer and Kit sees two Binkses — she trusts her own Hunter’s Mark over her Insight, stabs through the illusion, and kills Nanny Plunk."
+      ]
+    },
+    {
+      "n": "23",
+      "t": "Gods Above, Abyss Below",
+      "d": "2026-08-30",
+      "lbl": "August 30, 2026",
+      "lbl_short": "Aug 30, 2026",
+      "f": "01-Sessions/Session%2023%20%E2%80%94%20Gods%20Above,%20Abyss%20Below.md",
+      "r": "The Mermaid Cove",
+      "arc": "The cleared shallows → the merfolk bastion → six soul realms",
+      "wp": "The Starlit Grotto",
+      "ev": [
+        "Combat ends in a single round — Aeolus's fey calm washes the madness off the beach and Amanita talks Darby down out of a hallucinated sea of Stools.",
+        "The unnamed Merfolk Stormcaller High Priest opens the Starlit Grotto to the party and asks them to help build it into a true bastion against Demogorgon.",
+        "The merfolk pantheon takes notice while the party sleeps; each PC is given their own soul realm, and a shared dream in Amanita's ocean stops a corrupt tidal wave.",
+        "Kit meets her ghost army at peace, her Doll made flesh, and learns her family's deity is the Wild Mother — gaining understanding of Sylvan and Druidic.",
+        "Waking changes the physical bastion: Amanita's food forest, Blarg's goblin moon-shrine, Darby's axe beak hippogriff, Aeolus's stolen archfey plot in the Feydark."
+      ]
+    },
+    {
+      "n": "24",
+      "t": "Go Away, Demogorgon",
+      "d": "2026-09-13",
+      "lbl": "September 13, 2026",
+      "lbl_short": "Sep 13, 2026",
+      "f": "01-Sessions/Session%2024%20%E2%80%94%20Go%20Away,%20Demogorgon.md",
+      "r": "The Starlit Grotto",
+      "arc": "Four dream sequences → the first Bastion turn → the first exploration east",
+      "wp": "The uncharted mushroom cove",
+      "ev": [
+        "Kit's dream is a battlefield of children; she reaches four levels of madness and takes her first long-term madness — thirty hours of compulsive repetition.",
+        "Blarg's dream reveals he was born a dwarf underground and carried out by the goblin shaman who raised him; the whole party joins the dream and pushes Demogorgon out of it.",
+        "Addison opens 2024 DMG Chapter 8 and grants the party their first bastion; the first Bastion turn doubles the grotto's food and medicine and raises a moon shrine to Selûne.",
+        "Echo bullies Aeolus awake to grow wine; Naos laughs at him from inside Aeolus's head.",
+        "Amanita cures Kit's madness with Lesser Restoration; Indigo asks Kit to stand beside him when he fights the Six Fingered man.",
+        "Exploring east, the party finds a homebrew fungus no one can control, Darby is caught in webbing, and a divine shrine is pinpointed but not reached — hard cliffhanger."
+      ]
+    },
+    {
+      "n": "25",
+      "t": "Nevermind. We're Going",
+      "d": "2026-09-27",
+      "lbl": "September 27, 2026",
+      "lbl_short": "Sep 27, 2026",
+      "f": "01-Sessions/Session%2025%20%E2%80%94%20Nevermind.%20We're%20Going.md",
+      "r": "The Starlit Grotto",
+      "arc": "Freeing Darby with fire → the magma wine grape → Binks bargains with Lolth → Kit's inherited orc magic",
+      "wp": "Quarter Mile Cavern — the mushroom nook and the abyssal well",
+      "ev": [
+        "Aeolus's fire bolt is amplified by the faerzress into a fireball that frees Darby Stonefeather unharmed and permanently deepens the primordial bond to her mace.",
+        "Aeolus and Blarg coax a single gold wine grape out of the magma; Blarg hears Selûne for the first time in his life despite a natural 1.",
+        "Binks Stonevein deliberately opens a bargain with Lolth, fails every roll, and is swallowed by a 40-foot globe of magical darkness.",
+        "His Ring of Mind Shielding shatters, his connection to Garl Glittergold is atomized, and he is renamed Ormic the Warlock with Lolth as patron.",
+        "Kit Aluri hears her mother's voice, crosses roughly 200 yards in an instant on unnamed mythical orc magic, and dispels Lolth's presence with a sonic boom that bores a new tunnel to the abyss.",
+        "Cliffhanger — a lone athletic orc climbs the abyssal well toward the party, fleeing goblinoids and spiders, with something monstrous sensed far below."
+      ]
+    }
+  ]
+}
