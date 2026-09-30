@@ -5,6 +5,12 @@
 
 ## Status
 
+✅ **THIS SITE NOW READS THE `skitl_*` VIEWS AND DISPLAYS "SKITL" (`d3cec23`, 2026-09-30).** Part of the SITL → SKITL rename driven from `sitl_vault` (`docs/2026-09-30-skitl-rename-plan.md`). All 6 `sitl_session_rolls` references moved to `skitl_session_rolls` in `app.js`, `index.html`, `archive.html`, `character.html` and `session.html`; nothing here ever referenced `sitl_character_snapshots`. **Verified on the live domain:** dashboard `SKITL 1,393` / 25 sessions, archive 25·1393·55·49, Darby 294/18/11, `session.html?n=25` roll log renders, zero console errors, and no request to the old view from any page. 🛑 **Both view names still exist in Supabase** — the old ones are dropped in the rename's Phase C3, which is **held** until the vault's own pipeline instructions stop referencing them. Until then a mistake here is revertible.
+
+🛑 **`sn` in `app.js` is BOTH the displayed short name and the `?c=` lookup key.** `sn:'SITL'` → `'SKITL'` would therefore have silently broken any shared `dashboard.html?c=sitl` link — the page still loads, just on the wrong campaign, so nobody reports it. `SN_ALIASES={sitl:'skitl'}` keeps the old key resolving. **If you rename a campaign's `sn` again, add its old value there in the same commit.**
+
+⚠️ **`vault:'sitl_vault'` and the `QB_LOCAL` key are deliberately still the old name** and must stay in sync with the actual GitHub repo, which has not been renamed yet (rename Phase E). Changing either one alone breaks the quote board.
+
 ✅ **THE SITL PAGES NO LONGER READ A DEAD URL (`dcfe429`, 2026-09-30).** `sitl_vault` is **private**, and `raw.githubusercontent.com` returns **404 for private repos**, so four surfaces here were quietly reading a URL that could not resolve: all 6 **character pages** rendered `"Failed to load character notes."`, `index.html` and `app.js:517` fell back **silently** to baked-in numbers (15 sessions / 946 rolls against a real 25 / 1,393), and `app.js:322` `qbLoad` cached an **empty** quote board because its `.catch()` stores `[]`. Everything the pages need now ships in `sky-is-the-limit/data/`, published from the vault by `publish_site_assets.mjs`. 📌 **Only SITL was affected** — `ashfall_vault` and `wtff_vault` are public and still read raw through the unchanged path; `pacts_power_vault` is public too. ✅ **Verified in a browser at `127.0.0.1`, not by inspection:** 6/6 character pages render, Kit shows 10 panels / 81 quotes / live roll record, the index reads **25 sessions · 1,393 rolls · 55 nat 20 · 49 nat 1**, `qbLoad('sitl_vault')` returns **719 quotes** where it returned 0, Ashfall still returns 270, zero console errors.
 
 🛑 **The published PC sheets are a WHITELISTED SUBSET, and pointing them back at a raw vault URL would be a privacy regression, not a convenience.** The old full-note raw fetch shipped the entire file while this site rendered only part of it, so `## Inner Life & Evolution`, `## POV Journal` (both already `SHOW_*=false` here), every player's `**DDB userId:**`, and a free-text note naming a player's nationality were all publicly reachable. The generator drops them and asserts their absence in its own self-test. **Do not "restore the full note" to fix a missing panel** — add the heading to the generator's allow list instead.
@@ -45,6 +51,17 @@
 
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
+
+### 2026-09-30 17:41 ET · Claude Code — cut over to the skitl_* views, and kept the old ?c=sitl links working
+
+- **Changed:** Phase C1 of the SITL → SKITL rename (plan lives in `sitl_vault/docs/2026-09-30-skitl-rename-plan.md`). All 6 `sitl_session_rolls` references → `skitl_session_rolls` across `app.js`, `index.html`, `archive.html`, `character.html`, `session.html`. `sn:'SITL'` → `'SKITL'`. `RECTRIX_CAEDERE_PROJECT_BRIEF.md`'s "Primary view" line updated, since it documented the old name. Nothing here referenced `sitl_character_snapshots`.
+  - 🛑 **The near-miss worth remembering: `sn` is not just a label, it is the `?c=` lookup key** in `initialCampaignId()`. A bare rename would have broken every shared `dashboard.html?c=sitl` link *silently* — the page loads fine, just on the default campaign. Added `SN_ALIASES={sitl:'skitl'}`, the same aliasing approach already used to keep legacy R2 recording keys resolvable. Verified `?c=sitl` → 1, `?c=skitl` → 1, `?c=1` → 1, `?c=afb` → 3, garbage → 1.
+  - ✅ **Verified on `rectrixcaedere.com`, not locally** — this repo's own rule, reinforced by this morning's `.nojekyll` miss. Nine page URLs carry the new name and zero old-name references; the dashboard's real network requests are `skitl_session_rolls` + `ashfall_session_rolls` only; dashboard renders `SKITL 1,393` / 25 sessions with no `SITL` anywhere; archive 25·1393·55·49; Darby 294/18/11, 10 panels, no error; `session.html?n=25` renders its roll log; no console errors. Deploy landed in ~20s.
+  - 📌 **`vault:'sitl_vault'` and `QB_LOCAL` were deliberately NOT touched.** They track the GitHub repo name, which is not renamed until the rename's Phase E; changing one alone would have emptied the quote board.
+  - 📌 **The old views still exist**, so this commit is revertible. Dropping them (rename Phase C3) is held until `sitl_vault`'s `Workflows/` instruction files stop pointing at them.
+- **Commit:** `d3cec23`
+- **Next:** Unchanged for this repo — **write `site_*` frontmatter for S16–S19** so they stop being invisible (they are `published = false`; audio has been in R2 since 2026-09-29). The rename's remaining work is in `sitl_vault`.
+- **Watch out:** 🛑 **Do not point anything here back at `sitl_session_rolls`** — it is scheduled for deletion. ⚠️ Two pre-existing 404s remain, neither from this work: `assets/img/topcenterheader.webp` is missing, and `qbLoad` requests `Trackers/Quote Board Master.md` because the master file wikilinks to itself (harmless, `r.ok`-guarded).
 
 ### 2026-09-30 16:33 ET · Claude Code — four SITL surfaces were reading a 404, and only one of them said so
 
