@@ -52,6 +52,17 @@
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
 
+### 2026-10-01 15:52 ET · Claude Code — normalised 4 source labels that read as unlabeled
+
+- **Changed:** Four `## Log` entries (2026-09-19 through 2026-09-27) carried the source label as `Claude (chat)`. `septentrion-sync` recognises exactly five strings — `Claude Code`, `Claude desktop`, `Codex`, `ChatGPT`, and the legacy `Claude chat` — and groups on them **verbatim**, so a sixth spelling reads as **unlabeled**. Normalised to `Claude chat`.
+  - 📌 **This is what produced `source: unlabeled` for this repo in `Return Point` earlier today.** The newest entry at the time was one of these four, so the dashboard had nothing to attribute the activity to.
+  - 📌 **Spelling only — the author's own claim about which surface wrote each entry was preserved.** Kept the *legacy* string rather than modernising to `Claude desktop`, because the handoff skill says to leave legacy entries alone and use the new name only for new ones.
+  - ⚠️ **One caveat recorded rather than quietly resolved: the commit metadata disagrees with itself.** `227146d` was authored by a `…@users.noreply.github.com` identity with a numeric ID — the signature of a **GitHub Contents-API** write, which corroborates "chat". But `8810cca` was authored by a *local* git identity (`TheLittlestAskew <gmail>`), which argues it was actually **Claude Code**. The git config name has changed over time and a chat session can instruct a local commit, so the metadata does not settle it. **I did not override the author's self-report on an inference this weak.**
+  - ✅ **Audited all 10 handoff logs, not just this one:** 132 entries total, and this repo held the only 4 unlabeled ones. Every log is now clean.
+- **Commit:** `270468f`
+- **Next:** Unchanged for this repo — still the S16–S19 `site_*` frontmatter so those sessions stop being invisible.
+- **Watch out:** ⚠️ **`TOOLS.md` has no source column and commit messages carry no label either** — the label lives only in the `### ` log heading, so that one line is the single point of failure for attribution. ⚠️ Use `Claude desktop` for any **new** chat-surface entry; `Claude chat` is retained only for history.
+
 ### 2026-09-30 17:41 ET · Claude Code — cut over to the skitl_* views, and kept the old ?c=sitl links working
 
 - **Changed:** Phase C1 of the SITL → SKITL rename (plan lives in `sitl_vault/docs/2026-09-30-skitl-rename-plan.md`). All 6 `sitl_session_rolls` references → `skitl_session_rolls` across `app.js`, `index.html`, `archive.html`, `character.html`, `session.html`. `sn:'SITL'` → `'SKITL'`. `RECTRIX_CAEDERE_PROJECT_BRIEF.md`'s "Primary view" line updated, since it documented the old name. Nothing here referenced `sitl_character_snapshots`.
