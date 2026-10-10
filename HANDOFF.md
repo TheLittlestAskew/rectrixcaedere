@@ -52,6 +52,11 @@
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
 
+### 2026-10-10 19:05 ET · Claude Code (WTFF Session 06 added to session.html)
+- **Changed:** Added S06 "The Art of Staying Cool" (08/23/2026, inferred date; Travel, Roleplay) to the WtFF `ARC`. WtFF S01–S07 are now all listed.
+- **Commit:** `eb3d48b`
+- **Next:** Replace the hardcoded `ARC` with a fetch of `Public Session Index.json` so new sessions need no edit here.
+
 ### 2026-10-10 18:45 ET · Claude Code (WTFF Session 05 added to session.html)
 - **Changed:** Added S05 "The Bloody Truth" (08/09/2026; Combat, Roleplay) to the WtFF `ARC` array after S04. Note is on wtff_vault main (`2b2f8f5`).
 - **Commit:** `bd576ef`
@@ -185,12 +190,5 @@
 - **Commit:** `8810cca`
 - **Next:** RLS check closed out in the entry above. Existing null-enrichment rows from the gap window are not backfilled — a separate one-off pass if ever wanted.
 - **Watch out:** ⚠️ **Existing rows synced between the side-panel switch and this commit have null enrichment fields** — anything reading `action_category`/`skill`/`ability`/`is_nat_20`/`is_nat_1` off `ddb_rolls` should expect gaps in that window until/unless backfilled. ⚠️ This extension is **not** the Aftermath Meridian Pump — it's a separate, personal tool writing to this project's own Supabase (`vtrtyagltwdrbastpppl`), for Taylor's own campaigns only. 🛑 **`extension/files.zip` was moved in as-is and never opened or reviewed** — unknown contents.
-
-### 2026-09-19 · Claude chat — reference-doc consolidation + project memory update
-
-- **Changed:** Cross-checked three independently-compiled "RC site reference" docs (from separate campaign chats, all compiled 2026-09-19) directly against this file, `TOOLS.md`, and the repo tree. Confirmed the working Supabase MCP connector is `supabase-cutter` — some Claude account-level memory had drifted to a stale `supabase-rectrix`, now corrected. Filed the durable architecture, deploy, and data-rule facts into two new project memory files (`rectrix-caedere.md`, `rectrix-caedere-site.md`) so future campaign-chat sessions don't independently re-derive this doc a fourth time.
-- **Commit:** (this commit)
-- **Next:** Added three Next Steps items below (skill-naming ambiguity, `--f-serif` check, Ashfall spelling decision) — none of these are new problems, just previously untracked in this file.
-- **Watch out:** This entry made no code change and re-verified nothing live — the facts absorbed are only as fresh as the source docs' own 2026-09-19 compile date. One thing was confirmed empirically: GitHub MCP write access to this repo works fine from claude.ai chat (this push), contradicting a stale note in one source doc claiming it was read-only (403 on PR creation) and not cloned locally.
 
 > Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-07.md`, `handoff-archive/2026-08.md`, `handoff-archive/2026-09.md` - everything before 2026-09-27 13:07 ET.
