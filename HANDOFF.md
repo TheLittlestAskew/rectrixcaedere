@@ -196,4 +196,4 @@
 - **Next:** Fix `session_date` for S13 in `ashfall_session_rolls`, then delete its `ROLLDATE` entry.
 - **Watch out:** ⚠️ **`individual_values` arrives from PostgREST as a JSON *string* for 574 of 2,087 rows and as a real array for the rest** — the `typeof v==='string'` guard before `JSON.parse` is **load-bearing**, not defensive clutter. Do not "tidy" it away. ⚠️ **Campaign nat-20s jump 58 → 75** with the advantage fix; that is a visible change to historical numbers and it is correct. ⚑ `Roll Statistics S11-S20` in `ashfall_vault` still uses first-die-only and now disagrees with the site on S17 (5 vs 4 nat 1s). ⚠️ **S13 only renders via the `ROLLDATE` workaround** — the underlying row dates are still wrong.
 
-> Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-07.md`, `handoff-archive/2026-08.md` - everything before 2026-09-15 09:30 ET.
+> Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-07.md`, `handoff-archive/2026-08.md`, `handoff-archive/2026-09.md` - everything before 2026-09-15 09:30 ET.
