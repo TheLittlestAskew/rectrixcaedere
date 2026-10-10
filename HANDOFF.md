@@ -52,6 +52,12 @@
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
 
+### 2026-10-10 15:20 ET · Claude Code (WTFF Session 07 added to session.html)
+- **Changed:** Added S07 "Omission of Truth" (2026-09-20, joint crossover) to the hardcoded `ARC` array in `where-the-flowers-forget/session.html`, so `session.html?n=07` resolves now that wtff_vault published S07 (`2e187ab`).
+- **Commit:** `6654194`
+- **Next:** stop hardcoding ARC; have session.html read the vault's `Public Session Index.json` like archive.html does.
+- **Watch out:** S04–S06 have no published notes yet, so the ARC skips from 03 to 07 on purpose.
+
 ### 2026-10-01 15:52 ET · Claude Code — normalised 4 source labels that read as unlabeled
 
 - **Changed:** Four `## Log` entries (2026-09-19 through 2026-09-27) carried the source label as `Claude (chat)`. `septentrion-sync` recognises exactly five strings — `Claude Code`, `Claude desktop`, `Codex`, `ChatGPT`, and the legacy `Claude chat` — and groups on them **verbatim**, so a sixth spelling reads as **unlabeled**. Normalised to `Claude chat`.
@@ -190,13 +196,5 @@
 - **Commit:** `ea0a317`
 - **Next:** Unchanged. See the block above this log.
 - **Watch out:** The version pins in `TOOLS.md` restate the hard constraints from `CLAUDE.md` — Recharts must stay 2.12.7 (3.x breaks React 18 UMD), and script order is React → ReactDOM → prop-types → Recharts. If those ever change, the tool table has to change with them or it becomes a second, lying source of truth.
-
-### 2026-08-31 11:20 ET · Claude Code (WTFF map now reads the vault index)
-- **Changed:** `where-the-flowers-forget/archive.html` no longer hardcodes the Map of Artemesia. It fetches the `map` block of `wtff_vault`'s `Public Session Index.json` — locations, blooms, travel line and the "party is here" pin — so a new WTFF session note publishes itself to the map with no edit in this repo. The render code is wrapped in `renderMap()` and driven by `loadMap().then(renderMap)`.
-- **Commit:** `0f69051` (vault side: `wtff_vault@2bd2674`)
-- **Verification:** ✓ Headless render test drove the real script and produced **identical output from the live index and from the frozen fallback** — 1 pin, 2 blooms, 1 travel polyline, 3 session links, exactly matching the hardcoded version. ✓ Script parses standalone. ✓ Confirmed the WTFF index is live on `raw.githubusercontent.com` with the expected party/path/blooms.
-- **Friction:** gen-fail — my first edit replaced only the opening line of the multi-line `budFlower` SVG string literal and left its continuation lines orphaned, which would have been a syntax error on a live page. Caught by parse-checking the script block rather than by eye. ✅ **What works: after editing inline `<script>` in an HTML file, extract the block and `new Function(body)` it as a parse check before committing.**
-- **Watch out:** ⚠️ The old hardcoded CONFIG survives as **`FALLBACK`** and is used **only** when the fetch fails. It is deliberately allowed to go stale. **Editing it does not publish anything** — the live index replaces it on the next successful load. ⚠️ `runReveal()` (the cross-page card-flip intro) is untouched and still independent of the map data; it only fades `markers` in, so a slow fetch delays the blooms, not the animation.
-- **Next:** Unchanged. See the DO NEXT block above.
 
 > Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-07.md`, `handoff-archive/2026-08.md` - everything before 2026-08-31 11:20 ET.
