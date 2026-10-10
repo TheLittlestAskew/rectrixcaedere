@@ -52,6 +52,11 @@
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
 
+### 2026-10-10 17:25 ET · Claude Code (WTFF Session 04 added to session.html)
+- **Changed:** Added the S04 "Four Blooms, Five Petals" entry (07/26/2026; Combat, Level 1→2, Cliffhanger tags) to the WtFF `ARC` array, between S03 and S07. The note is live on wtff_vault main (`00fdc12`).
+- **Commit:** `fbff22e`
+- **Next:** Add S05 and S06 ARC entries once their notes publish. `ARC` is still hardcoded; it should read `Public Session Index.json`.
+
 ### 2026-10-10 15:20 ET · Claude Code (WTFF Session 07 added to session.html)
 - **Changed:** Added S07 "Omission of Truth" (2026-09-20, joint crossover) to the hardcoded `ARC` array in `where-the-flowers-forget/session.html`, so `session.html?n=07` resolves now that wtff_vault published S07 (`2e187ab`).
 - **Commit:** `6654194`
@@ -191,10 +196,4 @@
 - **Next:** Fix `session_date` for S13 in `ashfall_session_rolls`, then delete its `ROLLDATE` entry.
 - **Watch out:** ⚠️ **`individual_values` arrives from PostgREST as a JSON *string* for 574 of 2,087 rows and as a real array for the rest** — the `typeof v==='string'` guard before `JSON.parse` is **load-bearing**, not defensive clutter. Do not "tidy" it away. ⚠️ **Campaign nat-20s jump 58 → 75** with the advantage fix; that is a visible change to historical numbers and it is correct. ⚑ `Roll Statistics S11-S20` in `ashfall_vault` still uses first-die-only and now disagrees with the site on S17 (5 vs 4 nat 1s). ⚠️ **S13 only renders via the `ROLLDATE` workaround** — the underlying row dates are still wrong.
 
-### 2026-09-02 22:20 ET · Claude Code (TOOLS.md tool inventory added)
-- **Changed:** Added `TOOLS.md` (15 active rows) — the pinned React 18.2 / Recharts 2.12.7 / prop-types CDN stack, Supabase `Rectrix_Caedere` + the `supabase-cutter` MCP server, the two hash-pinned skills from `skills-lock.json`, and the rest. `AGENTS.md` gained a `### TOOLS.md` subsection so Codex maintains it too. One of 13 project tables that `septentrion-sync` v4 rolls into the vault's new `The Toolbox.md`.
-- **Commit:** `ea0a317`
-- **Next:** Unchanged. See the block above this log.
-- **Watch out:** The version pins in `TOOLS.md` restate the hard constraints from `CLAUDE.md` — Recharts must stay 2.12.7 (3.x breaks React 18 UMD), and script order is React → ReactDOM → prop-types → Recharts. If those ever change, the tool table has to change with them or it becomes a second, lying source of truth.
-
-> Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-07.md`, `handoff-archive/2026-08.md` - everything before 2026-08-31 11:20 ET.
+> Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-07.md`, `handoff-archive/2026-08.md` - everything before 2026-09-15 09:30 ET.
