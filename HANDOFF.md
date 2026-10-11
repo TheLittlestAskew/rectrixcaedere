@@ -52,6 +52,13 @@
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
 
+### 2026-10-11 14:05 ET · Claude Code (WTFF session.html reads the vault index)
+- **Changed:** `where-the-flowers-forget/session.html` now fetches `00-Campaign-Hub/Public Session Index.json` from `wtff_vault` (same file `archive.html` uses for the map) and builds `ARC` from it. A new WtFF session note appears on the site with **no edit here**. The hardcoded `ARC` stays as the frozen fallback **and** as the only home of each session's hand-picked tags (merged in by session number); a session with no ARC entry renders with no tags.
+- **Commit:** `7c93b94`
+- **Verification:** ✓ Node harness against the real page code: live index → 7 sessions, all tags kept; S04 note fetched via the index path (HTTP 200); 404, empty `sessions`, malformed entry and network error all fall back to the 7-entry ARC with a console warning; an untagged new session renders with `tags:null` and its date as label. ✓ Inline script parses. ✗ Not opened in a browser (chrome-devtools MCP failed to connect this session).
+- **Next:** Open rectrixcaedere.com/where-the-flowers-forget/session.html?n=04 once Pages deploys and confirm it renders.
+- **Watch out:** Tags still need an ARC entry per session if you want them; that is now optional, not required to publish.
+
 ### 2026-10-10 19:05 ET · Claude Code (WTFF Session 06 added to session.html)
 - **Changed:** Added S06 "The Art of Staying Cool" (08/23/2026, inferred date; Travel, Roleplay) to the WtFF `ARC`. WtFF S01–S07 are now all listed.
 - **Commit:** `eb3d48b`
@@ -183,12 +190,5 @@
 - **Commit:** (docs-only, no code change this entry — the fix was a Supabase SQL editor migration, not a repo change)
 - **Next:** Added a 🔵 item above to consider dropping the now-confirmed-stale `ddb_character_snapshots` once something checks nothing still reads from it.
 - **Watch out:** 🛑 This does **not** meaningfully restrict access — `roles = {public}` with `using (true)` on all four tables means the posture is now *consistent*, not *locked down*. That's correct for a personal single-user tool with the anon key sitting in a local unpacked extension, but don't mistake "RLS enabled" for "access controlled" anywhere in this project without checking the policy's `qual`/`with_check`, same lesson as the "Allow all for authenticated users" naming above. ⚠️ **`ddb_character_snapshots` (24 rows) is confirmed stale but not dropped** — something may still read from it; check before deleting.
-
-### 2026-09-20 · Claude chat — ddb-roll-sync extension moved into the repo, enrichment restored, dead popup UI archived
-
-- **Changed:** Brought the personal `ddb-roll-sync` Chrome extension into this repo under `extension/` — it had been living untracked in the Septentrion Obsidian vault (a folder outside every tracked GitHub repo), with zero backup. While reconciling it against code pasted into an unrelated project chat as "the current version" (it wasn't — two different pre-side-panel snapshots), found and fixed real drift: `panel.html`/`panel.js` are the live UI (Chrome side panel), but `popup.html`/`popup.js` had silently stopped being loaded once `manifest.json` was repointed at the side panel, and nothing had noticed or archived them. `enrichRoll()` auto-classification (skill/ability/spell/feat/nat20/nat1) had quietly stopped running along with them — `panel.js`'s `normalizeMessage()` never called it, so every roll synced since the side-panel switch has null `action_category`/`skill`/`ability`/etc. Re-ported the function into `panel.js` and fixed a PGRST102 batch-insert bug the re-port would otherwise have reintroduced (heterogeneous keys per roll type need union+backfill before a bulk POST). Removed a live TEMP DIAGNOSTIC block that had been logging roll context to console on every sync, marked "delete once confirmed" and never deleted. Archived `popup.html`/`popup.js` to `Workflows/_archive/ddb-roll-sync_pre-sidepanel-popup_2026-09-20/` in Septentrion (not in this repo). Rewrote `extension/README.md`, which previously documented the dead popup as the live UI and didn't mention Marginalia (session notes) or Character Snapshot at all.
-- **Commit:** `8810cca`
-- **Next:** RLS check closed out in the entry above. Existing null-enrichment rows from the gap window are not backfilled — a separate one-off pass if ever wanted.
-- **Watch out:** ⚠️ **Existing rows synced between the side-panel switch and this commit have null enrichment fields** — anything reading `action_category`/`skill`/`ability`/`is_nat_20`/`is_nat_1` off `ddb_rolls` should expect gaps in that window until/unless backfilled. ⚠️ This extension is **not** the Aftermath Meridian Pump — it's a separate, personal tool writing to this project's own Supabase (`vtrtyagltwdrbastpppl`), for Taylor's own campaigns only. 🛑 **`extension/files.zip` was moved in as-is and never opened or reviewed** — unknown contents.
 
 > Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-07.md`, `handoff-archive/2026-08.md`, `handoff-archive/2026-09.md` - everything before 2026-09-27 13:07 ET.
