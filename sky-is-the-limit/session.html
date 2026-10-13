@@ -11,367 +11,17 @@
      block, which AUDIT.md §5 flagged as the thing to remove. -->
 <link rel="stylesheet" href="/tokens.css">
 <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
-<style>
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{
-  background:var(--bg-void);color:var(--text-1);
-  font-family:var(--f-body);font-weight:300;font-size:var(--text-md);
-  -webkit-font-smoothing:antialiased;
-}
-a{color:inherit}
-:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:3px}
-
-/* ─────────── top bar ─────────── */
-.topbar{
-  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:var(--space-4);
-  padding:var(--space-4) var(--space-6);
-  border-bottom:1px solid var(--border-glow);
-  background:linear-gradient(180deg,var(--bg-sidebar-top),transparent);
-}
-.crumb{font-family:var(--f-label);font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--text-2)}
-.crumb a{text-decoration:none;color:var(--text-2)}
-.crumb a:hover{color:var(--gold)}
-.crumb .sep{opacity:.4;margin:0 6px}
-.crumb .here{color:var(--gold-pale)}
-.wordmark{
-  font-family:var(--f-deco);font-weight:400;font-size:var(--text-xl);
-  letter-spacing:.18em;color:var(--text-1);text-align:center;white-space:nowrap;text-decoration:none;
-}
-.topright{display:flex;align-items:center;gap:var(--space-3);justify-self:end}
-.search{
-  display:flex;align-items:center;gap:var(--space-2);
-  background:var(--bg-card-inner);border:1px solid var(--border);border-radius:999px;
-  padding:6px var(--space-3);min-width:210px;
-}
-.search input{
-  flex:1;background:none;border:0;color:var(--text-1);font-family:var(--f-body);
-  font-size:var(--text-base);outline:none;min-width:0;
-}
-.search input::placeholder{color:var(--text-2);opacity:.75}
-.search svg{width:13px;height:13px;fill:var(--text-2);flex:none}
-.acct{display:flex;align-items:center;gap:var(--space-2);font-family:var(--f-label);font-size:var(--text-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--text-2)}
-.acct .av{width:26px;height:26px;border-radius:50%;border:1px solid var(--border);display:grid;place-items:center;font-size:var(--text-sm);color:var(--gold)}
-
-/* ─────────── shell ─────────── */
-/* Four explicit rows. The POV card gets its own row so the reference rail can
-   start level with it, and so that COLLAPSING ANYTHING IN THE CENTRE CANNOT MOVE
-   THE OUTER COLUMNS: the rails are anchored to a row START, and only the heights
-   of rows below them change when a panel or the journal toggles.
-     row 1  title block          row 3  active panel
-     row 2  POV + refs top       row 4  session pager */
-.shell{
-  display:grid;
-  grid-template-columns:232px minmax(0,1fr) 304px;
-  grid-template-rows:auto auto auto auto;
-  gap:var(--space-5) var(--space-6);align-items:start;
-  max-width:1560px;margin:0 auto;padding:var(--space-6);
-}
-.rail{grid-column:1;grid-row:1/-1}
-.stage-head{grid-column:2;grid-row:1;min-width:0}
-.pov{grid-column:2;grid-row:2}
-.panel{grid-column:2;grid-row:3;min-width:0}
-.snav{grid-column:2;grid-row:4}
-.refs{grid-column:3;grid-row:2/-1}
-/* A sticky column TALLER than the viewport has an unreachable bottom: it pins at
-   `top` and the overflow below never scrolls into view, which made the last nav
-   items unclickable at 900px. Cap the height and let the column scroll itself. */
-.rail,.refs{
-  position:sticky;top:var(--space-4);align-self:start;display:grid;gap:var(--space-5);
-  max-height:calc(100vh - var(--space-8));overflow-y:auto;overscroll-behavior:contain;
-  scrollbar-width:thin;scrollbar-color:var(--gold-alpha-30) transparent;
-}
-.rail::-webkit-scrollbar,.refs::-webkit-scrollbar{width:6px}
-.rail::-webkit-scrollbar-thumb,.refs::-webkit-scrollbar-thumb{background:var(--gold-alpha-30);border-radius:3px}
-@media (max-width:860px){
-  /* Static columns must not inherit the cap, or they become tiny scroll boxes. */
-  .rail,.refs{max-height:none;overflow:visible}
-}
-
-/* ─────────── left rail ─────────── */
-.roster{display:flex;flex-wrap:wrap;gap:var(--space-2)}
-.pc{
-  width:44px;text-align:center;text-decoration:none;
-  display:grid;gap:4px;justify-items:center;
-  opacity:.28;filter:saturate(.2);transition:opacity var(--dur-hover) var(--ease),filter var(--dur-hover) var(--ease);
-}
-.pc.here{opacity:1;filter:none}
-.pc:hover{opacity:1}
-.pc .disc{
-  width:34px;height:34px;border-radius:50%;
-  display:grid;place-items:center;
-  font-family:var(--f-display);font-size:var(--text-lg);
-  border:1px solid currentColor;
-}
-.pc .nm{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:44px}
-.rosternote{font-size:var(--text-2xs);color:var(--text-2);opacity:.8}
-
-.rule{height:1px;background:linear-gradient(90deg,transparent,var(--gold-alpha-30),transparent)}
-
-.player{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--space-3);display:grid;gap:var(--space-2)}
-.player h3{margin:0;font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.16em;text-transform:uppercase;color:var(--text-2);font-weight:400}
-.parts{display:flex;flex-wrap:wrap;gap:4px}
-.part{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.08em;text-transform:uppercase;background:none;border:1px solid var(--border);color:var(--text-2);border-radius:999px;padding:2px 8px;cursor:pointer}
-.part.on{border-color:var(--gold);color:var(--gold)}
-.part.lost{opacity:.45;cursor:default}
-.pbar{display:flex;align-items:center;gap:var(--space-2)}
-.play{width:30px;height:30px;flex:none;border-radius:50%;border:1px solid var(--border-strong);background:none;color:var(--gold);display:grid;place-items:center;cursor:pointer}
-.play svg{width:13px;height:13px;fill:currentColor}
-.track{flex:1;height:3px;border-radius:2px;background:var(--gold-alpha-15);position:relative;cursor:pointer}
-.fill{position:absolute;inset:0 auto 0 0;width:0;background:var(--gold);border-radius:2px}
-.knob{position:absolute;top:50%;left:0;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:var(--gold-pale)}
-.time{font-family:var(--f-label);font-size:var(--text-2xs);color:var(--text-2);white-space:nowrap;font-variant-numeric:tabular-nums}
-.lost-note{font-size:var(--text-2xs);color:var(--text-2)}
-
-.nav{display:grid;gap:2px}
-.nav button{
-  all:unset;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);
-  padding:9px var(--space-3);border-radius:var(--r);
-  font-family:var(--f-display);font-size:var(--text-base);letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);
-  border-bottom:1px solid var(--gold-alpha-8);
-  transition:color var(--dur-hover) var(--ease),background var(--dur-hover) var(--ease);
-}
-.nav button:hover{color:var(--text-1);background:var(--gold-alpha-4)}
-.nav button[aria-current="true"]{background:var(--gold-alpha-12);color:var(--gold-pale);border-bottom-color:var(--gold-alpha-35)}
-.nav .n{font-family:var(--f-label);font-size:var(--text-2xs);opacity:.6;font-variant-numeric:tabular-nums}
-/* A section the note never recorded stays VISIBLE but inert, so the rail reads
-   the same on Session 01 as on Session 25 and the gap is legible rather than
-   silent. Omitting them made a thin early note look like a broken page. */
-.nav button[disabled]{cursor:default;color:var(--text-2);opacity:.38}
-.nav button[disabled]:hover{background:none;color:var(--text-2)}
-.nav button[disabled] .n{font-style:italic;opacity:.9}
-
-/* ─────────── centre stage ─────────── */
-.eyebrow{font-family:var(--f-label);font-size:var(--text-xs);letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
-.stitle{margin:2px 0 0;font-family:var(--f-deco);font-weight:700;font-size:var(--text-3xl);line-height:1.12;color:var(--text-1)}
-.sdate{font-family:var(--f-serif);font-style:italic;color:var(--text-2);font-size:var(--text-lg)}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:var(--space-2)}
-.chip{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1px solid var(--border);color:var(--text-2)}
-.chip.up{border-color:var(--success);color:var(--success)}
-.chip.dn{border-color:var(--danger);color:var(--danger)}
-.chip.on{border-color:var(--gold);color:var(--gold-pale)}
-
-.pov{
-  background:linear-gradient(160deg,var(--gold-alpha-6),transparent 60%),var(--bg-card);
-  border:1px solid var(--border);border-radius:var(--r-card);
-  padding:var(--space-5) var(--space-6);
-}
-.pov summary{list-style:none;cursor:pointer;display:grid;gap:2px;justify-items:center;text-align:center}
-.pov summary::-webkit-details-marker{display:none}
-.pov .lbl{font-family:var(--f-label);font-size:var(--text-xs);letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
-.pov .byline{font-family:var(--f-display);font-size:var(--text-xl);color:var(--text-1)}
-.pov .caret{color:var(--gold);font-size:var(--text-sm);transition:transform var(--dur-hover) var(--ease)}
-.pov[open] .caret{transform:rotate(180deg)}
-/* Full width, like any other body text. The 68ch measure centred the journal in
-   the card and left ~200px of dead gutter on each side, which read as padding. */
-.pov .prose{margin-top:var(--space-4);max-width:none}
-
-.panel{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-card);padding:var(--space-6) var(--space-7);min-height:200px}
-.panel h2{margin:0 0 var(--space-4);font-family:var(--f-display);font-size:var(--text-xl);letter-spacing:.06em;color:var(--gold-pale);font-weight:400}
-.prose{font-family:var(--f-serif);font-size:var(--text-lg);line-height:1.72;color:var(--text-1)}
-/* Panel prose runs the full width of the centre column. The POV journal keeps a
-   reading measure because it is continuous first-person narrative; a summary
-   full of bolded proper nouns is scanned, not read line by line. */
-.panel .prose{max-width:none}
-.prose p{margin:0 0 1em}
-.prose strong{color:var(--gold-pale);font-weight:500}
-.prose em{color:var(--text-1)}
-.prose h3,.prose h4{font-family:var(--f-display);color:var(--gold);font-size:var(--text-lg);letter-spacing:.05em;margin:1.6em 0 .5em;font-weight:400}
-.prose ul,.prose ol{padding-left:1.2em}
-.prose li{margin:0 0 .55em}
-.prose code{font-size:.92em;background:var(--gold-alpha-8);padding:1px 5px;border-radius:3px;color:var(--gold-pale)}
-.prose blockquote{margin:1em 0;padding-left:var(--space-4);border-left:2px solid var(--gold-alpha-30);color:var(--text-2)}
-
-/* scenes */
-.scene{display:grid;grid-template-columns:auto 1fr;gap:var(--space-4);padding:var(--space-4) 0;border-bottom:1px solid var(--gold-alpha-8)}
-.scene:last-child{border-bottom:0}
-.scene .ts{font-family:var(--f-label);font-size:var(--text-2xs);color:var(--gold);letter-spacing:.06em;white-space:nowrap;font-variant-numeric:tabular-nums;padding-top:3px}
-.scene .st{font-family:var(--f-display);font-size:var(--text-lg);color:var(--text-1);margin:0 0 4px;letter-spacing:.03em}
-.scene .sb{font-family:var(--f-serif);font-size:var(--text-md);line-height:1.68;color:var(--text-2)}
-.scene .sb strong{color:var(--text-1);font-weight:500}
-
-/* quests */
-.quest{padding:var(--space-3) 0;border-bottom:1px solid var(--gold-alpha-8)}
-.quest:last-child{border-bottom:0}
-.quest .qh{display:flex;align-items:baseline;gap:var(--space-3);justify-content:space-between}
-.quest .qt{font-family:var(--f-display);font-size:var(--text-lg);color:var(--text-1)}
-.quest .qs{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:999px;border:1px solid var(--border);color:var(--text-2);white-space:nowrap;flex:none}
-.quest .qs.done{border-color:var(--success);color:var(--success)}
-.quest ul{margin:var(--space-2) 0 0;padding-left:1.1em;font-family:var(--f-serif);font-size:var(--text-md);line-height:1.62;color:var(--text-2)}
-
-/* generic table */
-.tbl-wrap{overflow-x:auto}
-table{border-collapse:collapse;width:100%;font-size:var(--text-base)}
-th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--gold-alpha-8);vertical-align:top}
-th{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:400;white-space:nowrap}
-td{font-family:var(--f-serif);line-height:1.55;color:var(--text-2)}
-td strong{color:var(--text-1);font-weight:500}
-.up{color:var(--success)}
-.dn{color:var(--danger)}
-
-/* ─────────── right rail ─────────── */
-.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg)}
-.card>summary{
-  list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);
-  padding:var(--space-3) var(--space-4);
-  font-family:var(--f-display);font-size:var(--text-base);letter-spacing:.1em;text-transform:uppercase;color:var(--gold-pale);
-}
-.card>summary::-webkit-details-marker{display:none}
-.card .caret{color:var(--gold);font-size:var(--text-sm);transition:transform var(--dur-hover) var(--ease)}
-.card[open] .caret{transform:rotate(180deg)}
-.card .body{padding:0 var(--space-4) var(--space-4);max-height:340px;overflow-y:auto}
-.kv{margin:0;font-family:var(--f-serif);font-size:var(--text-md);line-height:1.6}
-.kv dt{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-top:var(--space-3)}
-.kv dt:first-child{margin-top:0}
-.kv dd{margin:2px 0 0;color:var(--text-2)}
-/* Where lives in the LEFT rail, not the centre column. It is session context of
-   the same kind as the roster and the recording, and the centre column was
-   carrying too much before the journal even started. */
-.where{font-size:var(--text-base)}
-.where dt{font-size:var(--text-2xs)}
-.where dd{line-height:1.5}
-.item{padding:var(--space-2) 0;border-bottom:1px solid var(--gold-alpha-8);font-family:var(--f-serif);font-size:var(--text-md);line-height:1.5}
-.item:last-child{border-bottom:0}
-.item .t{color:var(--text-1)}
-.item .m{display:block;color:var(--text-2);font-size:var(--text-base);margin-top:2px}
-.dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px;vertical-align:middle}
-.dot.enemy{background:var(--danger)}
-.dot.friendly{background:var(--success)}
-.dot.neutral{background:var(--info)}
-.legend{display:flex;gap:var(--space-3);font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);padding-bottom:var(--space-2)}
-.q{margin:0 0 var(--space-4);font-family:var(--f-serif);font-style:italic;font-size:var(--text-md);line-height:1.6;color:var(--text-1)}
-.q cite{display:block;font-style:normal;font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);margin-top:4px}
-.word{padding:var(--space-2) 0;border-bottom:1px solid var(--gold-alpha-8)}
-.word:last-child{border-bottom:0}
-.word .w{font-family:var(--f-display);color:var(--gold-pale);font-size:var(--text-lg)}
-.word .says{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.06em;color:var(--text-2);display:flex;flex-wrap:wrap;gap:8px;margin-top:3px}
-
-/* ─────────── foot ─────────── */
-.snav{display:flex;gap:var(--space-4);justify-content:space-between;margin-top:var(--space-2)}
-.snav a{
-  flex:1;text-decoration:none;padding:var(--space-3) var(--space-4);
-  border:1px solid var(--border);border-radius:var(--r-lg);background:var(--bg-card);
-  display:grid;gap:2px;transition:border-color var(--dur-hover) var(--ease)
-}
-.snav a:hover{border-color:var(--border-strong)}
-.snav a.off{opacity:.35;pointer-events:none}
-.snav .l{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
-.snav .t{font-family:var(--f-display);font-size:var(--text-base);color:var(--text-1)}
-.snav a:last-child{text-align:right}
-footer{text-align:center;padding:var(--space-10) var(--space-6);font-family:var(--f-label);font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--text-2)}
-footer a{color:var(--gold);text-decoration:none}
-.muted{color:var(--text-2)}
-.err{padding:var(--space-10);text-align:center;font-family:var(--f-serif);font-size:var(--text-lg);color:var(--text-2)}
-.err a{color:var(--gold)}
-
-/* ─────────── responsive ─────────── */
-@media (max-width:1180px){
-  /* Two columns: the reference rail drops below the pager and spreads out. Every
-     explicit row assignment has to be restated, or a child stays boxed into a
-     column that no longer exists. */
-  .shell{grid-template-columns:200px minmax(0,1fr);grid-template-rows:repeat(5,auto)}
-  .rail{grid-column:1;grid-row:1/-1}
-  .stage-head{grid-column:2;grid-row:1}
-  .pov{grid-column:2;grid-row:2}
-  .panel{grid-column:2;grid-row:3}
-  .snav{grid-column:2;grid-row:4}
-  .refs{grid-column:2;grid-row:5;position:static;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
-}
-@media (max-width:860px){
-  .shell{grid-template-columns:1fr;grid-template-rows:none;padding:var(--space-4)}
-  .rail,.stage-head,.pov,.panel,.snav,.refs{grid-column:1;grid-row:auto}
-  .rail{position:static}
-  .topbar{grid-template-columns:1fr;justify-items:center;gap:var(--space-2);text-align:center}
-  .topright{justify-self:center}
-  .stitle{font-size:var(--text-2xl)}
-  .scene{grid-template-columns:1fr;gap:var(--space-1)}
-}
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
-}
-</style>
+<link rel="stylesheet" href="/assets/session-layout.css">
 </head>
 <body>
 
-<header class="topbar">
-  <nav class="crumb" aria-label="Breadcrumb">
-    <a href="/">Rectrix Caedere</a><span class="sep">&rsaquo;</span><a href="/sky-is-the-limit/">Sky Is The Limit</a><span class="sep">&rsaquo;</span><span class="here">Session Notes</span>
-  </nav>
-  <a class="wordmark" href="/">RECTRIX CAEDERE</a>
-  <div class="topright">
-    <label class="search">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2a8 8 0 105.3 14l5.4 5.4 1.4-1.4-5.4-5.4A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/></svg>
-      <input id="q" type="search" placeholder="Search characters, NPCs, items&hellip;" aria-label="Search this session">
-    </label>
-    <div class="acct"><span class="av" aria-hidden="true">&#9737;</span><span id="who">Guest</span></div>
-  </div>
-</header>
+<!-- Layout, chrome and renderers live in /assets/session-layout.{css,js}, shared
+     with every other campaign. This page only says where SKITL's data comes from. -->
+<div id="session"></div>
 
-<div id="body">
-  <div class="shell" id="shell" hidden>
-
-    <aside class="rail">
-      <div>
-        <div class="roster" id="roster"></div>
-        <div class="rosternote" id="rosternote" hidden></div>
-      </div>
-      <div class="rule"></div>
-      <section class="player" id="player" hidden>
-        <h3>Session recording</h3>
-        <div class="parts" id="parts"></div>
-        <div class="pbar" id="pbar">
-          <button class="play" id="play" type="button" aria-label="Play recording">
-            <svg class="ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-            <svg class="ic-pause" viewBox="0 0 24 24" aria-hidden="true" style="display:none"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
-          </button>
-          <div class="track" id="track" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-            <div class="fill" id="fill"></div><div class="knob" id="knob"></div>
-          </div>
-          <div class="time"><span id="cur">0:00</span> / <span id="dur">0:00</span></div>
-        </div>
-        <div class="lost-note" id="lostnote" hidden></div>
-        <audio id="audio" preload="none"></audio>
-      </section>
-      <div id="where"></div>
-      <div class="rule"></div>
-      <nav class="nav" id="nav" aria-label="Section"></nav>
-    </aside>
-
-    <header class="stage-head">
-      <div class="eyebrow" id="eyebrow">Sky Is The Limit</div>
-      <h1 class="stitle" id="stitle">Loading&hellip;</h1>
-      <div class="sdate" id="sdate"></div>
-      <div class="chips" id="chips"></div>
-    </header>
-
-    <details class="pov" id="pov" open>
-      <summary>
-        <span class="lbl">Character POV</span>
-        <span class="byline" id="byline"></span>
-        <span class="caret" aria-hidden="true">&#9662;</span>
-      </summary>
-      <div class="prose" id="povbody"></div>
-    </details>
-
-    <section class="panel" id="panel" aria-live="polite">
-      <h2 id="panelh">&mdash;</h2>
-      <div id="panelbody"></div>
-    </section>
-
-    <aside class="refs" id="refs"></aside>
-
-    <nav class="snav" id="snav" aria-label="Adjacent sessions"></nav>
-  </div>
-  <div class="err" id="err" hidden></div>
-</div>
-
-<footer>Rectrix Caedere &nbsp;&#10022;&nbsp; Sky Is The Limit &nbsp;&#10022;&nbsp; <a href="/sky-is-the-limit/archive.html">The Descent</a></footer>
-
+<script src="/assets/session-layout.js"></script>
 <script>
-var SB='https://vtrtyagltwdrbastpppl.supabase.co';
-var AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0cnR5YWdsdHdkcmJhc3RwcHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTY5NTAsImV4cCI6MjA5MTkzMjk1MH0.hnpwjHGIqiUN_VmmIkOAAFGGCKsyYgl7AO3FW5vDIeM';
-var HDRS={apikey:AK,Authorization:'Bearer '+AK};
-var SELF=location.pathname.split('/').pop()||'session.html';
+var SB=SessionLayout.SB,HDRS=SessionLayout.HDRS;
 
 /* Content comes from Supabase, never from the vault repo. This page used to fetch
    01-Sessions/*.md out of a public sitl_vault and render it, which meant the
@@ -380,32 +30,6 @@ var SELF=location.pathname.split('/').pop()||'session.html';
    curated boundary: a row reaches this page only if someone marked it published,
    per panel. Do NOT reintroduce a fallback to the raw note. */
 var PUBSESS=SB+'/rest/v1/public_sessions?select=id,session_label,session_date,title,region,waypoint,arc,recording,body_md&published=eq.true&order=session_sort';
-var RECBASE='https://pub-33596be843004e7282ae8a9069ae9b82.r2.dev/Recordings/sitl/';
-
-/* ── small helpers ── */
-function esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-/* Inline markdown for table cells and short strings that must not become
-   block-level HTML. This delegates to marked rather than hand-rolling regexes:
-   the hand-rolled version used `[^*]+`, which cannot match NESTED emphasis, so
-   real cells like `**temporary *"as long as you want it to be."***` rendered
-   with literal asterisks. marked also escapes HTML in text nodes, so this is
-   not a weaker guarantee than the old escape-then-promote order. */
-function inl(s){
-  if(s==null)return'';
-  var t=String(s);
-  if(typeof marked==='undefined'||!marked.parseInline)return esc(t);
-  try{return marked.parseInline(t);}catch(e){return esc(t);}
-}
-function md(t){ return t?marked.parse(String(t)):''; }
-function el(id){return document.getElementById(id);}
-function fmtDate(iso){
-  var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso||''));
-  if(!m)return String(iso||'');
-  /* UTC on purpose: formatting an ET session date in local time rolls it back a
-     day, which would label the session wrong and query the wrong day's rolls. */
-  return new Date(Date.UTC(+m[1],+m[2]-1,+m[3])).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric',timeZone:'UTC'});
-}
-function getN(){var m=location.search.match(/[?&]n=([^&]+)/);return m?decodeURIComponent(m[1]):null;}
 
 /* PC colours. Kit is green by Taylor's call (2026-09-29); it has to stay clear
    of Blarg's olive, so Kit takes a cooler jade and Blarg keeps the warm olive.
@@ -414,8 +38,6 @@ function getN(){var m=location.search.match(/[?&]n=([^&]+)/);return m?decodeURIC
 var PC={'Kit Aluri':'#4FC58C','Binks Stonevein':'#78D6E0','Ormic':'#78D6E0','Aeolus':'#A084D8','Blarg':'#8FA85F','Amanita de’Champignon':'#D084BC',"Amanita de'Champignon":'#D084BC','Darby Stonefeather':'#D08A63'};
 var ROSTER=['Kit Aluri','Binks Stonevein','Aeolus','Blarg','Amanita de’Champignon','Darby Stonefeather'];
 var DISPO={'Ilvara':'enemy','Ilvara Mizzrym':'enemy','Shoor':'enemy','Shoor Vandree':'enemy','Jorlan':'enemy','Jorlan Duskryn':'enemy','Asha':'enemy','Black Pudding':'enemy','Gelatinous Cube':'enemy','Gray Ooze':'enemy','Wererat':'enemy','Lolth':'enemy','Topsy':'friendly','Turvy':'friendly','Stool':'friendly','Glabbagool':'friendly','Derendil':'friendly','Roxanne':'friendly','Roxy':'friendly','Clementine':'friendly','Eldeth':'friendly','Psilofyr':'friendly','Naos':'friendly','Echo':'friendly','Indigo':'friendly','Jimjar':'friendly','Hemeth':'friendly','Selûne':'friendly'};
-function dispo(n){return DISPO[n]||'neutral';}
-function censor(w){var i=Math.max(1,Math.floor(w.length/2));return w.slice(0,i)+'*'+w.slice(i+1);}
 
 /* public_sessions.recording is TEXT holding one of two shapes, both keyed by
    session number so no filename is maintained by hand:
@@ -431,253 +53,16 @@ function parseRec(v){
   catch(e){console.warn('session: recording is not valid JSON:',s,e);return null;}
 }
 
-/* ── audio ── */
-function paFmt(t){if(!isFinite(t)||t<0)t=0;t=Math.floor(t);var h=Math.floor(t/3600),m=Math.floor((t%3600)/60),s=t%60;var ss=(s<10?'0':'')+s;return h?h+':'+(m<10?'0':'')+m+':'+ss:m+':'+ss;}
-function paUrl(u){return /^https?:|^blob:|^data:/.test(u)?u:encodeURI(RECBASE+u);}
-function mountAudio(rec){
-  var card=el('player'),a=el('audio');
-  var parts=[];
-  if(rec){ if(typeof rec==='string')parts=[{lbl:'Recording',url:rec}]; else if(Array.isArray(rec))parts=rec.slice(); }
-  var playable=parts.filter(function(p){return p.url&&!p.lost;});
-  if(!parts.length||(!playable.length&&!parts.some(function(p){return p.lost;}))){card.hidden=true;return;}
-  card.hidden=false;
-  var multi=parts.length>1,current=-1;
-  function setToggle(on){card.querySelector('.ic-play').style.display=on?'none':'';card.querySelector('.ic-pause').style.display=on?'':'none';el('play').setAttribute('aria-label',on?'Pause recording':'Play recording');}
-  function loadPart(i){current=i;var p=parts[i];Array.prototype.forEach.call(el('parts').children,function(c,ci){c.classList.toggle('on',ci===i&&!parts[ci].lost);});a.src=paUrl(p.url);setToggle(false);el('fill').style.width='0%';el('knob').style.left='0%';el('cur').textContent='0:00';el('dur').textContent='0:00';}
-  el('parts').innerHTML='';
-  if(multi||parts.some(function(p){return p.lost;})){
-    parts.forEach(function(p,i){
-      var b=document.createElement(p.lost?'span':'button');
-      b.className='part'+(p.lost?' lost':'');b.type='button';
-      b.textContent=p.lbl+(p.lost?' · lost':'');
-      if(!p.lost)b.onclick=function(){if(i!==current)loadPart(i);a.play();};
-      el('parts').appendChild(b);
-    });
-  }
-  if(!playable.length){el('pbar').hidden=true;el('lostnote').hidden=false;el('lostnote').textContent='Recording unavailable for this session.';return;}
-  el('play').onclick=function(){if(a.paused)a.play();else a.pause();};
-  a.onplay=function(){setToggle(true);};
-  a.onpause=function(){setToggle(false);};
-  a.onended=function(){setToggle(false);el('fill').style.width='0%';el('knob').style.left='0%';a.currentTime=0;};
-  a.onloadedmetadata=function(){el('dur').textContent=paFmt(a.duration);};
-  a.ontimeupdate=function(){var p=a.duration?(a.currentTime/a.duration*100):0;el('fill').style.width=p+'%';el('knob').style.left=p+'%';el('cur').textContent=paFmt(a.currentTime);el('track').setAttribute('aria-valuenow',Math.round(p));};
-  el('track').onclick=function(e){var r=el('track').getBoundingClientRect();var p=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width));if(a.duration)a.currentTime=p*a.duration;};
-  el('track').onkeydown=function(e){
-    if(!a.duration)return;
-    if(e.key==='ArrowRight'){a.currentTime=Math.min(a.duration,a.currentTime+5);e.preventDefault();}
-    else if(e.key==='ArrowLeft'){a.currentTime=Math.max(0,a.currentTime-5);e.preventDefault();}
-    else if(e.key===' '||e.key==='Enter'){el('play').onclick();e.preventDefault();}
-  };
-  loadPart(parts.indexOf(playable[0]));
-}
-
-/* ── roll stats ──
-   A nat 20 is ANY d20 showing 20; a nat 1 requires EVERY d20 to be 1. The old
-   /^1d20/ test excluded every advantage roll, which is the bug archive.html was
-   fixed for on 2026-09-15 while this page kept the wrong rule and disagreed with it. */
-function ivArr(v){ if(v==null)return null; if(typeof v==='string'){try{v=JSON.parse(v);}catch(e){return null;}} return Array.isArray(v)?v:null; }
-async function rollStats(date){
-  try{
-    var r=await fetch(SB+'/rest/v1/skitl_session_rolls?session_date=eq.'+date+'&select=dice_notation,individual_values&limit=2000',{headers:HDRS});
-    if(!r.ok)return null;
-    var rows=await r.json(),s={total:rows.length,n20:0,n1:0};
-    rows.forEach(function(x){
-      if(!/\d*d20/.test(x.dice_notation||''))return;
-      var a=ivArr(x.individual_values);
-      if(!a||!a.length)return;
-      if(a.indexOf(20)>=0)s.n20++;
-      if(a.every(function(v){return v===1;}))s.n1++;
-    });
-    return s;
-  }catch(e){return null;}
-}
-async function rollLog(date){
-  try{
-    var r=await fetch(SB+'/rest/v1/skitl_session_rolls?session_date=eq.'+date+'&select=character,action,roll_type,dice_notation,modifier,total,individual_values,roll_id,timestamp_unix&order=timestamp_unix.asc&limit=2000',{headers:HDRS});
-    if(!r.ok)return '<p class="muted">Roll log unavailable.</p>';
-    var rows=await r.json(),order=[],g={};
-    rows.forEach(function(x){if(!g[x.roll_id]){g[x.roll_id]=[];order.push(x.roll_id);}g[x.roll_id].push(x);});
-    var body=order.map(function(id){
-      var grp=g[id],pr=null;
-      for(var i=0;i<grp.length;i++){if(grp[i].roll_type!=='damage'){pr=grp[i];break;}}
-      if(!pr)pr=grp[0];
-      var dmg=grp.filter(function(x){return x.roll_type==='damage';}).map(function(x){return x.total;});
-      var cls='';
-      if(/d20/.test(pr.dice_notation||'')){
-        var a=ivArr(pr.individual_values);
-        if(a&&a.length){ if(a.indexOf(20)>=0)cls='up'; else if(a.every(function(v){return v===1;}))cls='dn'; }
-      }
-      return '<tr><td>'+esc(pr.character||'')+'</td><td>'+esc(pr.action||'—')+'</td><td>'+esc(pr.roll_type||'')+'</td>'
-        +'<td><span class="'+cls+'">'+esc(pr.total)+(dmg.length?' <span class="muted">/ '+esc(dmg.join(', '))+' dmg</span>':'')+'</span></td></tr>';
-    }).join('');
-    if(!body)return '<p class="muted">No D&amp;D Beyond rolls synced for this date. Players on physical dice never reach the archive.</p>';
-    return '<div class="tbl-wrap"><table><thead><tr><th>Character</th><th>Action</th><th>Type</th><th>Result</th></tr></thead><tbody>'+body+'</tbody></table></div>';
-  }catch(e){return '<p class="muted">Roll log unavailable.</p>';}
-}
-
-/* ── panel renderers ──
-   One renderer per shape. A panel whose shape has no renderer falls back to the
-   generic table/prose path rather than rendering nothing. */
-function rowsTable(items){
-  if(!items.length)return '<p class="muted">&mdash;</p>';
-  var head=Object.keys(items[0]);
-  return '<div class="tbl-wrap"><table><thead><tr>'+head.map(function(h){return '<th>'+esc(h)+'</th>';}).join('')
-    +'</tr></thead><tbody>'+items.map(function(r){return '<tr>'+head.map(function(h){return '<td>'+inl(r[h])+'</td>';}).join('')+'</tr>';}).join('')
-    +'</tbody></table></div>';
-}
-var RENDER={
-  scenes:function(items){
-    return items.map(function(s){
-      var ts=s.start?esc(s.start)+'<br>'+esc(s.end||''):'';
-      return '<div class="scene"><div class="ts">'+ts+'</div><div><h3 class="st">'+inl(s.title)+'</h3><div class="sb">'+inl(s.body)+'</div></div></div>';
-    }).join('');
-  },
-  quests:function(items){
-    return items.map(function(q){
-      var d=(q.detail||[]).map(function(x){return '<li>'+inl(x)+'</li>';}).join('');
-      return '<div class="quest"><div class="qh"><span class="qt">'+inl(q.title)+'</span>'
-        +'<span class="qs'+(q.done?' done':'')+'">'+esc(q.status||(q.done?'Completed':'Open'))+'</span></div>'
-        +(d?'<ul>'+d+'</ul>':'')+'</div>';
-    }).join('');
-  },
-  quotes:function(items){
-    return items.map(function(q){
-      var sp=q.Speaker||q.speaker||'',tx=q.Quote||q.quote||'',tg=q.Tag||q.tag||'';
-      /* Speaker and tag carry markdown too: real tags include "**title quote**".
-         esc() left those as literal asterisks in the citation line. */
-      return '<blockquote class="q">'+inl(tx)+'<cite>&mdash; '+inl(sp)+(tg?' · '+inl(tg):'')+'</cite></blockquote>';
-    }).join('');
-  },
-  profanity:function(items){
-    var byWord={},order=[];
-    items.forEach(function(r){
-      var w=(r['Curse Word']||r.word||'').trim(); if(!w)return;
-      if(!byWord[w]){byWord[w]=[];order.push(w);}
-      byWord[w].push({who:(r.Speaker||'').replace(/\s*\(.*?\)\s*/,'').trim(),n:parseInt(r.Frequency||'1',10)||1});
-    });
-    if(!order.length)return rowsTable(items);
-    return order.map(function(w){
-      return '<div class="word"><div class="w">'+esc(censor(w))+'</div><div class="says">'
-        +byWord[w].map(function(e){return '<span>'+esc(e.who)+' ×'+e.n+'</span>';}).join('')+'</div></div>';
-    }).join('');
-  }
-};
-function renderPanel(p){
-  if(!p)return '<p class="muted">Not recorded for this session.</p>';
-  if(p.kind==='prose')return '<div class="prose">'+md(p.body_md)+'</div>';
-  var items=p.items||[];
-  if(!items.length)return '<p class="muted">&mdash;</p>';
-  return (RENDER[p.panel_key]||rowsTable)(items);
-}
-
-/* Order and labels for the left nav. Panels absent from a session are skipped,
-   so an early note with 7 panels shows 7 entries rather than 17 dead ones. */
-var NAVSPEC=[
-  ['narrative','Narrative Summary'],
-  ['scenes','Scenes & Timeline'],
-  ['themes','Themes / Beats'],
-  ['quests','Quests & Objectives'],
-  ['setting','Session Setting'],
-  ['party','Party Structure'],
-  ['reputation','Reputation'],
-  ['patterns','Patterns & Implications'],
-  ['continuity','Continuity Flags'],
-  ['encounters','Encounters'],
-  ['enc_summary','Encounter Summary'],
-  ['initiative','Initiative'],
-  ['rolllog','Roll Log']
-];
-/* Right rail: reference material that stays visible while the centre changes. */
-var REFSPEC=[['loot','Loot & Artifacts'],['npcs','NPCs & Companions'],['locations','Locations'],['profanity','Profanity Record']];
-
-/* Region / waypoint / arc belong with the title, not in the reference rail:
-   they describe the session, and keeping them out of the rail is what lets
-   Loot & Artifacts sit at the top of it, level with the centre panel. */
-function buildWhere(sess){
-  var where=[['Region',sess.region],['Waypoint',sess.waypoint],['Arc',sess.arc]].filter(function(x){return x[1];});
-  if(!where.length)return '';
-  return '<dl class="kv where">'+where.map(function(x){
-    return '<dt>'+esc(x[0])+'</dt><dd>'+inl(x[1])+'</dd>';
-  }).join('')+'</dl>';
-}
-
-function buildRefs(byKey,sess){
-  var out='';
-  REFSPEC.forEach(function(spec,i){
-    var p=byKey[spec[0]]; if(!p)return;
-    var inner;
-    if(spec[0]==='npcs'){
-      inner='<div class="legend"><span><i class="dot enemy"></i>Enemy</span><span><i class="dot friendly"></i>Friendly</span><span><i class="dot neutral"></i>Neutral</span></div>'
-        +(p.items||[]).map(function(r){
-          var nm=r.Name||r.name||'';
-          return '<div class="item"><span class="t"><i class="dot '+dispo(nm)+'"></i>'+inl(nm)+'</span><span class="m">'+inl(r.Status||'')+'</span></div>';
-        }).join('');
-    }else if(spec[0]==='loot'){
-      inner=(p.items||[]).map(function(r){
-        var own=r['Character/Owner']||'',item=r['Item/Artifact']||'',st=r['State/Context']||'';
-        return '<div class="item"><span class="t">'+inl(item)+'</span><span class="m">'+inl(st)+(own?' · '+inl(own):'')+'</span></div>';
-      }).join('');
-    }else if(spec[0]==='locations'){
-      inner=(p.items||[]).map(function(r){
-        var k=Object.keys(r);
-        return '<div class="item"><span class="t">'+inl(r[k[0]])+'</span>'+(k[1]?'<span class="m">'+inl(r[k[1]])+'</span>':'')+'</div>';
-      }).join('');
-    }else{
-      inner=renderPanel(p);
-    }
-    out+='<details class="card"'+(i===0?' open':'')+'><summary>'+esc(spec[1])+'<span class="caret" aria-hidden="true">&#9662;</span></summary><div class="body">'+inner+'</div></details>';
-  });
-  var quotes=byKey.quotes;
-  if(quotes){
-    out+='<details class="card" open><summary>Quotes<span class="caret" aria-hidden="true">&#9662;</span></summary><div class="body">'+renderPanel(quotes)+'</div></details>';
-  }
-  return out;
-}
-
-function buildRoster(rosterPanel){
-  /* The published roster is the source of truth for who was at the table. The
-     roll archive is NOT a substitute: players on physical dice never appear in
-     it, so deriving presence from rolls would mark real attendees absent. */
-  var present=rosterPanel?(rosterPanel.items||[]).map(function(x){return String(x.name||'').trim();}):[];
-  var norm=function(s){return s.toLowerCase().replace(/[^a-z]/g,'');};
-  var pset=present.map(norm);
-  var names=ROSTER.slice();
-  present.forEach(function(n){ if(!names.some(function(k){return norm(k)===norm(n);}))names.push(n); });
-  el('roster').innerHTML=names.map(function(n){
-    var here=!rosterPanel||pset.indexOf(norm(n))>=0;
-    var c=PC[n]||'#9A9590';
-    var short=n.split(/\s+/)[0];
-    return '<a class="pc'+(here?' here':'')+'" href="/sky-is-the-limit/character.html?c='+encodeURIComponent(n)+'" '
-      +'title="'+esc(n)+(here?'':' (not at the table)')+'" style="color:'+c+'">'
-      +'<span class="disc">'+esc(short.charAt(0))+'</span><span class="nm">'+esc(short)+'</span></a>';
-  }).join('');
-  if(rosterPanel){
-    var away=names.filter(function(n){return pset.indexOf(norm(n))<0;});
-    if(away.length){el('rosternote').hidden=false;el('rosternote').textContent='Dimmed: not at the table this session.';}
-  }
-}
-
-/* ── boot ── */
-async function init(){
-  var n=getN();
-  if(!n){el('err').hidden=false;el('err').innerHTML='No session specified. <a href="/sky-is-the-limit/archive.html">Go to The Descent</a>';return;}
-
+async function load(n){
   var sessions;
   try{
     var r=await fetch(PUBSESS,{headers:HDRS});
     if(!r.ok)throw new Error('HTTP '+r.status);
     sessions=await r.json();
-  }catch(e){
-    el('err').hidden=false;el('err').innerHTML='Could not reach the session archive. <a href="/sky-is-the-limit/archive.html">Back to The Descent</a>';
-    return;
-  }
+  }catch(e){ throw new Error('Could not reach the session archive.'); }
   var idx=-1;
   for(var i=0;i<sessions.length;i++){ if(String(sessions[i].session_label)===String(n)){idx=i;break;} }
-  if(idx===-1){
-    el('err').hidden=false;
-    el('err').innerHTML='Session &ldquo;'+esc(n)+'&rdquo; is not published. <a href="/sky-is-the-limit/archive.html">Go to The Descent</a>';
-    return;
-  }
+  if(idx===-1)throw new Error('Session “'+n+'” is not published.');
   var s=sessions[idx];
 
   var panels=[];
@@ -687,104 +72,60 @@ async function init(){
   }catch(e){ /* panels are additive; the page still renders its header and POV */ }
   var byKey={}; panels.forEach(function(p){byKey[p.panel_key]=p;});
 
-  document.title=s.session_label+' · '+s.title+' — Sky Is The Limit';
-  el('eyebrow').textContent='Sky Is The Limit · Session '+s.session_label;
-  el('stitle').textContent=s.title;
-  el('sdate').textContent=fmtDate(s.session_date);
-  el('shell').hidden=false;
-
-  buildRoster(byKey.roster);
-  mountAudio(parseRec(s.recording));
-
-  el('where').innerHTML=buildWhere(s);
-
-  /* The POV card always renders. When a session has no cleared journal it says
-     so, rather than disappearing and leaving a hole where Session 25 has a card
-     -- only S21 onward have a body, and a silent gap read as a broken page. */
-  if(s.body_md){
-    el('byline').textContent='The Devil You Know';
-    el('povbody').innerHTML=md(s.body_md);
-  }else{
-    el('pov').open=false;
-    el('byline').textContent='Not written for this session';
-    el('povbody').innerHTML='<p class="muted">No in-character journal has been cleared for publication here. '
-      +'The journal runs from <a href="'+SELF+'?n=21">Session 21</a> onward.</p>';
-  }
-
-  /* Every section is listed every time. Ones this note never recorded render
-     disabled rather than being dropped, so the rail is stable across sessions:
-     Session 01's note is 9.8 KB against Session 25's 174 KB, and silently
-     hiding ten entries made the early sessions look like a rendering failure. */
-  var nav=NAVSPEC.slice();
-  var first=null;
-  el('nav').innerHTML=nav.map(function(x){
-    var k=x[0],p=byKey[k],live=(k==='rolllog')||!!p;
-    if(live&&first===null)first=k;
-    var tag='';
-    if(p&&p.kind==='list')tag='<span class="n">'+(p.items||[]).length+'</span>';
-    else if(!live)tag='<span class="n">not recorded</span>';
-    return '<button type="button" data-k="'+k+'"'+(live?'':' disabled')
-      +' aria-current="false">'+esc(x[1])+tag+'</button>';
-  }).join('');
-
-  var logCache=null;
-  async function show(k){
-    Array.prototype.forEach.call(el('nav').children,function(b){b.setAttribute('aria-current',b.dataset.k===k?'true':'false');});
-    var label=(nav.find(function(x){return x[0]===k;})||[,k])[1];
-    el('panelh').textContent=label;
-    if(k==='rolllog'){
-      if(logCache===null){ el('panelbody').innerHTML='<p class="muted">Loading rolls…</p>'; logCache=await rollLog(s.session_date); }
-      el('panelbody').innerHTML=logCache;
-    }else{
-      el('panelbody').innerHTML=renderPanel(byKey[k]);
-    }
-  }
-  el('nav').addEventListener('click',function(e){
-    var b=e.target.closest('button[data-k]'); if(b&&!b.disabled)show(b.dataset.k);
-  });
-  if(first)show(first);
-
-  el('refs').innerHTML=buildRefs(byKey,s);
-
-  var prev=idx>0?sessions[idx-1]:null, next=idx<sessions.length-1?sessions[idx+1]:null;
-  el('snav').innerHTML=
-    (prev?'<a href="'+SELF+'?n='+encodeURIComponent(prev.session_label)+'"><span class="l">&larr; Session '+esc(prev.session_label)+'</span><span class="t">'+esc(prev.title)+'</span></a>'
-        :'<a class="off"><span class="l">&larr; Previous</span><span class="t">&mdash;</span></a>')
-   +(next?'<a href="'+SELF+'?n='+encodeURIComponent(next.session_label)+'"><span class="l">Session '+esc(next.session_label)+' &rarr;</span><span class="t">'+esc(next.title)+'</span></a>'
-        :'<a class="off"><span class="l">Next &rarr;</span><span class="t">&mdash;</span></a>');
-
-  var st=await rollStats(s.session_date);
-  var chips=[];
-  if(st){
-    chips.push('<span class="chip">'+st.total+' rolls</span>');
-    chips.push('<span class="chip up">nat 20 × '+st.n20+'</span>');
-    chips.push('<span class="chip dn">nat 1 × '+st.n1+'</span>');
-  }
-  if(byKey.initiative)chips.push('<span class="chip on">⚔ Combat</span>');
+  var tags=[];
+  if(byKey.initiative)tags.push('⚔ Combat');
   var q=byKey.quests;
   if(q&&q.items){
     var done=q.items.filter(function(x){return x.done;}).length;
-    if(done)chips.push('<span class="chip on">✓ '+done+' quest'+(done>1?'s':'')+' done</span>');
+    if(done)tags.push('✓ '+done+' quest'+(done>1?'s':'')+' done');
   }
-  el('chips').innerHTML=chips.join('');
 
-  /* Search filters the panel currently on screen plus the reference rail. It is a
-     within-session filter, not a site search; saying so in the placeholder would
-     be better than letting someone expect cross-session results. */
-  el('q').addEventListener('input',function(){
-    var term=this.value.trim().toLowerCase();
-    var scopes=[el('panelbody'),el('refs')];
-    scopes.forEach(function(scope){
-      var rows=scope.querySelectorAll('.item,.q,.word,.scene,.quest,tbody tr');
-      Array.prototype.forEach.call(rows,function(r){
-        r.style.display=(!term||r.textContent.toLowerCase().indexOf(term)>=0)?'':'none';
-      });
-    });
-  });
+  return {
+    sessions:sessions.map(function(x){return {label:x.session_label,title:x.title};}),idx:idx,
+    label:s.session_label,title:s.title,date:s.session_date,
+    where:[['Region',s.region],['Waypoint',s.waypoint],['Arc',s.arc]],
+    recording:parseRec(s.recording),
+    /* The published roster is the source of truth for who was at the table. */
+    present:byKey.roster?(byKey.roster.items||[]).map(function(x){return String(x.name||'').trim();}):null,
+    tags:tags,
+    pov:s.body_md?{byline:'The Devil You Know',md:s.body_md}:null,
+    panels:byKey
+  };
 }
 
-if(typeof marked!=='undefined')init();
-else window.addEventListener('load',init);
+function boot(){
+  SessionLayout.mount({
+    campaign:'Sky Is The Limit',home:'/sky-is-the-limit/',
+    archive:{href:'/sky-is-the-limit/archive.html',label:'The Descent'},
+    povLabel:'Character POV',
+    /* Only S21 onward have a journal body. */
+    povEmpty:'<p class="muted">No in-character journal has been cleared for publication here. '
+      +'The journal runs from <a href="session.html?n=21">Session 21</a> onward.</p>',
+    rollView:'skitl_session_rolls',
+    recBase:'https://pub-33596be843004e7282ae8a9069ae9b82.r2.dev/Recordings/sitl/',
+    roster:ROSTER,pcColors:PC,dispo:DISPO,
+    charHref:function(name){return '/sky-is-the-limit/character.html?c='+encodeURIComponent(name);},
+    /* Order and labels for the left nav. */
+    nav:[
+      ['narrative','Narrative Summary'],
+      ['scenes','Scenes & Timeline'],
+      ['themes','Themes / Beats'],
+      ['quests','Quests & Objectives'],
+      ['setting','Session Setting'],
+      ['party','Party Structure'],
+      ['reputation','Reputation'],
+      ['patterns','Patterns & Implications'],
+      ['continuity','Continuity Flags'],
+      ['encounters','Encounters'],
+      ['enc_summary','Encounter Summary'],
+      ['initiative','Initiative'],
+      ['rolllog','Roll Log']
+    ],
+    load:load
+  });
+}
+if(typeof marked!=='undefined')boot();
+else window.addEventListener('load',boot);
 </script>
 </body>
 </html>

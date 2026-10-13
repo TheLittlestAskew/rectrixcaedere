@@ -1,0 +1,296 @@
+/* Session-note layout shared by every campaign session.html.
+   Moved here from sky-is-the-limit/session.html so the four pages cannot drift.
+   Tokens come from /tokens.css; a campaign page adds only its own atmosphere. */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg-void);color:var(--text-1);
+  font-family:var(--f-body);font-weight:300;font-size:var(--text-md);
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit}
+/* Any rule that sets `display` outranks the browser's own [hidden] rule, so a
+   hidden .player (display:grid) still drew an empty recording card on sessions
+   with no audio. */
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:3px}
+
+/* ─────────── top bar ─────────── */
+.topbar{
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:var(--space-4);
+  padding:var(--space-4) var(--space-6);
+  border-bottom:1px solid var(--border-glow);
+  background:linear-gradient(180deg,var(--bg-sidebar-top),transparent);
+}
+.crumb{font-family:var(--f-label);font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--text-2)}
+.crumb a{text-decoration:none;color:var(--text-2)}
+.crumb a:hover{color:var(--gold)}
+.crumb .sep{opacity:.4;margin:0 6px}
+.crumb .here{color:var(--gold-pale)}
+.wordmark{
+  font-family:var(--f-deco);font-weight:400;font-size:var(--text-xl);
+  letter-spacing:.18em;color:var(--text-1);text-align:center;white-space:nowrap;text-decoration:none;
+}
+.topright{display:flex;align-items:center;gap:var(--space-3);justify-self:end}
+.search{
+  display:flex;align-items:center;gap:var(--space-2);
+  background:var(--bg-card-inner);border:1px solid var(--border);border-radius:999px;
+  padding:6px var(--space-3);min-width:210px;
+}
+.search input{
+  flex:1;background:none;border:0;color:var(--text-1);font-family:var(--f-body);
+  font-size:var(--text-base);outline:none;min-width:0;
+}
+.search input::placeholder{color:var(--text-2);opacity:.75}
+.search svg{width:13px;height:13px;fill:var(--text-2);flex:none}
+.acct{display:flex;align-items:center;gap:var(--space-2);font-family:var(--f-label);font-size:var(--text-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--text-2)}
+.acct .av{width:26px;height:26px;border-radius:50%;border:1px solid var(--border);display:grid;place-items:center;font-size:var(--text-sm);color:var(--gold)}
+
+/* ─────────── shell ─────────── */
+/* Four explicit rows. The POV card gets its own row so the reference rail can
+   start level with it, and so that COLLAPSING ANYTHING IN THE CENTRE CANNOT MOVE
+   THE OUTER COLUMNS: the rails are anchored to a row START, and only the heights
+   of rows below them change when a panel or the journal toggles.
+     row 1  title block          row 3  active panel
+     row 2  POV + refs top       row 4  session pager */
+.shell{
+  display:grid;
+  grid-template-columns:232px minmax(0,1fr) 304px;
+  grid-template-rows:auto auto auto auto;
+  gap:var(--space-5) var(--space-6);align-items:start;
+  max-width:1560px;margin:0 auto;padding:var(--space-6);
+}
+.rail{grid-column:1;grid-row:1/-1}
+.stage-head{grid-column:2;grid-row:1;min-width:0}
+.pov{grid-column:2;grid-row:2}
+.panel{grid-column:2;grid-row:3;min-width:0}
+.snav{grid-column:2;grid-row:4}
+.refs{grid-column:3;grid-row:2/-1}
+/* A sticky column TALLER than the viewport has an unreachable bottom: it pins at
+   `top` and the overflow below never scrolls into view, which made the last nav
+   items unclickable at 900px. Cap the height and let the column scroll itself. */
+.rail,.refs{
+  position:sticky;top:var(--space-4);align-self:start;display:grid;gap:var(--space-5);
+  max-height:calc(100vh - var(--space-8));overflow-y:auto;overscroll-behavior:contain;
+  scrollbar-width:thin;scrollbar-color:var(--gold-alpha-30) transparent;
+}
+.rail::-webkit-scrollbar,.refs::-webkit-scrollbar{width:6px}
+.rail::-webkit-scrollbar-thumb,.refs::-webkit-scrollbar-thumb{background:var(--gold-alpha-30);border-radius:3px}
+@media (max-width:860px){
+  /* Static columns must not inherit the cap, or they become tiny scroll boxes. */
+  .rail,.refs{max-height:none;overflow:visible}
+}
+
+/* ─────────── left rail ─────────── */
+.roster{display:flex;flex-wrap:wrap;gap:var(--space-2)}
+.pc{
+  width:44px;text-align:center;text-decoration:none;
+  display:grid;gap:4px;justify-items:center;
+  opacity:.28;filter:saturate(.2);transition:opacity var(--dur-hover) var(--ease),filter var(--dur-hover) var(--ease);
+}
+.pc.here{opacity:1;filter:none}
+.pc:hover{opacity:1}
+.pc .disc{
+  width:34px;height:34px;border-radius:50%;
+  display:grid;place-items:center;
+  font-family:var(--f-display);font-size:var(--text-lg);
+  border:1px solid currentColor;
+}
+.pc .nm{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:44px}
+.pc.guest .disc{border-style:dashed}
+.rosternote{font-size:var(--text-2xs);color:var(--text-2);opacity:.8}
+
+.rule{height:1px;background:linear-gradient(90deg,transparent,var(--gold-alpha-30),transparent)}
+
+.player{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--space-3);display:grid;gap:var(--space-2)}
+.player h3{margin:0;font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.16em;text-transform:uppercase;color:var(--text-2);font-weight:400}
+.parts{display:flex;flex-wrap:wrap;gap:4px}
+.part{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.08em;text-transform:uppercase;background:none;border:1px solid var(--border);color:var(--text-2);border-radius:999px;padding:2px 8px;cursor:pointer}
+.part.on{border-color:var(--gold);color:var(--gold)}
+.part.lost{opacity:.45;cursor:default}
+.pbar{display:flex;align-items:center;gap:var(--space-2)}
+.play{width:30px;height:30px;flex:none;border-radius:50%;border:1px solid var(--border-strong);background:none;color:var(--gold);display:grid;place-items:center;cursor:pointer}
+.play svg{width:13px;height:13px;fill:currentColor}
+.track{flex:1;height:3px;border-radius:2px;background:var(--gold-alpha-15);position:relative;cursor:pointer}
+.fill{position:absolute;inset:0 auto 0 0;width:0;background:var(--gold);border-radius:2px}
+.knob{position:absolute;top:50%;left:0;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:var(--gold-pale)}
+.time{font-family:var(--f-label);font-size:var(--text-2xs);color:var(--text-2);white-space:nowrap;font-variant-numeric:tabular-nums}
+.lost-note{font-size:var(--text-2xs);color:var(--text-2)}
+
+.nav{display:grid;gap:2px}
+.nav button{
+  all:unset;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);
+  padding:9px var(--space-3);border-radius:var(--r);
+  font-family:var(--f-display);font-size:var(--text-base);letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);
+  border-bottom:1px solid var(--gold-alpha-8);
+  transition:color var(--dur-hover) var(--ease),background var(--dur-hover) var(--ease);
+}
+.nav button:hover{color:var(--text-1);background:var(--gold-alpha-4)}
+.nav button[aria-current="true"]{background:var(--gold-alpha-12);color:var(--gold-pale);border-bottom-color:var(--gold-alpha-35)}
+.nav .n{font-family:var(--f-label);font-size:var(--text-2xs);opacity:.6;font-variant-numeric:tabular-nums}
+/* A section the note never recorded stays VISIBLE but inert, so the rail reads
+   the same on Session 01 as on Session 25 and the gap is legible rather than
+   silent. Omitting them made a thin early note look like a broken page. */
+.nav button[disabled]{cursor:default;color:var(--text-2);opacity:.38}
+.nav button[disabled]:hover{background:none;color:var(--text-2)}
+.nav button[disabled] .n{font-style:italic;opacity:.9}
+
+/* ─────────── centre stage ─────────── */
+.eyebrow{font-family:var(--f-label);font-size:var(--text-xs);letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.stitle{margin:2px 0 0;font-family:var(--f-deco);font-weight:700;font-size:var(--text-3xl);line-height:1.12;color:var(--text-1)}
+.sdate{font-family:var(--f-serif);font-style:italic;color:var(--text-2);font-size:var(--text-lg)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:var(--space-2)}
+.chip{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1px solid var(--border);color:var(--text-2)}
+.chip.up{border-color:var(--success);color:var(--success)}
+.chip.dn{border-color:var(--danger);color:var(--danger)}
+.chip.on{border-color:var(--gold);color:var(--gold-pale)}
+
+.pov{
+  background:linear-gradient(160deg,var(--gold-alpha-6),transparent 60%),var(--bg-card);
+  border:1px solid var(--border);border-radius:var(--r-card);
+  padding:var(--space-5) var(--space-6);
+}
+.pov summary{list-style:none;cursor:pointer;display:grid;gap:2px;justify-items:center;text-align:center}
+.pov summary::-webkit-details-marker{display:none}
+.pov .lbl{font-family:var(--f-label);font-size:var(--text-xs);letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.pov .byline{font-family:var(--f-display);font-size:var(--text-xl);color:var(--text-1)}
+.pov .caret{color:var(--gold);font-size:var(--text-sm);transition:transform var(--dur-hover) var(--ease)}
+.pov[open] .caret{transform:rotate(180deg)}
+/* The journal starts collapsed on every campaign, so the summary has to SAY it
+   opens. A bare caret under a centred title read as an ornament, not a control. */
+.pov .hint{
+  display:inline-flex;align-items:center;gap:6px;margin-top:var(--space-2);
+  padding:4px var(--space-3);border:1px solid var(--border-strong);border-radius:999px;
+  font-family:var(--f-label);font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-pale);
+  transition:border-color var(--dur-hover) var(--ease),background var(--dur-hover) var(--ease);
+}
+.pov summary:hover .hint{border-color:var(--gold);background:var(--gold-alpha-8)}
+.pov .when-open,.pov[open] .when-closed{display:none}
+.pov[open] .when-open{display:inline}
+/* Full width, like any other body text. The 68ch measure centred the journal in
+   the card and left ~200px of dead gutter on each side, which read as padding. */
+.pov .prose{margin-top:var(--space-4);max-width:none}
+
+.panel{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-card);padding:var(--space-6) var(--space-7);min-height:200px}
+.panel h2{margin:0 0 var(--space-4);font-family:var(--f-display);font-size:var(--text-xl);letter-spacing:.06em;color:var(--gold-pale);font-weight:400}
+.prose{font-family:var(--f-serif);font-size:var(--text-lg);line-height:1.72;color:var(--text-1)}
+/* Panel prose runs the full width of the centre column. The POV journal keeps a
+   reading measure because it is continuous first-person narrative; a summary
+   full of bolded proper nouns is scanned, not read line by line. */
+.panel .prose{max-width:none}
+.prose p{margin:0 0 1em}
+.prose strong{color:var(--gold-pale);font-weight:500}
+.prose em{color:var(--text-1)}
+.prose h3,.prose h4{font-family:var(--f-display);color:var(--gold);font-size:var(--text-lg);letter-spacing:.05em;margin:1.6em 0 .5em;font-weight:400}
+.prose ul,.prose ol{padding-left:1.2em}
+.prose li{margin:0 0 .55em}
+.prose code{font-size:.92em;background:var(--gold-alpha-8);padding:1px 5px;border-radius:3px;color:var(--gold-pale)}
+.prose blockquote{margin:1em 0;padding-left:var(--space-4);border-left:2px solid var(--gold-alpha-30);color:var(--text-2)}
+
+/* scenes */
+.scene{display:grid;grid-template-columns:auto 1fr;gap:var(--space-4);padding:var(--space-4) 0;border-bottom:1px solid var(--gold-alpha-8)}
+.scene:last-child{border-bottom:0}
+.scene .ts{font-family:var(--f-label);font-size:var(--text-2xs);color:var(--gold);letter-spacing:.06em;white-space:nowrap;font-variant-numeric:tabular-nums;padding-top:3px}
+.scene .st{font-family:var(--f-display);font-size:var(--text-lg);color:var(--text-1);margin:0 0 4px;letter-spacing:.03em}
+.scene .sb{font-family:var(--f-serif);font-size:var(--text-md);line-height:1.68;color:var(--text-2)}
+.scene .sb strong{color:var(--text-1);font-weight:500}
+
+/* quests */
+.quest{padding:var(--space-3) 0;border-bottom:1px solid var(--gold-alpha-8)}
+.quest:last-child{border-bottom:0}
+.quest .qh{display:flex;align-items:baseline;gap:var(--space-3);justify-content:space-between}
+.quest .qt{font-family:var(--f-display);font-size:var(--text-lg);color:var(--text-1)}
+.quest .qs{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:999px;border:1px solid var(--border);color:var(--text-2);white-space:nowrap;flex:none}
+.quest .qs.done{border-color:var(--success);color:var(--success)}
+.quest ul{margin:var(--space-2) 0 0;padding-left:1.1em;font-family:var(--f-serif);font-size:var(--text-md);line-height:1.62;color:var(--text-2)}
+
+/* generic table */
+.tbl-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:var(--text-base)}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--gold-alpha-8);vertical-align:top}
+th{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:400;white-space:nowrap}
+td{font-family:var(--f-serif);line-height:1.55;color:var(--text-2)}
+td strong{color:var(--text-1);font-weight:500}
+.up{color:var(--success)}
+.dn{color:var(--danger)}
+
+/* ─────────── right rail ─────────── */
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg)}
+.card>summary{
+  list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);
+  padding:var(--space-3) var(--space-4);
+  font-family:var(--f-display);font-size:var(--text-base);letter-spacing:.1em;text-transform:uppercase;color:var(--gold-pale);
+}
+.card>summary::-webkit-details-marker{display:none}
+.card .caret{color:var(--gold);font-size:var(--text-sm);transition:transform var(--dur-hover) var(--ease)}
+.card[open] .caret{transform:rotate(180deg)}
+.card .body{padding:0 var(--space-4) var(--space-4);max-height:340px;overflow-y:auto}
+.kv{margin:0;font-family:var(--f-serif);font-size:var(--text-md);line-height:1.6}
+.kv dt{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-top:var(--space-3)}
+.kv dt:first-child{margin-top:0}
+.kv dd{margin:2px 0 0;color:var(--text-2)}
+/* Where lives in the LEFT rail, not the centre column. It is session context of
+   the same kind as the roster and the recording, and the centre column was
+   carrying too much before the journal even started. */
+.where{font-size:var(--text-base)}
+.where dt{font-size:var(--text-2xs)}
+.where dd{line-height:1.5}
+.item{padding:var(--space-2) 0;border-bottom:1px solid var(--gold-alpha-8);font-family:var(--f-serif);font-size:var(--text-md);line-height:1.5}
+.item:last-child{border-bottom:0}
+.item .t{color:var(--text-1)}
+.item .m{display:block;color:var(--text-2);font-size:var(--text-base);margin-top:2px}
+.dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.dot.enemy{background:var(--danger)}
+.dot.friendly{background:var(--success)}
+.dot.neutral{background:var(--info)}
+.legend{display:flex;gap:var(--space-3);font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);padding-bottom:var(--space-2)}
+.q{margin:0 0 var(--space-4);font-family:var(--f-serif);font-style:italic;font-size:var(--text-md);line-height:1.6;color:var(--text-1)}
+.q cite{display:block;font-style:normal;font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);margin-top:4px}
+.word{padding:var(--space-2) 0;border-bottom:1px solid var(--gold-alpha-8)}
+.word:last-child{border-bottom:0}
+.word .w{font-family:var(--f-display);color:var(--gold-pale);font-size:var(--text-lg)}
+.word .says{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.06em;color:var(--text-2);display:flex;flex-wrap:wrap;gap:8px;margin-top:3px}
+
+/* ─────────── foot ─────────── */
+.snav{display:flex;gap:var(--space-4);justify-content:space-between;margin-top:var(--space-2)}
+.snav a{
+  flex:1;text-decoration:none;padding:var(--space-3) var(--space-4);
+  border:1px solid var(--border);border-radius:var(--r-lg);background:var(--bg-card);
+  display:grid;gap:2px;transition:border-color var(--dur-hover) var(--ease)
+}
+.snav a:hover{border-color:var(--border-strong)}
+.snav a.off{opacity:.35;pointer-events:none}
+.snav .l{font-family:var(--f-label);font-size:var(--text-2xs);letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.snav .t{font-family:var(--f-display);font-size:var(--text-base);color:var(--text-1)}
+.snav a:last-child{text-align:right}
+footer{text-align:center;padding:var(--space-10) var(--space-6);font-family:var(--f-label);font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--text-2)}
+footer a{color:var(--gold);text-decoration:none}
+.muted{color:var(--text-2)}
+.err{padding:var(--space-10);text-align:center;font-family:var(--f-serif);font-size:var(--text-lg);color:var(--text-2)}
+.err a{color:var(--gold)}
+
+/* ─────────── responsive ─────────── */
+@media (max-width:1180px){
+  /* Two columns: the reference rail drops below the pager and spreads out. Every
+     explicit row assignment has to be restated, or a child stays boxed into a
+     column that no longer exists. */
+  .shell{grid-template-columns:200px minmax(0,1fr);grid-template-rows:repeat(5,auto)}
+  .rail{grid-column:1;grid-row:1/-1}
+  .stage-head{grid-column:2;grid-row:1}
+  .pov{grid-column:2;grid-row:2}
+  .panel{grid-column:2;grid-row:3}
+  .snav{grid-column:2;grid-row:4}
+  .refs{grid-column:2;grid-row:5;position:static;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+}
+@media (max-width:860px){
+  .shell{grid-template-columns:1fr;grid-template-rows:none;padding:var(--space-4)}
+  .rail,.stage-head,.pov,.panel,.snav,.refs{grid-column:1;grid-row:auto}
+  .rail{position:static}
+  .topbar{grid-template-columns:1fr;justify-items:center;gap:var(--space-2);text-align:center}
+  .topright{justify-self:center}
+  .stitle{font-size:var(--text-2xl)}
+  .scene{grid-template-columns:1fr;gap:var(--space-1)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
+}
