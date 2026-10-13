@@ -25,7 +25,7 @@
 
 ## Next Steps
 
-- [ ] 🔴 **NEW 2026-10-13 — MERGE `lithotripsy/session-layout-sitewide` to put the site-wide session layout live.** All four campaign `session.html` pages now mount one shared layout (`assets/session-layout.{css,js}`) with the POV journal collapsed by default; it is verified locally and **not on `main`**, so the live site still shows the old pages. After the merge, open one session per campaign on rectrixcaedere.com and confirm the POV card reads "Read the journal". 🛑 **Decide before or right after merging: WtFF quotes from S05 on now publish for the first time, and those lines name players by first name** ("Seth", "Rachel", "Evan") because the vault writes the speaker that way. The Profanity Record already showed player first names, so this is not a new category of exposure, but it is more of it.
+- [x] **2026-10-13: site-wide session layout merged and live.** `lithotripsy/session-layout-sitewide` fast-forwarded to `main` at `4752fc0`. Taylor ruled that player first names in WtFF quotes stay as written.
 
 - [x] ✅ **DONE 2026-09-29 — the rebuilt session page is verified in a browser.** Checked at 1440 / 768 / 485 with measurements rather than screenshots: rails immovable across centre-column state changes, Loot & Artifacts exactly level with the POV card, no horizontal scroll at any width, and the last nav item hit-tested reachable. The sticky-rail overflow trap it exposed (a column taller than the viewport has an unreachable bottom) is fixed with a `100vh` cap and internal scroll. ⚠️ True 375px was NOT tested - the OS would not size the window below 485px - but 485 exercises the same single-column rules.
 - [ ] 🟡 **NEW 2026-09-29 — BLUE OR GOLD? Taylor's layout mock is blue; the build is brand gold.** The mock reads as a greybox wireframe and `tokens.css` reserves blue as `--info` (semantic, never decorative), so the brand palette won. **If the blue was a real design direction, say so — it is a token swap, not a rebuild.** 📌 Related and unresolved: the mock's header carries a search field and an "ADDISON" account chip. Search is built as a within-session filter; the account chip is presentational only, pending the DM-login work in the item below.
@@ -53,6 +53,12 @@
 
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
+
+### 2026-10-13 13:25 ET · Claude Code (site-wide session layout merged to main and live)
+- **Changed:** Fast-forwarded `main` to `lithotripsy/session-layout-sitewide` and pushed, on Taylor's go-ahead. No code changed in the merge. Taylor decided the WtFF quotes keep player first names.
+- **Commit:** `4752fc0` (`main` = `origin/main`). Backup tag `lithotripsy-backup-20261013-1230` still marks the pre-change state.
+- **Verification:** ✓ `node tests/session-layout.test.mjs --live`: 25 checks passed before the merge. ✓ On rectrixcaedere.com after the Pages build: one session per campaign (SKITL 25, Ashfall 20, WtFF 05, P&P 12) loads its title and panels, POV `<details>` is closed on load with "Read the journal", opens on click and swaps to "Close the journal", no horizontal scroll, no raw wikilinks. Only console error is the long-standing missing `favicon.ico`. ✗ Audio playback not played.
+- **Next:** Unchanged. See Next Steps above.
 
 ### 2026-10-13 12:45 ET · Claude Code (SKITL session layout applied site-wide; POV collapsed)
 - **Changed:** The SKITL session-note layout moved out of `sky-is-the-limit/session.html` into `assets/session-layout.css` + `assets/session-layout.js`. All four campaign `session.html` pages now mount it and keep only a `load(n)` data adapter (Supabase for SKITL; the public vault note for Ashfall, WtFF and P&P, reusing each page's existing section parsers). The POV journal `<details>` has no `open` attribute, so it starts collapsed everywhere, and its summary carries a "Read the journal / Close the journal" pill. Campaign atmosphere (background art, ash, petals) stays per page; the old per-page palettes and the read-more modals are gone. New `tests/session-layout.test.mjs`.
