@@ -25,6 +25,8 @@
 
 ## Next Steps
 
+- [ ] 🟡 **NEW 2026-10-27: merge `redesign/character-dashboard` once Taylor approves.** The SKITL character pages (`sky-is-the-limit/character.html`) are rebuilt as a dashboard. Pushed, **not merged, not live.** Open a PR from the branch and merge it in GitHub; Pages deploys `main`. ⚠️ The file is now ~100KB, so deploy through git, never the MCP `create_or_update_file` (truncates around 15KB).
+
 - [x] **2026-10-13: site-wide session layout merged and live.** `lithotripsy/session-layout-sitewide` fast-forwarded to `main` at `4752fc0`. Taylor ruled that player first names in WtFF quotes stay as written.
 
 - [x] ✅ **DONE 2026-09-29 — the rebuilt session page is verified in a browser.** Checked at 1440 / 768 / 485 with measurements rather than screenshots: rails immovable across centre-column state changes, Loot & Artifacts exactly level with the POV card, no horizontal scroll at any width, and the last nav item hit-tested reachable. The sticky-rail overflow trap it exposed (a column taller than the viewport has an unreachable bottom) is fixed with a `100vh` cap and internal scroll. ⚠️ True 375px was NOT tested - the OS would not size the window below 485px - but 485 exercises the same single-column rules.
@@ -53,6 +55,14 @@
 
 ## Log
 <!-- newest first · one entry per logical task/session · timestamp · source · changed · commit · next -->
+
+### 2026-10-27 02:15 ET · Claude Code (SKITL character pages rebuilt as a dashboard)
+- **Changed:** `sky-is-the-limit/character.html` now parses each published PC sheet into widgets: a per-session roll chart in the hero, six jump counters, a sticky session-era filter that applies to every tab, one-line expandable entries, a session timeline with a heat strip, relationship cards (party first), inventory grouped by status, and a searchable, tag-filtered quote board. Vault flag emoji (⭐ 🛑 ⚠️ ✅ 🏆 🔴) render as text labels, so no emoji reach the public page. Taylor's follow-ups: equal-height Appearance/Backstory panels, 88px centered ability boxes, unboxed profile facts.
+- **Fixed while building:** `### SNN Key Events` blocks sit under `## Key Quotes` in five sheets, so their bullets were rendering as quotes on the live site. `parseEvents` now routes them to Story and `stripEventBlocks` keeps them off the quote board.
+- **Commit:** `1e8b9f3` on `redesign/character-dashboard` (5 commits from `2d08680`). Pushed. **Not merged, not live.**
+- **Verification:** ✓ Rendered at `127.0.0.1:8765` with Playwright at 1440 and 390 for Kit and Binks, all tabs, zero console errors, live Supabase roll data. ✓ Clickable preview with a snapshot of all 6 sheets and their rolls published as an artifact for Taylor's review.
+- **Next:** Taylor approves, then merge the PR.
+- **Watch out:** ⚠️ Headlines come from a bullet's leading bold phrase, else its first sentence. Unbolded long bullets get clunky headlines; the fix is bolding the lead phrase in the vault, not code. ⚠️ Long frontmatter values (Binks's status and level) show only their lead clause in the hero; the full text is in the hover title.
 
 ### 2026-10-13 13:25 ET · Claude Code (site-wide session layout merged to main and live)
 - **Changed:** Fast-forwarded `main` to `lithotripsy/session-layout-sitewide` and pushed, on Taylor's go-ahead. No code changed in the merge. Taylor decided the WtFF quotes keep player first names.
@@ -183,15 +193,4 @@
 - **Next:** Rebuild the session-notes extractor and the page layout to Taylor's new design, starting with S25 as a vertical slice.
 - **Watch out:** ⚠️ **`public_sessions.recording` is the ONLY source of audio now** — there is deliberately no ARC fallback. If Supabase is unreachable the player hides itself, which is correct; do not "restore" a hardcoded list. ⚠️ **S16–S19 audio is uploaded and verified but invisible**, because those rows are `published = false`; the anon policy is `published = true`, so the page cannot see them at all. ⚠️ The legacy human-named R2 keys are **intentionally retained** as aliases — deleting them breaks any recording link already shared with the table.
 
-### 2026-09-28 · Claude Code — SITL session pages now read Supabase, not the vault repo
-
-- **Changed:** `sky-is-the-limit/session.html` and `archive.html` no longer fetch `raw.githubusercontent.com/TheLittlestAskew/sitl_vault/main`. Both now read **`public.public_sessions`** using the anon key the pages already embed.
-- **Commit:** `22b284d`
-- 🛑 **Why this mattered more than a broken link.** The pages fetched `01-Sessions/*.md` **verbatim** and rendered it, so **the published page WAS the working vault note** — and `session.html` sliced **16 zones** out of it, including the **Quote Board (real player speech)**, the **Profanity Record**, and the archivist's **Patterns** and **Continuity flags**. `sitl_vault` was made **private on 2026-09-27** after health details reached it, so both pages have been **404ing** since; the outage is what surfaced the real problem.
-- ⭐ **`public_sessions` is a curated boundary, not a mirror.** RLS returns **only rows marked `published`**, and the body is limited to the **in-character POV journal**, which is written under Hard Exclusions (no player names, dice, stats, session refs). **21 of 25 sessions publish; 5 have bodies.**
-- **Implementation is deliberately small.** `buildNote()` assembles a document from curated fields and hands it to the **existing** `renderZones()`, which already hid any zone whose heading was missing — so the vault-derived zones vanish on their own rather than needing the page restructured. ✗ **No fallback to the raw note, on purpose.** ⚠️ **Do not reintroduce one.**
-- **Verified against live Supabase using the page's own `zblock()`**, not a reimplementation: ✓ 21 sessions load and POV bodies slice out **intact**; ✓ S20–S25 render a narrative from curated events and S01–S15 show an explicit *"no published write-up yet"* notice; ✓ **Quote Board, Profanity, Continuity, Patterns, Encounters, Initiative, Scene, Themes, Loot and NPCs all slice to empty and cannot render**; ✓ inline JS passes `node --check` on both pages.
-- **Next:** Author `site_*` editorial for **S16–S19** (loaded but unpublished — they have no editorial anywhere and were never on the site) and for **S01–S15** (title and date only, so their cards are sparse — the old hardcoded `ARC` array never carried region/arc/events).
-- **Watch out:** ⚠️ **`party_present` is gone from the session pages** — it lived in note frontmatter and `public_sessions` has no column for it, so that zone is empty. Add a column if it should come back. ⚠️ The **hardcoded 15-entry `ARC` array still exists in both pages** as the offline fallback; it is now the only place S01–S15 titles are curated, and it will drift from Supabase. ⚠️ The load path into `public_sessions` runs through the **Supabase MCP or SQL editor** — `sitl_vault/Workflows/scripts/build_public_sessions.mjs` only emits JSON, because the anon key deliberately cannot write.
-
-> Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-07.md`, `handoff-archive/2026-08.md`, `handoff-archive/2026-09.md` - everything before 2026-09-28 00:00 ET.
+> Older entries archived to `handoff-archive/2026-06.md`, `handoff-archive/2026-07.md`, `handoff-archive/2026-08.md`, `handoff-archive/2026-09.md` - everything before 2026-10-01 00:00 ET.
