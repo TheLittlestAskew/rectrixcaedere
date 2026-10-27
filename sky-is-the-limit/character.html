@@ -1505,6 +1505,7 @@
           name: "Kit Aluri",
           img: "Kit-card.webp",
           accent: "#B98A56",
+          circle: ["Indigo"],
         },
         "binks-stonevein": {
           file: "Binks Stonevein.md",
@@ -2651,16 +2652,34 @@
         var canon = allEntries.filter(function (e) {
           return e.flags.indexOf("canon") >= 0;
         });
+        /* Inner Circle: the party, then NPCs pinned in PCS[slug].circle, then the NPCs the
+           sheet mentions most, capped at 7. Pin an NPC here to guarantee them a slot. */
+        var pinned = (pc.circle || []).map(function (n) {
+          return n.toLowerCase();
+        });
+        function mentions(r) {
+          var first = r.who.split(/\s+/)[0];
+          return (body.match(new RegExp("\\b" + first.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "g")) || []).length;
+        }
+        var npcs = rels.filter(function (r) {
+          return !r.pc;
+        });
+        var pinnedRels = npcs.filter(function (r) {
+          return pinned.indexOf(r.who.toLowerCase()) >= 0;
+        });
+        var rankedRels = npcs
+          .filter(function (r) {
+            return pinnedRels.indexOf(r) < 0;
+          })
+          .sort(function (a, b) {
+            return mentions(b) - mentions(a);
+          });
         var partyRels = rels
           .filter(function (r) {
             return r.pc;
           })
-          .concat(
-            rels.filter(function (r) {
-              return !r.pc;
-            }),
-          )
-          .slice(0, 6);
+          .concat(pinnedRels, rankedRels)
+          .slice(0, 7);
         var featQ = quotes
           .filter(function (q) {
             return q.tags.some(function (t) {
