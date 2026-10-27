@@ -883,9 +883,16 @@
       /* sheet */
       .abil {
         display: grid;
-        grid-template-columns: repeat(6, 64px);
-        justify-content: start;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 8px;
+        max-width: 224px;
+      }
+      /* Character sheet: ability block as a narrow left rail, features fill the rest. */
+      .sheetgrid {
+        display: grid;
+        grid-template-columns: 260px minmax(0, 1fr);
+        gap: 18px;
+        align-items: start;
       }
       .abil .s {
         background: rgba(22, 34, 48, 0.5);
@@ -1421,7 +1428,8 @@
         .hero .rolls {
           grid-column: 1/-1;
         }
-        .dash {
+        .dash,
+        .sheetgrid {
           grid-template-columns: 1fr;
         }
       }
@@ -1441,9 +1449,6 @@
         }
         .two {
           grid-template-columns: 1fr;
-        }
-        .abil {
-          grid-template-columns: repeat(3, 64px);
         }
         .eb {
           margin-left: 0;
@@ -2817,7 +2822,7 @@
         });
         if (grid) featHtml += "</div>";
         var sheet =
-          '<div class="col">' +
+          '<div class="sheetgrid">' +
           panel(
             "Ability Scores",
             '<div class="abil">' +
@@ -2834,6 +2839,7 @@
               '<p class="pendnote">Live stats (scores, AC, HP, saves, skills, attacks) sync from D&amp;D Beyond once the sheet is public. Empty on purpose until real data is wired.</p>',
             "awaiting sync",
           ) +
+          '<div class="col">' +
           panel(
             "Features & Traits",
             featHtml || '<p class="unavail">No features recorded.</p>',
@@ -2841,7 +2847,7 @@
               return i.kind === "item";
             }).length + " entries",
           ) +
-          "</div>";
+          "</div></div>";
 
         /* ---------- story ---------- */
         var byN = {};
