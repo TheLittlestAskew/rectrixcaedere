@@ -883,16 +883,14 @@
       /* sheet */
       .abil {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 8px;
-        max-width: 224px;
+        grid-template-columns: repeat(6, 88px);
+        justify-content: center;
+        gap: 10px;
       }
-      /* Character sheet: ability block as a narrow left rail, features fill the rest. */
       .sheetgrid {
-        display: grid;
-        grid-template-columns: 260px minmax(0, 1fr);
+        display: flex;
+        flex-direction: column;
         gap: 18px;
-        align-items: start;
       }
       .abil .s {
         background: rgba(22, 34, 48, 0.5);
@@ -916,6 +914,7 @@
         font-size: 13px;
         color: var(--text2);
         margin: 10px 0 0;
+        text-align: center;
       }
       .feat {
         border: 1px solid var(--border);
@@ -1428,8 +1427,7 @@
         .hero .rolls {
           grid-column: 1/-1;
         }
-        .dash,
-        .sheetgrid {
+        .dash {
           grid-template-columns: 1fr;
         }
       }
@@ -1449,6 +1447,9 @@
         }
         .two {
           grid-template-columns: 1fr;
+        }
+        .abil {
+          grid-template-columns: repeat(3, 88px);
         }
         .eb {
           margin-left: 0;
