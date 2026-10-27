@@ -653,7 +653,14 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 18px;
-        align-items: start;
+        align-items: stretch;
+      }
+      .two > .panel {
+        display: flex;
+        flex-direction: column;
+      }
+      .two > .panel > .pb {
+        flex: 1;
       }
       .cards {
         display: grid;
@@ -876,7 +883,8 @@
       /* sheet */
       .abil {
         display: grid;
-        grid-template-columns: repeat(6, 1fr);
+        grid-template-columns: repeat(6, 64px);
+        justify-content: start;
         gap: 8px;
       }
       .abil .s {
@@ -892,7 +900,7 @@
         font-size: 11px;
         color: var(--text2);
       }
-      .abil .dash {
+      .abil .dv {
         font-family: var(--fc);
         font-size: 20px;
         color: rgba(199, 163, 105, 0.4);
@@ -1435,7 +1443,7 @@
           grid-template-columns: 1fr;
         }
         .abil {
-          grid-template-columns: repeat(3, 1fr);
+          grid-template-columns: repeat(3, 64px);
         }
         .eb {
           margin-left: 0;
@@ -2818,7 +2826,7 @@
                   return (
                     '<div class="s"><div class="lab">' +
                     a +
-                    '</div><div class="dash">&mdash;</div></div>'
+                    '</div><div class="dv">&mdash;</div></div>'
                   );
                 })
                 .join("") +
